@@ -1,13 +1,15 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Compass, Globe, Calendar, Newspaper, MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import Logo from './Logo';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,20 +20,19 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location]);
+
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
   const navLinks = [
-    { name: 'Discover', href: '/discover', icon: <Compass className="h-4 w-4 mr-1" /> },
-    { name: 'Experiences', href: '/experiences', icon: <Globe className="h-4 w-4 mr-1" /> },
-    { name: 'Events', href: '/events', icon: <Calendar className="h-4 w-4 mr-1" /> },
-    { name: 'News', href: '/news', icon: <Newspaper className="h-4 w-4 mr-1" /> },
-    { name: 'Chat', href: '/chat', icon: <MessageCircle className="h-4 w-4 mr-1" /> },
+    { name: 'Discover', href: '/feature/guides', icon: <Compass className="h-4 w-4 mr-1" /> },
+    { name: 'Experiences', href: '/feature/suggestions', icon: <Globe className="h-4 w-4 mr-1" /> },
+    { name: 'Events', href: '/feature/events', icon: <Calendar className="h-4 w-4 mr-1" /> },
+    { name: 'News', href: '/feature/guides', icon: <Newspaper className="h-4 w-4 mr-1" /> },
+    { name: 'Chat', href: '/feature/chat', icon: <MessageCircle className="h-4 w-4 mr-1" /> },
   ];
-
-  const logoVariants = {
-    initial: { opacity: 0, y: -10 },
-    animate: { opacity: 1, y: 0, transition: { duration: 0.5 } }
-  };
 
   const navVariants = {
     initial: { opacity: 0, y: -10 },
@@ -43,12 +44,17 @@ const Header = () => {
     animate: { opacity: 1, y: 0 }
   };
 
+  const isActive = (path: string) => {
+    if (path === '/') return location.pathname === '/';
+    return location.pathname.startsWith(path);
+  };
+
   return (
     <header 
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-custom-bezier",
         isScrolled 
-          ? "py-3 bg-white/80 backdrop-blur-lg shadow-sm" 
+          ? "py-3 bg-white/95 backdrop-blur-lg shadow-sm" 
           : "py-5 bg-transparent"
       )}
     >
@@ -56,16 +62,11 @@ const Header = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <motion.div
-            variants={logoVariants}
-            initial="initial"
-            animate="animate"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
           >
-            <Link to="/" className="flex items-center">
-              <span className="h-8 w-8 rounded-md bg-morocco-clay flex items-center justify-center mr-2">
-                <span className="font-bold text-white">A</span>
-              </span>
-              <span className="font-bold text-xl tracking-tight">Azoul</span>
-            </Link>
+            <Logo variant={isScrolled ? 'default' : 'default'} />
           </motion.div>
 
           {/* Desktop Navigation */}
@@ -80,14 +81,22 @@ const Header = () => {
                 <Link
                   to={link.href}
                   className={cn(
-                    "flex items-center text-sm font-medium transition-colors",
-                    isScrolled 
-                      ? "text-gray-900 hover:text-morocco-teal" 
-                      : "text-gray-800 hover:text-morocco-teal"
+                    "flex items-center text-sm font-medium transition-colors relative group",
+                    isActive(link.href)
+                      ? "text-morocco-clay" 
+                      : isScrolled 
+                        ? "text-gray-900 hover:text-morocco-teal" 
+                        : "text-gray-800 hover:text-morocco-teal"
                   )}
                 >
                   {link.icon}
                   {link.name}
+                  <span 
+                    className={cn(
+                      "absolute -bottom-1 left-0 h-0.5 bg-morocco-clay transition-all duration-300 rounded-full",
+                      isActive(link.href) ? "w-full" : "w-0 group-hover:w-full"
+                    )}
+                  />
                 </Link>
               </motion.div>
             ))}
@@ -123,8 +132,12 @@ const Header = () => {
               <Link
                 key={link.name}
                 to={link.href}
-                className="flex items-center px-3 py-3 text-base font-medium text-gray-900 hover:bg-gray-50 hover:text-morocco-teal rounded-md"
-                onClick={() => setIsMobileMenuOpen(false)}
+                className={cn(
+                  "flex items-center px-3 py-3 text-base font-medium rounded-md",
+                  isActive(link.href)
+                    ? "bg-morocco-sand/20 text-morocco-clay"
+                    : "text-gray-900 hover:bg-gray-50 hover:text-morocco-teal"
+                )}
               >
                 {link.icon}
                 <span className="ml-2">{link.name}</span>

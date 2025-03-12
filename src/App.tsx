@@ -7,6 +7,8 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import DestinationDetail from "./pages/DestinationDetail";
+import FeatureDetail from "./pages/FeatureDetail";
 
 const queryClient = new QueryClient();
 
@@ -17,6 +19,8 @@ const AppRoutes = () => {
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<Index />} />
+        <Route path="/destination/:destinationId" element={<DestinationDetail />} />
+        <Route path="/feature/:featureId" element={<FeatureDetail />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>

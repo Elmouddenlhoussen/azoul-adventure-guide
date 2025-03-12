@@ -1,6 +1,7 @@
 
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import DestinationCard from '@/components/DestinationCard';
@@ -56,31 +57,37 @@ const Index = () => {
       title: 'Interactive Map',
       description: 'Explore Morocco with our detailed interactive map showing destinations, routes, and attractions.',
       icon: MapPin,
+      href: '/feature/map',
     },
     {
       title: 'Smart Suggestions',
       description: 'Receive personalized recommendations based on your interests and preferences.',
       icon: Search,
+      href: '/feature/suggestions',
     },
     {
       title: 'Chat Assistant',
       description: 'Get instant answers to your questions from our AI-powered travel assistant.',
       icon: MessageCircle,
+      href: '/feature/chat',
     },
     {
       title: 'Cultural Events',
       description: 'Stay updated on local festivals, concerts, and cultural events happening during your visit.',
       icon: Calendar,
+      href: '/feature/events',
     },
     {
       title: 'Travel Guides',
       description: 'Access comprehensive guides with insider tips on each destination.',
       icon: Compass,
+      href: '/feature/guides',
     },
     {
       title: 'Language Support',
       description: 'Learn essential phrases in Moroccan Arabic and navigate language barriers with ease.',
       icon: Globe,
+      href: '/feature/language',
     },
   ];
 
@@ -126,9 +133,9 @@ const Index = () => {
             viewport={{ once: true, margin: "-100px" }}
             className="mt-12 text-center"
           >
-            <button className="px-6 py-3 bg-morocco-clay text-white rounded-full font-medium hover:bg-morocco-clay/90 transition-colors">
+            <Link to="/destination/marrakech" className="px-6 py-3 bg-morocco-clay text-white rounded-full font-medium hover:bg-morocco-clay/90 transition-colors inline-block">
               View All Destinations
-            </button>
+            </Link>
           </motion.div>
         </section>
 
@@ -156,6 +163,7 @@ const Index = () => {
                   description={feature.description}
                   icon={feature.icon}
                   index={index}
+                  href={feature.href}
                 />
               ))}
             </div>
@@ -222,12 +230,12 @@ const Index = () => {
                 viewport={{ once: true, margin: "-100px" }}
                 className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4"
               >
-                <button className="px-6 py-3 bg-white text-morocco-navy rounded-full font-medium hover:bg-white/90 transition-colors">
+                <Link to="/destination/marrakech" className="px-6 py-3 bg-white text-morocco-navy rounded-full font-medium hover:bg-white/90 transition-colors inline-block">
                   Start Exploring
-                </button>
-                <button className="px-6 py-3 border border-white text-white rounded-full font-medium hover:bg-white/10 transition-colors">
+                </Link>
+                <Link to="/feature/chat" className="px-6 py-3 border border-white text-white rounded-full font-medium hover:bg-white/10 transition-colors inline-block">
                   Chat with Azoul
-                </button>
+                </Link>
               </motion.div>
             </div>
           </div>

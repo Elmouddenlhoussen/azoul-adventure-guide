@@ -1,12 +1,14 @@
 
 import { motion } from 'framer-motion';
 import { LucideIcon } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface FeatureCardProps {
   title: string;
   description: string;
   icon: LucideIcon;
   index: number;
+  href: string;
 }
 
 const FeatureCard = ({
@@ -14,23 +16,37 @@ const FeatureCard = ({
   description,
   icon: Icon,
   index,
+  href,
 }: FeatureCardProps) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      viewport={{ once: true, margin: "-50px" }}
-      className="glass-card p-6 rounded-2xl hover-scale"
-    >
-      <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-morocco-sand">
-        <Icon className="h-6 w-6 text-morocco-clay" />
-      </div>
-      
-      <h3 className="mb-2 text-xl font-semibold">{title}</h3>
-      
-      <p className="text-muted-foreground">{description}</p>
-    </motion.div>
+    <Link to={href}>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: index * 0.1 }}
+        viewport={{ once: true, margin: "-50px" }}
+        whileHover={{ 
+          scale: 1.03, 
+          boxShadow: "0 10px 30px -15px rgba(0,0,0,0.15)", 
+          y: -5 
+        }}
+        className="glass-card p-6 rounded-2xl cursor-pointer group"
+      >
+        <div className="relative z-10 mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-morocco-sand group-hover:bg-morocco-terracotta transition-colors duration-300">
+          <Icon className="h-6 w-6 text-morocco-clay group-hover:text-white transition-colors duration-300" />
+        </div>
+        
+        <h3 className="mb-2 text-xl font-semibold group-hover:text-morocco-terracotta transition-colors duration-300">{title}</h3>
+        
+        <p className="text-muted-foreground">{description}</p>
+        
+        <motion.div
+          initial={{ width: 0 }}
+          whileHover={{ width: "100%" }}
+          className="h-0.5 bg-morocco-terracotta mt-4 rounded-full origin-left"
+        />
+      </motion.div>
+    </Link>
   );
 };
 

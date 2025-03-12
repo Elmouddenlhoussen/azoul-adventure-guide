@@ -2,37 +2,38 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Instagram, Twitter, Facebook, Mail, Heart } from 'lucide-react';
+import Logo from './Logo';
 
 const Footer = () => {
   const footerLinks = [
     {
       title: 'Explore',
       links: [
-        { name: 'Destinations', href: '/destinations' },
-        { name: 'Experiences', href: '/experiences' },
-        { name: 'Guides', href: '/guides' },
-        { name: 'Events', href: '/events' },
-        { name: 'Map', href: '/map' },
+        { name: 'Destinations', href: '/destination/marrakech' },
+        { name: 'Experiences', href: '/feature/suggestions' },
+        { name: 'Guides', href: '/feature/guides' },
+        { name: 'Events', href: '/feature/events' },
+        { name: 'Map', href: '/feature/map' },
       ],
     },
     {
       title: 'Services',
       links: [
-        { name: 'Chat Assistant', href: '/chat' },
-        { name: 'Language Courses', href: '/courses' },
-        { name: 'Trip Planning', href: '/plan' },
-        { name: 'Smart Suggestions', href: '/suggestions' },
-        { name: 'News', href: '/news' },
+        { name: 'Chat Assistant', href: '/feature/chat' },
+        { name: 'Language Courses', href: '/feature/language' },
+        { name: 'Trip Planning', href: '/feature/map' },
+        { name: 'Smart Suggestions', href: '/feature/suggestions' },
+        { name: 'News', href: '/feature/guides' },
       ],
     },
     {
       title: 'Company',
       links: [
-        { name: 'About Us', href: '/about' },
-        { name: 'Careers', href: '/careers' },
-        { name: 'Contact', href: '/contact' },
-        { name: 'Privacy Policy', href: '/privacy' },
-        { name: 'Terms of Service', href: '/terms' },
+        { name: 'About Us', href: '/feature/guides' },
+        { name: 'Careers', href: '/feature/guides' },
+        { name: 'Contact', href: '/feature/chat' },
+        { name: 'Privacy Policy', href: '/feature/guides' },
+        { name: 'Terms of Service', href: '/feature/guides' },
       ],
     },
   ];
@@ -52,27 +53,23 @@ const Footer = () => {
         <div className="py-12 md:py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Logo and description */}
           <div className="lg:col-span-2">
-            <Link to="/" className="flex items-center">
-              <span className="h-8 w-8 rounded-md bg-morocco-clay flex items-center justify-center mr-2">
-                <span className="font-bold text-white">A</span>
-              </span>
-              <span className="font-bold text-xl tracking-tight">Azoul</span>
-            </Link>
+            <Logo variant="footer" />
             <p className="mt-4 text-muted-foreground max-w-xs">
               Your ultimate guide to exploring the beautiful landscapes, rich culture, and breathtaking experiences of Morocco.
             </p>
             <div className="mt-6 flex space-x-4">
               {socialLinks.map((social) => (
-                <a
+                <motion.a
                   key={social.name}
                   href={social.href}
+                  whileHover={{ scale: 1.1, y: -2 }}
                   className="text-gray-500 hover:text-morocco-teal transition-colors"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.name}
                 >
                   <social.icon className="h-5 w-5" />
-                </a>
+                </motion.a>
               ))}
             </div>
           </div>
