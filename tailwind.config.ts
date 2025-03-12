@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -24,6 +25,16 @@ export default {
 				ring: 'hsl(var(--ring))',
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
+				morocco: {
+					terracotta: '#E67E22',
+					sand: '#F9F3E6',
+					navy: '#1E3A8A',
+					teal: '#319795',
+					gold: '#D4AF37',
+					clay: '#C0846B',
+					desert: '#E9DAC1',
+					sky: '#7AB9E0'
+				},
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))'
@@ -70,26 +81,69 @@ export default {
 			},
 			keyframes: {
 				'accordion-down': {
-					from: {
-						height: '0'
-					},
-					to: {
-						height: 'var(--radix-accordion-content-height)'
-					}
+					from: { height: '0' },
+					to: { height: 'var(--radix-accordion-content-height)' }
 				},
 				'accordion-up': {
-					from: {
-						height: 'var(--radix-accordion-content-height)'
-					},
-					to: {
-						height: '0'
-					}
+					from: { height: 'var(--radix-accordion-content-height)' },
+					to: { height: '0' }
+				},
+				'fade-in': {
+					from: { opacity: '0' },
+					to: { opacity: '1' }
+				},
+				'fade-out': {
+					from: { opacity: '1' },
+					to: { opacity: '0' }
+				},
+				'slide-up': {
+					from: { transform: 'translateY(20px)', opacity: '0' },
+					to: { transform: 'translateY(0)', opacity: '1' }
+				},
+				'slide-down': {
+					from: { transform: 'translateY(-20px)', opacity: '0' },
+					to: { transform: 'translateY(0)', opacity: '1' }
+				},
+				'scale-up': {
+					from: { transform: 'scale(0.95)', opacity: '0' },
+					to: { transform: 'scale(1)', opacity: '1' }
+				},
+				'blur-in': {
+					from: { filter: 'blur(8px)', opacity: '0' },
+					to: { filter: 'blur(0)', opacity: '1' }
+				},
+				'rotate-logo': {
+					from: { transform: 'rotate(0deg)' },
+					to: { transform: 'rotate(360deg)' }
+				},
+				'shimmer': {
+					from: { backgroundPosition: '-1000px 0' },
+					to: { backgroundPosition: '1000px 0' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
-			}
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.5s ease-out',
+				'fade-out': 'fade-out 0.5s ease-out',
+				'slide-up': 'slide-up 0.6s ease-out',
+				'slide-down': 'slide-down 0.6s ease-out',
+				'scale-up': 'scale-up 0.4s ease-out',
+				'blur-in': 'blur-in 0.7s ease-out',
+				'rotate-logo': 'rotate-logo 20s linear infinite',
+				'shimmer': 'shimmer 2s infinite linear'
+			},
+			fontFamily: {
+				sans: ['"SF Pro Display"', '"SF Pro Text"', 'system-ui', 'sans-serif'],
+				serif: ['Georgia', 'serif']
+			},
+			transitionProperty: {
+				'height': 'height',
+				'spacing': 'margin, padding',
+			},
+			transitionTimingFunction: {
+				'custom-bezier': 'cubic-bezier(0.25, 0.1, 0.25, 1)',
+			},
 		}
 	},
 	plugins: [require("tailwindcss-animate")],
