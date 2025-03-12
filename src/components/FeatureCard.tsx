@@ -30,7 +30,7 @@ const FeatureCard = ({
           boxShadow: "0 10px 30px -15px rgba(0,0,0,0.15)", 
           y: -5 
         }}
-        className="glass-card p-6 rounded-2xl cursor-pointer group"
+        className="glass-card p-6 rounded-2xl cursor-pointer group transition-all duration-300"
       >
         <motion.div 
           className="relative z-10 mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-morocco-sand group-hover:bg-morocco-terracotta transition-colors duration-300"
@@ -48,11 +48,12 @@ const FeatureCard = ({
           {title}
         </motion.h3>
         
-        <p className="text-muted-foreground">{description}</p>
+        <p className="text-muted-foreground group-hover:text-gray-700 transition-colors duration-300">{description}</p>
         
         <motion.div
           initial={{ width: 0 }}
           whileHover={{ width: "100%" }}
+          transition={{ duration: 0.3 }}
           className="h-0.5 bg-morocco-terracotta mt-4 rounded-full origin-left"
         />
       </motion.div>

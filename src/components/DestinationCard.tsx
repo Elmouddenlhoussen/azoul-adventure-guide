@@ -29,14 +29,14 @@ const DestinationCard = ({
       className="group relative overflow-hidden rounded-xl"
     >
       <Link to={href} className="block">
-        <div className="aspect-[5/6] w-full overflow-hidden rounded-xl bg-gray-100">
+        <div className="aspect-[5/6] w-full overflow-hidden rounded-xl bg-gray-100 shadow-md group-hover:shadow-xl transition-shadow duration-300">
           <div className="relative h-full w-full">
             {/* Image */}
             <motion.img
               src={image}
               alt={title}
-              className="h-full w-full object-cover"
-              whileHover={{ scale: 1.08 }}
+              className="h-full w-full object-cover transition-transform duration-700"
+              whileHover={{ scale: 1.1 }}
               transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
               loading="lazy"
             />
@@ -59,7 +59,7 @@ const DestinationCard = ({
               </motion.div>
               
               <motion.h3 
-                className="text-xl font-semibold text-white mb-2 group-hover:text-morocco-sand transition-colors"
+                className="text-xl font-semibold text-white mb-2 group-hover:text-morocco-sand transition-colors duration-300"
                 whileHover={{ x: 3 }}
                 transition={{ duration: 0.3 }}
               >

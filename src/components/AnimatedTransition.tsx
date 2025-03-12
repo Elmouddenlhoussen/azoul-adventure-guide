@@ -14,31 +14,31 @@ const variants = {
     initial: { opacity: 0 },
     animate: { opacity: 1 },
     exit: { opacity: 0 },
-    transition: { duration: 0.5 }
+    transition: { duration: 0.5, ease: "easeInOut" }
   },
   slideUp: {
     initial: { opacity: 0, y: 30 },
     animate: { opacity: 1, y: 0 },
     exit: { opacity: 0, y: 30 },
-    transition: { duration: 0.5 }
+    transition: { duration: 0.5, ease: "easeOut" }
   },
   slideRight: {
     initial: { opacity: 0, x: -30 },
     animate: { opacity: 1, x: 0 },
     exit: { opacity: 0, x: -30 },
-    transition: { duration: 0.5 }
+    transition: { duration: 0.5, ease: "easeOut" }
   },
   slideLeft: {
     initial: { opacity: 0, x: 30 },
     animate: { opacity: 1, x: 0 },
     exit: { opacity: 0, x: 30 },
-    transition: { duration: 0.5 }
+    transition: { duration: 0.5, ease: "easeOut" }
   },
   scale: {
     initial: { opacity: 0, scale: 0.95 },
     animate: { opacity: 1, scale: 1 },
     exit: { opacity: 0, scale: 0.95 },
-    transition: { duration: 0.5 }
+    transition: { duration: 0.5, type: "spring", stiffness: 300, damping: 30 }
   }
 };
 

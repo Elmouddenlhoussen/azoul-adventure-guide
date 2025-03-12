@@ -11,14 +11,19 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
   return (
     <Link to="/" className="flex items-center group">
       <motion.div
-        whileHover={{ rotate: 15, scale: 1.1 }}
-        transition={{ type: "spring", stiffness: 500, damping: 15 }}
-        className={`h-8 w-8 rounded-md ${variant === 'footer' ? 'bg-morocco-terracotta' : 'bg-morocco-clay'} flex items-center justify-center mr-2 overflow-hidden`}
+        whileHover={{ rotate: [0, -5, 5, -5, 5, 0], scale: 1.1 }}
+        transition={{ 
+          type: "spring", 
+          stiffness: 500, 
+          damping: 15,
+          rotate: { duration: 0.5, ease: "easeInOut" }
+        }}
+        className={`h-8 w-8 rounded-md ${variant === 'footer' ? 'bg-morocco-terracotta' : 'bg-morocco-clay'} flex items-center justify-center mr-2 overflow-hidden shadow-md`}
       >
         <motion.span 
           initial={{ y: 0 }}
           whileHover={{ y: -30 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
           className="flex flex-col items-center"
         >
           <span className="font-bold text-white text-xl">A</span>

@@ -101,7 +101,7 @@ const Footer = () => {
             &copy; {currentYear} Azoul. All rights reserved.
           </p>
           <p className="text-sm text-muted-foreground mt-2 md:mt-0 flex items-center">
-            Made with <Heart className="h-3 w-3 mx-1 text-morocco-terracotta" /> in Morocco
+            Made with <Heart className="h-3 w-3 mx-1 text-morocco-terracotta animate-pulse" /> in Morocco
           </p>
         </div>
       </div>

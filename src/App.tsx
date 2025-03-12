@@ -21,7 +21,6 @@ const AppRoutes = () => {
         <Route path="/" element={<Index />} />
         <Route path="/destination/:destinationId" element={<DestinationDetail />} />
         <Route path="/feature/:featureId" element={<FeatureDetail />} />
-        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>
