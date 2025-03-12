@@ -4,8 +4,9 @@ import { ReactNode } from 'react';
 
 interface AnimatedTransitionProps {
   children: ReactNode;
-  variant?: 'fade' | 'slideUp' | 'slideRight' | 'scale';
+  variant?: 'fade' | 'slideUp' | 'slideRight' | 'scale' | 'slideLeft';
   delay?: number;
+  duration?: number;
 }
 
 const variants = {
@@ -16,15 +17,21 @@ const variants = {
     transition: { duration: 0.5 }
   },
   slideUp: {
-    initial: { opacity: 0, y: 20 },
+    initial: { opacity: 0, y: 30 },
     animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: 20 },
+    exit: { opacity: 0, y: 30 },
     transition: { duration: 0.5 }
   },
   slideRight: {
-    initial: { opacity: 0, x: -20 },
+    initial: { opacity: 0, x: -30 },
     animate: { opacity: 1, x: 0 },
-    exit: { opacity: 0, x: -20 },
+    exit: { opacity: 0, x: -30 },
+    transition: { duration: 0.5 }
+  },
+  slideLeft: {
+    initial: { opacity: 0, x: 30 },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: 30 },
     transition: { duration: 0.5 }
   },
   scale: {
@@ -38,7 +45,8 @@ const variants = {
 const AnimatedTransition = ({ 
   children, 
   variant = 'fade',
-  delay = 0 
+  delay = 0,
+  duration = 0.5
 }: AnimatedTransitionProps) => {
   const selectedVariant = variants[variant];
   
@@ -47,7 +55,8 @@ const AnimatedTransition = ({
       initial={selectedVariant.initial}
       animate={selectedVariant.animate}
       exit={selectedVariant.exit}
-      transition={{ ...selectedVariant.transition, delay }}
+      transition={{ ...selectedVariant.transition, delay, duration }}
+      className="w-full"
     >
       {children}
     </motion.div>

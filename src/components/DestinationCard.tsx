@@ -1,6 +1,7 @@
 
 import { motion } from 'framer-motion';
 import { MapPin } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface DestinationCardProps {
   title: string;
@@ -25,44 +26,64 @@ const DestinationCard = ({
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       viewport={{ once: true, margin: "-100px" }}
-      className="group relative overflow-hidden rounded-xl hover-scale"
+      className="group relative overflow-hidden rounded-xl"
     >
-      <a href={href} className="block">
+      <Link to={href} className="block">
         <div className="aspect-[5/6] w-full overflow-hidden rounded-xl bg-gray-100">
           <div className="relative h-full w-full">
             {/* Image */}
-            <img
+            <motion.img
               src={image}
               alt={title}
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              className="h-full w-full object-cover"
+              whileHover={{ scale: 1.08 }}
+              transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
               loading="lazy"
             />
             
             {/* Overlay gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300" />
             
             {/* Content overlay */}
             <div className="absolute inset-0 flex flex-col justify-end p-6">
-              <div className="mb-3 flex items-center">
-                <span className="inline-flex items-center text-xs font-medium text-white/90">
+              <motion.div 
+                className="mb-3 flex items-center"
+                initial={{ opacity: 0.8 }}
+                whileHover={{ opacity: 1, x: 3 }}
+                transition={{ duration: 0.3 }}
+              >
+                <span className="inline-flex items-center text-xs font-medium text-white/90 group-hover:text-white transition-colors">
                   <MapPin className="mr-1 h-3 w-3" />
                   {location}
                 </span>
-              </div>
+              </motion.div>
               
-              <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-morocco-sand transition-colors">
+              <motion.h3 
+                className="text-xl font-semibold text-white mb-2 group-hover:text-morocco-sand transition-colors"
+                whileHover={{ x: 3 }}
+                transition={{ duration: 0.3 }}
+              >
                 {title}
-              </h3>
+              </motion.h3>
               
-              <p className="text-sm text-white/80 line-clamp-2">
+              <motion.p 
+                className="text-sm text-white/80 line-clamp-2 group-hover:text-white/95 transition-colors"
+                initial={{ opacity: 0.8 }}
+                whileHover={{ opacity: 1 }}
+              >
                 {description}
-              </p>
+              </motion.p>
               
-              <div className="mt-4 h-0.5 w-12 bg-morocco-terracotta rounded opacity-70 transition-all duration-300 group-hover:w-20 group-hover:opacity-100" />
+              <motion.div 
+                className="mt-4 h-0.5 bg-morocco-terracotta rounded opacity-70"
+                initial={{ width: 48 }}
+                whileHover={{ width: 80, opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              />
             </div>
           </div>
         </div>
-      </a>
+      </Link>
     </motion.div>
   );
 };

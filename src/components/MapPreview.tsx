@@ -47,9 +47,10 @@ const MapPreview = () => {
     
     // Add some "pins" or markers
     const pins = [
-      { x: canvas.width * 0.2, y: canvas.height * 0.3, name: "Marrakech" },
-      { x: canvas.width * 0.5, y: canvas.height * 0.5, name: "Fes" },
-      { x: canvas.width * 0.8, y: canvas.height * 0.7, name: "Sahara Desert" },
+      { x: canvas.width * 0.2, y: canvas.height * 0.3, name: "Marrakech", href: "/destination/marrakech" },
+      { x: canvas.width * 0.5, y: canvas.height * 0.5, name: "Fes", href: "/destination/fes" },
+      { x: canvas.width * 0.8, y: canvas.height * 0.7, name: "Sahara Desert", href: "/destination/sahara" },
+      { x: canvas.width * 0.3, y: canvas.height * 0.6, name: "Chefchaouen", href: "/destination/chefchaouen" },
     ];
     
     pins.forEach((pin, index) => {
@@ -73,8 +74,6 @@ const MapPreview = () => {
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(pin.name, pin.x, pin.y + 30);
-      
-      // Interactive elements would be added here in a real implementation
     });
     
     mapContainer.appendChild(canvas);
@@ -90,7 +89,8 @@ const MapPreview = () => {
         const distance = Math.sqrt(Math.pow(x - pin.x, 2) + Math.pow(y - pin.y, 2));
         if (distance < 15) {
           console.log(`Clicked on ${pin.name}`);
-          // In a real implementation, we would navigate to the destination page
+          // Navigate to the destination page
+          window.location.href = pin.href;
         }
       });
     });
@@ -109,7 +109,7 @@ const MapPreview = () => {
       transition={{ duration: 0.6 }}
       viewport={{ once: true, margin: "-100px" }}
       className="relative rounded-2xl overflow-hidden shadow-xl group"
-      whileHover={{ scale: 1.01 }}
+      whileHover={{ scale: 1.01, boxShadow: "0 15px 30px -15px rgba(0,0,0,0.3)" }}
     >
       <div ref={mapRef} className="aspect-[16/9] w-full bg-morocco-sand">
         {/* Map will be rendered here */}
@@ -121,14 +121,21 @@ const MapPreview = () => {
         <motion.div
           initial={{ y: 10, opacity: 0.8 }}
           whileHover={{ y: 0, opacity: 1 }}
-          className="bg-white/90 backdrop-blur-sm rounded-xl p-4 md:p-6 shadow-lg max-w-md transition-transform duration-300"
+          transition={{ duration: 0.3 }}
+          className="bg-white/90 backdrop-blur-sm rounded-xl p-4 md:p-6 shadow-lg max-w-md"
         >
           <h3 className="text-lg font-semibold mb-2">Interactive Map</h3>
           <p className="text-sm text-muted-foreground mb-4">
             Explore destinations, find attractions, and plan your journey with our interactive map
           </p>
-          <Link to="/feature/map" className="bg-morocco-teal text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-morocco-teal/90 transition-colors inline-block">
-            Open Full Map
+          <Link to="/feature/map">
+            <motion.button
+              className="bg-morocco-teal text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-morocco-teal/90 transition-colors inline-block"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              Open Full Map
+            </motion.button>
           </Link>
         </motion.div>
       </div>

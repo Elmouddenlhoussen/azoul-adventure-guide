@@ -32,11 +32,21 @@ const FeatureCard = ({
         }}
         className="glass-card p-6 rounded-2xl cursor-pointer group"
       >
-        <div className="relative z-10 mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-morocco-sand group-hover:bg-morocco-terracotta transition-colors duration-300">
+        <motion.div 
+          className="relative z-10 mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-morocco-sand group-hover:bg-morocco-terracotta transition-colors duration-300"
+          whileHover={{ scale: 1.1, rotate: 5 }}
+          transition={{ type: "spring", stiffness: 400, damping: 10 }}
+        >
           <Icon className="h-6 w-6 text-morocco-clay group-hover:text-white transition-colors duration-300" />
-        </div>
+        </motion.div>
         
-        <h3 className="mb-2 text-xl font-semibold group-hover:text-morocco-terracotta transition-colors duration-300">{title}</h3>
+        <motion.h3 
+          className="mb-2 text-xl font-semibold group-hover:text-morocco-terracotta transition-colors duration-300"
+          whileHover={{ x: 3 }}
+          transition={{ duration: 0.2 }}
+        >
+          {title}
+        </motion.h3>
         
         <p className="text-muted-foreground">{description}</p>
         

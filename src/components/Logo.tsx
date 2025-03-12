@@ -11,7 +11,7 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
   return (
     <Link to="/" className="flex items-center group">
       <motion.div
-        whileHover={{ rotate: 10 }}
+        whileHover={{ rotate: 15, scale: 1.1 }}
         transition={{ type: "spring", stiffness: 500, damping: 15 }}
         className={`h-8 w-8 rounded-md ${variant === 'footer' ? 'bg-morocco-terracotta' : 'bg-morocco-clay'} flex items-center justify-center mr-2 overflow-hidden`}
       >
@@ -29,7 +29,7 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
       {showText && (
         <motion.span
           initial={{ width: "auto" }}
-          whileHover={{ scale: 1.05 }}
+          whileHover={{ scale: 1.05, x: 3 }}
           transition={{ duration: 0.2 }}
           className="font-bold text-xl tracking-tight bg-gradient-to-r from-morocco-clay to-morocco-terracotta bg-clip-text text-transparent"
         >
