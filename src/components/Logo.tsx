@@ -72,12 +72,16 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
     }
   };
 
-  // Circle glow animation
+  // Circle glow animation - Fixed the type error by specifying "reverse" as the repeatType
   const glowVariants = {
     initial: { opacity: 0.5 },
     animate: { 
       opacity: [0.5, 0.8, 0.5],
-      transition: { duration: 2, repeat: Infinity, repeatType: "reverse" }
+      transition: { 
+        duration: 2, 
+        repeat: Infinity, 
+        repeatType: "reverse" as const  // Fixed here - explicitly typed as "reverse"
+      }
     }
   };
 
