@@ -319,4 +319,4 @@ const destinations: Record<string, DestinationData> = {
       ber: ["ⴰⵔⵎ ⵏ ⵓⵎⴷⴰⵏ", "ⵜⵉⴽⴽⵉⵡⵉⵏ ⵜⵉⴷⵍⵙⴰⵏⵉⵏ", "ⵜⵉⵎⵍⴰⵡⵉⵏ ⵏ ⵜⵉⵏⴰⵡⵉⵏ ⵜⵉⵇⴱⵓⵔⵉⵏ", "ⵜⵉⴽⴽⵉⵡⵉⵏ ⵏ ⵓⵙⵡⵓ", "ⵜⵉⵔⵣⵉⵡⵉⵏ ⵏ ⵉⴷⵖⴰⵔⵏ ⵉⵎⵣⵔⵓⵢⴰⵏ"]
     },
     highlights: {
-      en: ["Chouara Tannery", "Al-Qarawiyyin University and Mosque", "Bou Inania Madrasa", "Bab Boujloud
+      en: ["Chouara Tannery", "Al-Qarawiyyin University and Mosque", "Bou Inania Madrasa", "Bab Boujloud"],
