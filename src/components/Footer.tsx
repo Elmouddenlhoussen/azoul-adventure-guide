@@ -1,7 +1,7 @@
 
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Instagram, Twitter, Facebook, Mail, Heart, ArrowUpRight, MapPin, Phone, Send } from 'lucide-react';
+import { Instagram, Twitter, Facebook, Mail, Heart, ArrowUpRight, MapPin, Phone, Send, Star } from 'lucide-react';
 import Logo from './Logo';
 
 const Footer = () => {
@@ -48,7 +48,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-white border-t relative overflow-hidden">
+    <footer className="bg-gradient-to-b from-white to-morocco-sand/10 relative overflow-hidden">
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{ 
@@ -58,12 +58,8 @@ const Footer = () => {
         }}></div>
       </div>
       
-      {/* Curved top border */}
-      <div className="absolute top-0 left-0 right-0">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 48" className="w-full h-12 fill-white">
-          <path d="M0,48L80,42.7C160,37,320,27,480,21.3C640,16,800,16,960,21.3C1120,27,1280,37,1360,42.7L1440,48L1440,48L1360,48C1280,48,1120,48,960,48C800,48,640,48,480,48C320,48,160,48,80,48L0,48Z"></path>
-        </svg>
-      </div>
+      {/* Moroccan-inspired decorative element */}
+      <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-morocco-terracotta via-morocco-gold to-morocco-clay"></div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="py-12 md:py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8">
@@ -77,7 +73,7 @@ const Footer = () => {
             >
               <Logo variant="footer" />
               <p className="mt-4 text-muted-foreground max-w-xs">
-                Your ultimate guide to exploring the beautiful landscapes, rich culture, and breathtaking experiences of Morocco.
+                Discover the magic of Morocco with Azoul - your gateway to authentic experiences, rich heritage, and unforgettable adventures.
               </p>
               
               <div className="mt-6 flex space-x-4">
@@ -86,7 +82,7 @@ const Footer = () => {
                     key={social.name}
                     href={social.href}
                     whileHover={{ scale: 1.1, y: -2 }}
-                    className="text-morocco-clay hover:text-morocco-teal transition-colors bg-morocco-sand/20 p-2 rounded-full"
+                    className="text-morocco-clay hover:text-morocco-gold transition-colors bg-morocco-sand/20 p-2 rounded-full"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.name}
@@ -96,23 +92,23 @@ const Footer = () => {
                 ))}
               </div>
               
-              <div className="mt-8 p-4 bg-morocco-sand/20 rounded-xl">
-                <h3 className="text-sm font-semibold flex items-center">
-                  <MapPin className="h-4 w-4 mr-1 text-morocco-clay" />
+              <div className="mt-8 p-4 bg-white/80 backdrop-blur-sm shadow-sm rounded-xl border border-morocco-sand/30">
+                <h3 className="text-sm font-semibold flex items-center text-morocco-navy">
+                  <MapPin className="h-4 w-4 mr-1 text-morocco-terracotta" />
                   Visit Us
                 </h3>
                 <p className="text-sm text-muted-foreground mt-1">
                   123 Medina Street, Marrakech, Morocco
                 </p>
                 <div className="flex items-center mt-2">
-                  <Phone className="h-4 w-4 mr-1 text-morocco-clay" />
+                  <Phone className="h-4 w-4 mr-1 text-morocco-terracotta" />
                   <span className="text-sm text-muted-foreground">+212 123 456 789</span>
                 </div>
               </div>
             </motion.div>
           </div>
 
-          {/* Newsletter */}
+          {/* Newsletter with Moroccan styling */}
           <div className="lg:col-span-3">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -120,7 +116,8 @@ const Footer = () => {
               transition={{ duration: 0.5, delay: 0.1 }}
               viewport={{ once: true }}
             >
-              <h3 className="text-sm font-semibold text-gray-900 mb-4">
+              <h3 className="text-sm font-semibold text-morocco-navy mb-4 flex items-center">
+                <Star className="h-3 w-3 mr-1 fill-morocco-gold text-morocco-gold" /> 
                 Subscribe to Our Newsletter
               </h3>
               <form className="mt-2">
@@ -129,24 +126,24 @@ const Footer = () => {
                     <input 
                       type="email" 
                       placeholder="Your email address" 
-                      className="w-full px-4 py-2 pr-10 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-morocco-clay focus:border-transparent"
+                      className="w-full px-4 py-2 pr-10 rounded-lg border border-morocco-sand/50 focus:outline-none focus:ring-2 focus:ring-morocco-gold focus:border-transparent"
                     />
                     <button 
                       type="submit" 
-                      className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-morocco-clay text-white p-1 rounded-md"
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-morocco-terracotta text-white p-1 rounded-md hover:bg-morocco-gold transition-colors"
                     >
                       <Send className="h-4 w-4" />
                     </button>
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Get travel tips and exclusive offers directly to your inbox.
+                    Join our community for exclusive Moroccan travel tips and cultural insights.
                   </p>
                 </div>
               </form>
             </motion.div>
           </div>
 
-          {/* Footer links */}
+          {/* Footer links with Moroccan-inspired decorations */}
           {footerLinks.map((group, idx) => (
             <motion.div 
               key={group.title} 
@@ -156,7 +153,8 @@ const Footer = () => {
               transition={{ duration: 0.5, delay: 0.1 + idx * 0.1 }}
               viewport={{ once: true }}
             >
-              <h3 className="text-sm font-semibold text-gray-900 mb-4 flex items-center">
+              <h3 className="text-sm font-semibold text-morocco-navy mb-4 flex items-center">
+                <Star className="h-3 w-3 mr-1 fill-morocco-gold text-morocco-gold" />
                 {group.title}
                 <ArrowUpRight className="h-3 w-3 ml-1 text-morocco-clay" />
               </h3>
@@ -168,10 +166,10 @@ const Footer = () => {
                   >
                     <Link
                       to={link.href}
-                      className="text-muted-foreground hover:text-morocco-teal transition-colors text-sm inline-block relative group"
+                      className="text-muted-foreground hover:text-morocco-terracotta transition-colors text-sm inline-block relative group"
                     >
                       {link.name}
-                      <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-morocco-teal transition-all duration-300 group-hover:w-full"></span>
+                      <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-morocco-terracotta transition-all duration-300 group-hover:w-full"></span>
                     </Link>
                   </motion.li>
                 ))}
@@ -180,7 +178,7 @@ const Footer = () => {
           ))}
         </div>
 
-        <div className="py-6 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center">
+        <div className="py-6 border-t border-morocco-sand/20 flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-muted-foreground">
             &copy; {currentYear} Azoul. All rights reserved.
           </p>

@@ -1,6 +1,7 @@
 
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { Star } from 'lucide-react';
 
 interface LogoProps {
   variant?: 'default' | 'footer';
@@ -22,118 +23,101 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
     })
   };
 
-  // Logo box animation
-  const logoBoxVariants = {
-    rest: { 
-      scale: 1,
-      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)"
+  // Logo animations
+  const logoContainerVariants = {
+    initial: { 
+      scale: 0.9, 
+      opacity: 0,
+      rotate: -10
+    },
+    animate: { 
+      scale: 1, 
+      opacity: 1,
+      rotate: 0,
+      transition: {
+        type: "spring",
+        stiffness: 200,
+        damping: 20,
+        duration: 0.8
+      }
     },
     hover: { 
-      scale: 1.1,
-      boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)",
+      scale: 1.05,
       transition: {
         type: "spring",
         stiffness: 400,
         damping: 10
       }
     },
-    tap: { 
-      scale: 0.95 
-    }
+    tap: { scale: 0.95 }
   };
 
-  // Logo box spin on load
-  const initialRotateVariants = {
-    initial: { rotate: -180, opacity: 0 },
-    animate: { 
-      rotate: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 200,
-        damping: 20,
-        duration: 1
-      }
-    }
-  };
-
-  // Arabic letter animation
-  const arabicLetterVariants = {
-    rest: { y: 0 },
+  // Star animation
+  const starVariants = {
+    initial: { scale: 1, opacity: 1 },
     hover: { 
-      y: -20,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 20
-      }
+      scale: 0,
+      opacity: 0,
+      transition: { duration: 0.3 }
     }
   };
 
-  // Combined initial and animate states
-  const combinedInitial = {
-    ...logoBoxVariants.rest,
-    ...initialRotateVariants.initial
+  // Tifinagh symbol animation
+  const tifinaghVariants = {
+    initial: { scale: 0, opacity: 0 },
+    hover: { 
+      scale: 1,
+      opacity: 1,
+      transition: { duration: 0.3, delay: 0.1 }
+    }
   };
-  
-  const combinedAnimate = {
-    ...logoBoxVariants.rest,
-    ...initialRotateVariants.animate
+
+  // Circle glow animation
+  const glowVariants = {
+    initial: { opacity: 0.5 },
+    animate: { 
+      opacity: [0.5, 0.8, 0.5],
+      transition: { duration: 2, repeat: Infinity, repeatType: "reverse" }
+    }
   };
 
   // Enhanced gradient colors based on variant
   const gradientColors = variant === 'footer' 
-    ? "from-morocco-gold to-morocco-terracotta" 
+    ? "from-morocco-terracotta to-morocco-gold" 
     : "from-morocco-clay to-morocco-terracotta";
 
   return (
     <Link to="/" className="flex items-center group">
       <motion.div
-        initial={combinedInitial}
-        animate={combinedAnimate}
+        initial="initial"
+        animate="animate"
         whileHover="hover"
         whileTap="tap"
-        variants={logoBoxVariants}
+        variants={logoContainerVariants}
         className={`h-10 w-10 rounded-full relative ${
           variant === 'footer' 
-            ? 'bg-gradient-to-br from-morocco-gold to-morocco-terracotta' 
-            : 'bg-gradient-to-br from-morocco-teal to-morocco-clay'
+            ? 'bg-gradient-to-br from-morocco-terracotta to-morocco-gold' 
+            : 'bg-gradient-to-br from-morocco-clay to-morocco-terracotta'
         } flex items-center justify-center mr-2 overflow-hidden shadow-lg`}
       >
         {/* Inner circle with glow effect */}
         <motion.div 
           className="absolute inset-0.5 rounded-full bg-white/10 backdrop-blur-sm"
-          animate={{ opacity: [0.5, 0.8, 0.5] }}
-          transition={{ 
-            duration: 2,
-            repeat: Infinity,
-            repeatType: "reverse"
-          }}
+          variants={glowVariants}
         />
         
-        <motion.span 
-          variants={arabicLetterVariants}
-          initial="rest"
-          whileHover="hover"
-          className="flex flex-col items-center relative z-10"
+        {/* Moroccan flag star that transforms on hover */}
+        <motion.div className="relative z-10" variants={starVariants}>
+          <Star className="h-6 w-6 text-white fill-morocco-gold stroke-morocco-gold" strokeWidth={1} />
+        </motion.div>
+        
+        {/* Tifinagh symbol "ⵣ" (Yaz) - symbolizes free men (Amazigh) */}
+        <motion.div 
+          className="absolute inset-0 flex items-center justify-center"
+          variants={tifinaghVariants}
         >
-          <motion.span 
-            className="font-bold text-white text-xl"
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-          >
-            A
-          </motion.span>
-          <motion.span 
-            className="font-bold text-white text-xl mt-5"
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.5 }}
-          >
-            ز
-          </motion.span>
-        </motion.span>
+          <span className="text-white text-xl font-bold">ⵣ</span>
+        </motion.div>
       </motion.div>
       
       {showText && (
