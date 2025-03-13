@@ -34,6 +34,10 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.75rem;
+    
+    /* Moroccan flag colors */
+    --morocco-red: 357 81% 48%;     /* #c1272d */
+    --morocco-green: 153 100% 19%;   /* #006233 */
   }
 
   .dark {
@@ -64,6 +68,10 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
+    /* Moroccan flag colors - same in dark mode */
+    --morocco-red: 357 81% 48%;     /* #c1272d */
+    --morocco-green: 153 100% 19%;   /* #006233 */
   }
 }
 
@@ -129,6 +137,10 @@
   }
   
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-morocco-teal to-morocco-navy;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-morocco-green to-morocco-red;
+  }
+
+  .morocco-gradient {
+    @apply bg-gradient-to-r from-morocco-green to-morocco-red;
   }
 }

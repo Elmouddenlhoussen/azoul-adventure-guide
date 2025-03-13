@@ -85,10 +85,9 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
     }
   };
 
-  // Enhanced gradient colors based on variant
-  const gradientColors = variant === 'footer' 
-    ? "from-morocco-terracotta to-morocco-gold" 
-    : "from-morocco-clay to-morocco-terracotta";
+  // Moroccan flag colors
+  const bgColor = "bg-[#c1272d]"; // Moroccan flag red
+  const starColor = "text-[#006233] fill-[#006233] stroke-[#006233]"; // Moroccan flag green
 
   return (
     <Link to="/" className="flex items-center group">
@@ -98,11 +97,7 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
         whileHover="hover"
         whileTap="tap"
         variants={logoContainerVariants}
-        className={`h-10 w-10 rounded-full relative ${
-          variant === 'footer' 
-            ? 'bg-gradient-to-br from-morocco-terracotta to-morocco-gold' 
-            : 'bg-gradient-to-br from-morocco-clay to-morocco-terracotta'
-        } flex items-center justify-center mr-2 overflow-hidden shadow-lg`}
+        className={`h-10 w-10 rounded-full relative ${bgColor} flex items-center justify-center mr-2 overflow-hidden shadow-lg`}
       >
         {/* Inner circle with glow effect */}
         <motion.div 
@@ -110,9 +105,9 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
           variants={glowVariants}
         />
         
-        {/* Moroccan flag star that transforms on hover */}
+        {/* Moroccan flag star */}
         <motion.div className="relative z-10" variants={starVariants}>
-          <Star className="h-6 w-6 text-white fill-morocco-gold stroke-morocco-gold" strokeWidth={1} />
+          <Star className={`h-6 w-6 ${starColor}`} strokeWidth={1} />
         </motion.div>
         
         {/* Tifinagh symbol "ⵣ" (Yaz) - symbolizes free men (Amazigh) */}
@@ -120,7 +115,7 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
           className="absolute inset-0 flex items-center justify-center"
           variants={tifinaghVariants}
         >
-          <span className="text-white text-xl font-bold">ⵣ</span>
+          <span className={`${starColor} text-xl font-bold`}>ⵣ</span>
         </motion.div>
       </motion.div>
       
@@ -139,14 +134,14 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
                 variants={letterVariants}
                 initial="hidden"
                 animate="visible"
-                className="font-bold text-xl inline-block tracking-tight bg-gradient-to-r from-morocco-teal to-morocco-terracotta bg-clip-text text-transparent hover:tracking-normal transition-all duration-300"
+                className="font-bold text-xl inline-block tracking-tight bg-gradient-to-r from-[#006233] to-[#c1272d] bg-clip-text text-transparent hover:tracking-normal transition-all duration-300"
               >
                 {letter}
               </motion.span>
             ))}
             {/* Animated underline effect */}
             <motion.span 
-              className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-morocco-teal to-morocco-terracotta rounded-full"
+              className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-[#006233] to-[#c1272d] rounded-full"
               initial={{ width: "0%" }}
               whileInView={{ width: "100%" }}
               transition={{ delay: 1, duration: 0.8 }}

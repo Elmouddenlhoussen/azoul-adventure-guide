@@ -33,7 +33,9 @@ export default {
 					gold: '#D4AF37',
 					clay: '#C0846B',
 					desert: '#E9DAC1',
-					sky: '#7AB9E0'
+					sky: '#7AB9E0',
+					red: '#c1272d',    // Moroccan flag red
+					green: '#006233'   // Moroccan flag green
 				},
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
