@@ -1,25 +1,45 @@
-
 import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ExternalLink } from 'lucide-react';
 import AnimatedTransition from '@/components/AnimatedTransition';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/hooks/use-language';
 
 interface FeatureData {
   id: string;
-  title: string;
-  description: string;
+  title: {
+    en: string;
+    fr: string;
+    ar: string;
+    ber: string;
+  };
+  description: {
+    en: string;
+    fr: string;
+    ar: string;
+    ber: string;
+  };
   content: React.ReactNode;
 }
 
-// This will be replaced with actual content for each feature
 const features: Record<string, FeatureData> = {
   "map": {
     id: "map",
-    title: "Interactive Map",
-    description: "Explore Morocco with our detailed interactive map showing destinations, routes, and attractions.",
+    title: {
+      en: "Interactive Map",
+      fr: "Carte Interactive",
+      ar: "خريطة تفاعلية",
+      ber: "ⵜⴰⴽⴰⵔⴷⴰ ⵜⴰⵎⵙⴰⵡⴰⵙⵜ"
+    },
+    description: {
+      en: "Explore Morocco with our detailed interactive map showing destinations, routes, and attractions.",
+      fr: "Explorez le Maroc avec notre carte interactive détaillée montrant les destinations, les itinéraires et les attractions.",
+      ar: "استكشف المغرب مع خريطتنا التفاعلية المفصلة التي تعرض الوجهات والطرق ومناطق الجذب.",
+      ber: "ⵙⵙⵏ ⵍⵎⵖⵔⵉⴱ ⵙ ⵜⴽⴰⵔⴷⴰ ⵜⴰⵎⵙⴰⵡⴰⵙⵜ ⵉⵜⵜⵎⵍⴰⵏ ⵉⵙⴰⴼⴰⵔⵏ, ⵉⴱⵔⵉⴷⵏ ⴷ ⵜⵉⵏⵏⴰⵥⵉⵏ"
+    },
     content: (
       <div className="space-y-6">
         <p>Our interactive map is currently under development. Soon you'll be able to:</p>
@@ -30,17 +50,34 @@ const features: Record<string, FeatureData> = {
           <li>Create custom routes and itineraries</li>
           <li>Save favorite locations</li>
         </ul>
-        <div className="bg-morocco-sand/30 p-4 rounded-lg">
-          <p className="text-morocco-clay font-medium">Coming soon!</p>
+        <div className="bg-morocco-sand/30 p-6 rounded-lg shadow-inner">
+          <p className="text-morocco-clay font-medium text-lg mb-2">Coming soon!</p>
           <p className="text-sm">Our development team is working hard to bring you this feature.</p>
+          <div className="mt-4">
+            <Button variant="outline" className="bg-white/50">
+              <Link to="/" className="flex items-center">
+                Join the Waitlist <ExternalLink className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
         </div>
       </div>
     )
   },
   "suggestions": {
     id: "suggestions",
-    title: "Smart Suggestions",
-    description: "Receive personalized recommendations based on your interests and preferences.",
+    title: {
+      en: "Smart Suggestions",
+      fr: "Suggestions Intelligentes",
+      ar: "اقتراحات ذكية",
+      ber: "ⵉⵥⵓⵕⴰⵏ ⵉⵎⵉⴳⵉⵏ"
+    },
+    description: {
+      en: "Receive personalized recommendations based on your interests and preferences.",
+      fr: "Recevez des recommandations personnalisées en fonction de vos intérêts et préférences.",
+      ar: "احصل على توصيات مخصصة بناءً على اهتماماتك وتفضيلاتك.",
+      ber: "ⵔⵎⵙ ⵉⵙⵓⵍⴰⵏ ⵉⵎⵓⵜⴰⵏ ⵙ ⵡⵓⴷⵎⴰⵡⵏ ⴷ ⵜⵉⵙⵜⵉⵏⵉⵏ ⵏⵏⴽ"
+    },
     content: (
       <div className="space-y-6">
         <p>Our AI-powered suggestion engine analyzes your preferences and browsing history to recommend the perfect Moroccan experiences for you.</p>
@@ -51,17 +88,38 @@ const features: Record<string, FeatureData> = {
           <li>Our AI learns from your interactions</li>
           <li>Receive personalized recommendations</li>
         </ol>
-        <div className="bg-morocco-sand/30 p-4 rounded-lg">
-          <p className="text-morocco-clay font-medium">Did you know?</p>
-          <p className="text-sm">Our suggestion algorithm considers over 200 factors including season, budget, and travel style to make the perfect recommendations.</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+          <div className="bg-morocco-sand/30 p-4 rounded-lg shadow-sm">
+            <p className="text-morocco-clay font-medium">Did you know?</p>
+            <p className="text-sm">Our suggestion algorithm considers over 200 factors including season, budget, and travel style to make the perfect recommendations.</p>
+          </div>
+          <div className="bg-morocco-teal/10 p-4 rounded-lg shadow-sm">
+            <p className="text-morocco-teal font-medium">Try it now!</p>
+            <p className="text-sm">Create your profile to start receiving personalized Morocco travel suggestions.</p>
+          </div>
+        </div>
+        <div className="mt-4 text-center">
+          <Button className="bg-morocco-clay hover:bg-morocco-clay/90">
+            Get Started
+          </Button>
         </div>
       </div>
     )
   },
   "chat": {
     id: "chat",
-    title: "Chat Assistant",
-    description: "Get instant answers to your questions from our AI-powered travel assistant.",
+    title: {
+      en: "Chat Assistant",
+      fr: "Assistant de Chat",
+      ar: "مساعد الدردشة",
+      ber: "ⴰⵎⵛⵛⵉⵡ ⵏ ⵓⵎⵙⴰⵡⴰⵍ"
+    },
+    description: {
+      en: "Get instant answers to your questions from our AI-powered travel assistant.",
+      fr: "Obtenez des réponses instantanées à vos questions grâce à notre assistant de voyage alimenté par l'IA.",
+      ar: "احصل على إجابات فورية لأسئلتك من مساعد السفر المدعوم بالذكاء الاصطناعي.",
+      ber: "ⴰⵔⵎ ⵉⵏⴰⵔⴰⵡⵏ ⵉⵎⴰⴳⵓⵜⵏ ⵉ ⵜⵓⵇⵇⵙⵉⵡⵉⵏ ⵏⵏⵓⵏ ⵙⴳ ⵓⵎⵛⵛⵉⵡ ⵏ ⵜⵎⴰⵜⵜⴰⵢⵜ ⵉⵜⵜⵓⵙⴽⴰⵔⵏ ⵙ ⵜⵥⵏⵉⵇⵜ"
+    },
     content: (
       <div className="space-y-6">
         <p>Meet Azoul, your personal Moroccan travel assistant! Available 24/7 to answer your questions about:</p>
@@ -98,8 +156,18 @@ const features: Record<string, FeatureData> = {
   },
   "events": {
     id: "events",
-    title: "Cultural Events",
-    description: "Stay updated on local festivals, concerts, and cultural events happening during your visit.",
+    title: {
+      en: "Cultural Events",
+      fr: "Événements Culturels",
+      ar: "الفعاليات الثقافية",
+      ber: "ⵉⵎⵓⵙⵙⵓⵜⵏ ⵉⴷⵍⵙⴰⵏⵏ"
+    },
+    description: {
+      en: "Stay updated on local festivals, concerts, and cultural events happening during your visit.",
+      fr: "Restez informé des festivals locaux, des concerts et des événements culturels qui se déroulent pendant votre visite.",
+      ar: "ابق على اطلاع دائم بالمهرجانات المحلية والحفلات الموسيقية والفعاليات الثقافية التي تحدث خلال زيارتك.",
+      ber: "ⵉⵍⵉⵏ ⵉⵜⵜⵓⵙⵏⴼⴰⵍⵏ ⵅⴼ ⵉⵎⵓⵙⵙⵓⵜⵏ ⵉⴷⵍⵙⴰⵏⵏ, ⵉⵎⵔⴰⵔⴰⵢⵏ ⴷ ⵉⵎⵓⵙⵙⵓⵜⵏ ⵉⴷⵍⵙⴰⵏⵏ ⵉⵍⵍⴰⵏ ⴳ ⵓⵣⵎⵣ ⵏ ⵜⵉⵔⵣⵉⵜ ⵏⵏⵓⵏ."
+    },
     content: (
       <div className="space-y-6">
         <p>Morocco has a rich calendar of cultural events throughout the year. Plan your trip to coincide with these unforgettable experiences:</p>
@@ -130,8 +198,18 @@ const features: Record<string, FeatureData> = {
   },
   "guides": {
     id: "guides",
-    title: "Travel Guides",
-    description: "Access comprehensive guides with insider tips on each destination.",
+    title: {
+      en: "Travel Guides",
+      fr: "Guides de Voyage",
+      ar: "إرشادات السفر",
+      ber: "ⵉⵎⴰⵙⵙⴰⵏ ⵏ ⵓⵎⴰⵜⵜⴰⵢ"
+    },
+    description: {
+      en: "Access comprehensive guides with insider tips on each destination.",
+      fr: "Accédez à des guides complets avec des conseils d'initiés sur chaque destination.",
+      ar: "الوصول إلى إرشادات شاملة مع نصائح من الداخل حول كل وجهة.",
+      ber: "ⴰⵡⴹ ⵉ ⵉⵎⴰⵙⵙⴰⵏ ⵉⵎⴰⵜⵜⴰⵢⵏ ⵉⵜⵜⵓⵙⴽⴰⵔⵏ ⵙ ⵉⵙⵓⵍⴰⵏ ⵉⴳⴳⵓⵔⴰⵏ ⵅⴼ ⴽⵓ ⵢⴰⵏ ⵙⴳ ⵉⵙⴰⴼⴰⵔⵏ."
+    },
     content: (
       <div className="space-y-6">
         <p>Our comprehensive travel guides are written by local experts and seasoned travelers to give you the most authentic Moroccan experience.</p>
@@ -170,8 +248,18 @@ const features: Record<string, FeatureData> = {
   },
   "language": {
     id: "language",
-    title: "Language Support",
-    description: "Learn essential phrases in Moroccan Arabic and navigate language barriers with ease.",
+    title: {
+      en: "Language Support",
+      fr: "Support Linguistique",
+      ar: "دعم اللغة",
+      ber: "ⵜⴰⵡⵙⵉ ⵏ ⵜⵓⵜⵍⴰⵢⵜ"
+    },
+    description: {
+      en: "Learn essential phrases in Moroccan Arabic and navigate language barriers with ease.",
+      fr: "Apprenez des phrases essentielles en arabe marocain et surmontez facilement les barrières linguistiques.",
+      ar: "تعلم العبارات الأساسية في اللغة العربية المغربية وتغلب على الحواجز اللغوية بسهولة.",
+      ber: "ⵍⵎⴷ ⵜⴰⴳⵓⵔⵉⵡⵉⵏ ⵉⵙⵙⵔⵙⵏⵉⵏ ⴳ ⵜⴰⵄⵕⴰⴱⵜ ⵜⴰⵎⴰⵣⵉⵖⵜ ⴷ ⵜⵣⵡⵉⵔⵜ ⵏ ⵉⵎⵉⴽⵏ ⵏ ⵜⵓⵜⵍⴰⵢⵜ ⵙ ⴰⴼⵓⵙ."
+    },
     content: (
       <div className="space-y-6">
         <p>Learning a few key phrases in Darija (Moroccan Arabic) can enhance your experience and show respect for the local culture.</p>
@@ -230,6 +318,7 @@ const features: Record<string, FeatureData> = {
 
 const FeatureDetail = () => {
   const { featureId } = useParams<{ featureId: string }>();
+  const { language } = useLanguage();
   const feature = features[featureId || ''];
   
   useEffect(() => {
@@ -250,6 +339,10 @@ const FeatureDetail = () => {
     );
   }
 
+  // Get the title and description in the current language or fall back to English
+  const title = feature.title[language as keyof typeof feature.title] || feature.title.en;
+  const description = feature.description[language as keyof typeof feature.description] || feature.description.en;
+
   return (
     <AnimatedTransition variant="slideUp">
       <div className="min-h-screen">
@@ -263,8 +356,8 @@ const FeatureDetail = () => {
             </Link>
             
             <div className="mb-8">
-              <h1 className="text-3xl md:text-4xl font-bold mb-4">{feature.title}</h1>
-              <p className="text-lg text-gray-600">{feature.description}</p>
+              <h1 className="text-3xl md:text-4xl font-bold mb-4">{title}</h1>
+              <p className="text-lg text-gray-600">{description}</p>
             </div>
             
             {feature.content}

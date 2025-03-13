@@ -3,27 +3,28 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Instagram, Twitter, Facebook, Mail, Heart, ArrowUpRight, MapPin, Phone, Send, Star } from 'lucide-react';
 import Logo from './Logo';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const Footer = () => {
   const footerLinks = [
     {
       title: 'Explore',
       links: [
-        { name: 'Destinations', href: '/destination/marrakech' },
-        { name: 'Experiences', href: '/feature/suggestions' },
-        { name: 'Guides', href: '/feature/guides' },
-        { name: 'Events', href: '/feature/events' },
-        { name: 'Map', href: '/feature/map' },
+        { name: 'Marrakech', href: '/destination/marrakech' },
+        { name: 'Chefchaouen', href: '/destination/chefchaouen' },
+        { name: 'Sahara Desert', href: '/destination/sahara' },
+        { name: 'Fes', href: '/destination/fes' },
+        { name: 'Interactive Map', href: '/feature/map' },
       ],
     },
     {
-      title: 'Services',
+      title: 'Features',
       links: [
         { name: 'Chat Assistant', href: '/feature/chat' },
-        { name: 'Language Courses', href: '/feature/language' },
-        { name: 'Trip Planning', href: '/feature/map' },
+        { name: 'Language Support', href: '/feature/language' },
+        { name: 'Travel Guides', href: '/feature/guides' },
         { name: 'Smart Suggestions', href: '/feature/suggestions' },
-        { name: 'News', href: '/feature/guides' },
+        { name: 'Cultural Events', href: '/feature/events' },
       ],
     },
     {
@@ -76,7 +77,11 @@ const Footer = () => {
                 Discover the magic of Morocco with Azoul - your gateway to authentic experiences, rich heritage, and unforgettable adventures.
               </p>
               
-              <div className="mt-6 flex space-x-4">
+              <div className="mt-4 flex items-center">
+                <LanguageSwitcher />
+              </div>
+              
+              <div className="mt-4 flex space-x-4">
                 {socialLinks.map((social) => (
                   <motion.a
                     key={social.name}

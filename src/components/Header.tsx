@@ -5,6 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Compass, Globe, Calendar, Newspaper, MessageCircle, MapPin, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Logo from './Logo';
+import LanguageSwitcher from './LanguageSwitcher';
 import { 
   NavigationMenu,
   NavigationMenuContent,
@@ -109,42 +110,48 @@ const Header = () => {
           </motion.div>
 
           {/* Desktop Navigation */}
-          <NavigationMenu className="hidden md:flex">
-            <NavigationMenuList>
-              {navLinks.map((link) => (
-                <NavigationMenuItem key={link.name}>
-                  <Link 
-                    to={link.href}
-                    className={cn(
-                      "flex items-center text-sm font-medium px-4 py-2 rounded-full transition-colors relative group",
-                      isActive(link.href)
-                        ? "bg-morocco-sand/30 text-morocco-clay" 
-                        : isScrolled 
-                          ? "text-gray-800 hover:bg-morocco-sand/20" 
-                          : "text-gray-800 hover:bg-white/20"
-                    )}
-                  >
-                    {link.icon}
-                    <span>{link.name}</span>
-                    
-                    {isActive(link.href) && (
-                      <motion.span 
-                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-morocco-clay"
-                        layoutId="navbar-indicator"
-                        transition={{ type: 'spring', duration: 0.6 }}
-                      />
-                    )}
-                  </Link>
-                </NavigationMenuItem>
-              ))}
-            </NavigationMenuList>
-          </NavigationMenu>
+          <div className="hidden md:flex items-center space-x-2">
+            <NavigationMenu>
+              <NavigationMenuList>
+                {navLinks.map((link) => (
+                  <NavigationMenuItem key={link.name}>
+                    <Link 
+                      to={link.href}
+                      className={cn(
+                        "flex items-center text-sm font-medium px-4 py-2 rounded-full transition-colors relative group",
+                        isActive(link.href)
+                          ? "bg-morocco-sand/30 text-morocco-clay" 
+                          : isScrolled 
+                            ? "text-gray-800 hover:bg-morocco-sand/20" 
+                            : "text-gray-800 hover:bg-white/20"
+                      )}
+                    >
+                      {link.icon}
+                      <span>{link.name}</span>
+                      
+                      {isActive(link.href) && (
+                        <motion.span 
+                          className="absolute bottom-0 left-0 right-0 h-0.5 bg-morocco-clay"
+                          layoutId="navbar-indicator"
+                          transition={{ type: 'spring', duration: 0.6 }}
+                        />
+                      )}
+                    </Link>
+                  </NavigationMenuItem>
+                ))}
+              </NavigationMenuList>
+            </NavigationMenu>
+            
+            <LanguageSwitcher />
+          </div>
           
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center">
+            <LanguageSwitcher />
+            
             <motion.button
               onClick={toggleMobileMenu}
-              className="inline-flex items-center justify-center rounded-full p-2 text-gray-800 bg-morocco-sand/20"
+              className="ml-2 inline-flex items-center justify-center rounded-full p-2 text-gray-800 bg-morocco-sand/20"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >

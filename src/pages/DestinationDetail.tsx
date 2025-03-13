@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -6,273 +5,318 @@ import { ArrowLeft, Clock, Calendar, Users, MapPin, Star, ExternalLink } from 'l
 import AnimatedTransition from '@/components/AnimatedTransition';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { useLanguage } from '@/hooks/use-language';
 
 interface DestinationData {
   id: string;
-  title: string;
-  description: string;
-  fullDescription: string;
+  title: {
+    en: string;
+    fr: string;
+    ar: string;
+    ber: string;
+  };
+  description: {
+    en: string;
+    fr: string;
+    ar: string;
+    ber: string;
+  };
+  fullDescription: {
+    en: string;
+    fr: string;
+    ar: string;
+    ber: string;
+  };
   image: string;
   gallery: string[];
-  location: string;
+  location: {
+    en: string;
+    fr: string;
+    ar: string;
+    ber: string;
+  };
   rating: number;
-  duration: string;
-  bestTime: string;
-  groupSize: string;
-  activities: string[];
-  highlights: string[];
+  duration: {
+    en: string;
+    fr: string;
+    ar: string;
+    ber: string;
+  };
+  bestTime: {
+    en: string;
+    fr: string;
+    ar: string;
+    ber: string;
+  };
+  groupSize: {
+    en: string;
+    fr: string;
+    ar: string;
+    ber: string;
+  };
+  activities: {
+    en: string[];
+    fr: string[];
+    ar: string[];
+    ber: string[];
+  };
+  highlights: {
+    en: string[];
+    fr: string[];
+    ar: string[];
+    ber: string[];
+  };
 }
 
 const destinations: Record<string, DestinationData> = {
   "marrakech": {
     id: "marrakech",
-    title: "Marrakech",
-    description: "Discover the vibrant markets, palaces, and gardens of this historic imperial city.",
-    fullDescription: "Known as the 'Red City' for its ochre-colored walls, Marrakech is a cultural epicenter that offers a perfect blend of history, architecture, and vibrant street life. The city's heart is Jemaa el-Fnaa square, which transforms from a shopping hub during the day to an open-air theater of performers, storytellers, and food stalls at night. Explore the winding alleyways of the medina, visit the stunning Bahia Palace, and find peace in the Majorelle Garden, a botanical garden designed by the French painter Jacques Majorelle and later owned by Yves Saint Laurent.",
+    title: {
+      en: "Marrakech",
+      fr: "Marrakech",
+      ar: "مراكش",
+      ber: "ⵎⵕⵕⴰⴽⵛ"
+    },
+    description: {
+      en: "Discover the vibrant markets, palaces, and gardens of this historic imperial city.",
+      fr: "Découvrez les marchés animés, les palais et les jardins de cette ville impériale historique.",
+      ar: "اكتشف الأسواق النابضة بالحياة والقصور والحدائق في هذه المدينة الإمبراطورية التاريخية.",
+      ber: "ⵙⵙⵏ ⵉⵙⵡⴰⵇⵏ ⵉⵜⵜⵏⵓⵙⵏ, ⵉⴳⵍⴷⴰⵏ ⴷ ⵓⵔⵜⴰⵏ ⵏ ⵜⵖⵔⵎⵜ ⴰⴷ ⵜⴰⵎⴰⵙⵙⴰⵏⵜ."
+    },
+    fullDescription: {
+      en: "Known as the 'Red City' for its ochre-colored walls, Marrakech is a cultural epicenter that offers a perfect blend of history, architecture, and vibrant street life. The city's heart is Jemaa el-Fnaa square, which transforms from a shopping hub during the day to an open-air theater of performers, storytellers, and food stalls at night. Explore the winding alleyways of the medina, visit the stunning Bahia Palace, and find peace in the Majorelle Garden, a botanical garden designed by the French painter Jacques Majorelle and later owned by Yves Saint Laurent.",
+      fr: "Connue sous le nom de 'Ville Rouge' pour ses murs couleur ocre, Marrakech est un épicentre culturel qui offre un mélange parfait d'histoire, d'architecture et de vie urbaine animée. Le cœur de la ville est la place Jemaa el-Fnaa, qui se transforme d'un centre commercial pendant la journée en un théâtre à ciel ouvert d'artistes, de conteurs et d'étals de nourriture la nuit. Explorez les ruelles sinueuses de la médina, visitez le magnifique Palais de la Bahia et trouvez la paix dans le Jardin Majorelle, un jardin botanique conçu par le peintre français Jacques Majorelle et plus tard possédé par Yves Saint Laurent.",
+      ar: "تُعرف باسم 'المدينة الحمراء' لجدرانها ذات اللون الأوكر، مراكش هي مركز ثقافي يقدم مزيجًا مثاليًا من التاريخ والهندسة المعمارية والحياة النابضة بالحيوية في الشوارع. قلب المدينة هو ساحة جامع الفنا، التي تتحول من مركز للتسوق خلال النهار إلى مسرح في الهواء الطلق للفنانين ورواة القصص وأكشاك الطعام في الليل. استكشف الأزقة المتعرجة في المدينة القديمة، وزر قصر الباهية الرائع، واعثر على السلام في حديقة ماجوريل، وهي حديقة نباتية صممها الرسام الفرنسي جاك ماجوريل وامتلكها لاحقًا إيف سان لوران.",
+      ber: "ⵜⵜⵡⴰⵙⵙⴰⵏ ⵙ 'ⵜⵖⵔⵎⵜ ⵜⴰⵣⴳⴳⵯⴰⵖⵜ' ⴼ ⵉⵖⵔⴱⴰⵏ ⵏⵏⵙ ⵓⴽⵡⵔⴰⵏⵉⵏ, ⵎⵕⵕⴰⴽⵛ ⵉⴳⴰ ⵜⵜ ⴰⵎⵎⴰⵙ ⴰⴷⵍⵙⴰⵏ ⵉⵙⴽⴰⵔⵏ ⴰⵛⵕⴰⴹ ⵉⴷⵍⵙⴰⵏ ⵏ ⵓⵎⵣⵔⵓⵢ, ⵜⴰⵖⴰⵡⵙⴰ ⴷ ⵜⵓⴷⵔⵜ ⵜⴰⵢⵎⴰⵜⵜ ⵜⴰⵎⵔⴰⵔⵜ. ⵓⵍ ⵏ ⵜⵖⵔⵎⵜ ⵉⴳⴰ ⵜⵜ ⴰⵙⴰⵢⵔⴰⵔ ⵏ ⵊⴰⵎⵄ ⵍⴼⵏⴰ, ⵉⵜⵜⴱⴷⴷⴰⵍⵏ ⵙⴳ ⴰⵎⵎⴰⵙ ⵏ ⵜⵣⵏⵣⴰ ⴳ ⵡⴰⵙⵙ ⵖⵔ ⴰⵎⵔⴰⵔ ⵉⵥⵥⵏⵥⵕⵏ ⴳ ⵉⵢⴹ. ⵙⴽⵙⵓ ⵉⴱⵔⵉⴷⵏ ⵉⵥⵡⴰⵢⵏⵉⵏ ⵏ ⵓⵎⴷⴰⵏ, ⵥⵕ ⵉⴳⵍⴷⴰⵏ ⵉⵛⵡⴰⵏ ⵏ ⵍⴱⴰⵀⵢⴰ ⴷ ⵓⵔⵜⵉ ⵏ ⵎⴰⵊⵓⵔⵉⵍ, ⵓⵔⵜⵉ ⵉⵙⴽⵔ ⵊⴰⴽ ⵎⴰⵊⵓⵔⵉⵍ, ⵢⴰⵙⵙⵜⵔ ⵢⴰⵏ ⵙⴰⵏ ⵍⵓⵔⴰⵏ."
+    },
     image: "/images/marrakech.jpg",
     gallery: [
       "/images/marrakech-1.jpg",
       "/images/marrakech-2.jpg",
       "/images/marrakech-3.jpg"
     ],
-    location: "Central Morocco",
+    location: {
+      en: "Central Morocco",
+      fr: "Maroc Central",
+      ar: "وسط المغرب",
+      ber: "ⴰⵎⵎⴰⵙ ⵏ ⵍⵎⵖⵔⵉⴱ"
+    },
     rating: 4.8,
-    duration: "3-4 days",
-    bestTime: "March to May, September to November",
-    groupSize: "No restrictions",
-    activities: ["Shopping in souks", "Historical tours", "Food tasting", "Hammam experience", "Garden visits"],
-    highlights: ["Jemaa el-Fnaa", "Bahia Palace", "Majorelle Garden", "Koutoubia Mosque", "El Badi Palace"]
+    duration: {
+      en: "3-4 days",
+      fr: "3-4 jours",
+      ar: "3-4 أيام",
+      ber: "3-4 ⵡⵓⵙⵙⴰⵏ"
+    },
+    bestTime: {
+      en: "March to May, September to November",
+      fr: "Mars à Mai, Septembre à Novembre",
+      ar: "مارس إلى مايو ، سبتمبر إلى نوفمبر",
+      ber: "ⵎⴰⵕⵚ ⴰⵔ ⵎⴰⵢⵢⵓ, ⵛⵓⵜⴰⵏⴱⵉⵔ ⴰⵔ ⵏⵓⵡⴰⵏⴱⵉⵔ"
+    },
+    groupSize: {
+      en: "No restrictions",
+      fr: "Pas de restrictions",
+      ar: "لا قيود",
+      ber: "ⵓⵔ ⵉⵍⵍⵉ ⵓⵙⴳⵣⵉ"
+    },
+    activities: {
+      en: ["Shopping in souks", "Historical tours", "Food tasting", "Hammam experience", "Garden visits"],
+      fr: ["Shopping dans les souks", "Visites historiques", "Dégustation culinaire", "Expérience hammam", "Visites de jardins"],
+      ar: ["التسوق في الأسواق", "جولات تاريخية", "تذوق الطعام", "تجربة الحمام", "زيارات الحدائق"],
+      ber: ["ⵜⴰⵣⵏⵣⴰ ⴳ ⵉⵙⵡⴰⵇⵏ", "ⵜⵉⴽⴽⵉⵡⵉⵏ ⵜⵉⵎⵣⵔⵓⵢⵉⵏ", "ⴰⵔⵎ ⵏ ⵓⵙⵡⵓ", "ⵜⴰⵔⵎⵜ ⵏ ⵓⵃⵎⵎⴰⵎ", "ⵜⵉⵔⵣⵉⵡⵉⵏ ⵏ ⵡⵓⵔⵜⴰⵏ"]
+    },
+    highlights: {
+      en: ["Jemaa el-Fnaa", "Bahia Palace", "Majorelle Garden", "Koutoubia Mosque", "El Badi Palace"],
+      fr: ["Jemaa el-Fnaa", "Palais de la Bahia", "Jardin Majorelle", "Mosquée Koutoubia", "Palais El Badi"],
+      ar: ["جامع الفنا", "قصر الباهية", "حديقة ماجوريل", "مسجد الكتبية", "قصر البديع"],
+      ber: ["ⵊⴰⵎⵄ ⵍⴼⵏⴰ", "ⵉⴳⵍⴷⴰⵏ ⵏ ⵍⴱⴰⵀⵢⴰ", "ⵓⵔⵜⵉ ⵏ ⵎⴰⵊⵓⵔⵉⵍ", "ⵜⵉⵎⵣⴳⵉⴷⴰ ⵏ ⴽⵓⵜⵓⴱⵉⵢⴰ", "ⵉⴳⵍⴷⴰⵏ ⵏ ⵍⴱⴰⴷⵉⵄ"]
+    }
   },
   "chefchaouen": {
     id: "chefchaouen",
-    title: "Chefchaouen",
-    description: "Explore the stunning blue city nestled in the Rif Mountains of northwest Morocco.",
-    fullDescription: "Nestled in the Rif Mountains, Chefchaouen is famous for its blue-washed buildings that create a dreamlike atmosphere. This charming town offers a relaxed pace compared to Morocco's bustling cities. The blue-painted streets and buildings create a unique, photogenic environment that attracts artists and photographers from around the world. Explore the winding medina, hike in the surrounding mountains, or simply enjoy the laid-back café culture. The town also offers excellent shopping for local handicrafts, particularly woolen garments and woven blankets, as the region is known for its weaving industry.",
+    title: {
+      en: "Chefchaouen",
+      fr: "Chefchaouen",
+      ar: "شفشاون",
+      ber: "ⵛⴼⵛⴰⵡⵏ"
+    },
+    description: {
+      en: "Explore the stunning blue city nestled in the Rif Mountains of northwest Morocco.",
+      fr: "Explorez la magnifique ville bleue nichée dans les montagnes du Rif au nord-ouest du Maroc.",
+      ar: "استكشف المدينة الزرقاء المذهلة الواقعة في جبال الريف شمال غرب المغرب.",
+      ber: "ⴰⵔⵎ ⵜⴰⵎⴷⵉⵏⵜ ⵜⴰⵏⴰⵡⴰⵢⵜ ⵜⵍⵍⴰ ⴳ ⵉⴷⵔⴰⵔ ⵏ ⴰⵔⵉⴼ ⴳ ⵓⴳⴰⴼⴰ ⵓⵜⵔⵉⵎ ⵏ ⵍⵎⵖⵔⵉⴱ."
+    },
+    fullDescription: {
+      en: "Nestled in the Rif Mountains, Chefchaouen is famous for its blue-washed buildings that create a dreamlike atmosphere. This charming town offers a relaxed pace compared to Morocco's bustling cities. The blue-painted streets and buildings create a unique, photogenic environment that attracts artists and photographers from around the world. Explore the winding medina, hike in the surrounding mountains, or simply enjoy the laid-back café culture. The town also offers excellent shopping for local handicrafts, particularly woolen garments and woven blankets, as the region is known for its weaving industry.",
+      fr: "Niché dans les montagnes du Rif, Chefchaouen est célèbre pour ses bâtiments blanchis à la chaux bleue qui créent une atmosphère de rêve. Cette charmante ville offre un rythme détendu par rapport aux villes animées du Maroc. Les rues et les bâtiments peints en bleu créent un environnement unique et photogénique qui attire des artistes et des photographes du monde entier. Explorez la médina sinueuse, faites de la randonnée dans les montagnes environnantes ou profitez simplement de la culture décontractée des cafés. La ville offre également d'excellents magasins d'artisanat local, en particulier des vêtements en laine et des couvertures tissées, car la région est connue pour son industrie du tissage.",
+      ar: "تقع شفشاون في جبال الريف وتشتهر بمبانيها المطلية باللون الأزرق والتي تخلق جوًا يشبه الحلم. توفر هذه المدينة الساحرة وتيرة مريحة مقارنة بمدن المغرب الصاخبة. تخلق الشوارع والمباني المطلية باللون الأزرق بيئة فريدة وساحرة تجذب الفنانين والمصورين من جميع أنحاء العالم. استكشف المدينة القديمة المتعرجة أو تنزه في الجبال المحيطة أو ببساطة استمتع بثقافة المقاهي المريحة. تقدم المدينة أيضًا تسوقًا ممتازًا للحرف اليدوية المحلية ، لا سيما الملابس الصوفية والبطانيات المنسوجة ، حيث تشتهر المنطقة بصناعة النسيج.",
+      ber: "ⵜⵍⵍⴰ ⴳ ⵉⴷⵔⴰⵔ ⵏ ⴰⵔⵉⴼ, ⵛⴼⵛⴰⵡⵏ ⵜⵜⵡⴰⵙⵙⴰⵏ ⵙ ⵜⵉⵎⵉⴽⵉⵡⵉⵏ ⵏⵏⵙ ⵜⵜⵡⴰⵙⵓⵖⴰⵏⵉⵏ ⵙ ⵡⵓⵏⴳⵍⵓ ⵉⵙⴽⴰⵔⵏ ⴰⵡⴰⵏ ⵉⵎⵍⴰⵏ. ⵜⴰⵎⴷⵉⵏⵜ ⴰⴷ ⵜⴰⵇⴱⵓⵔ ⵜⵜⴰⴽⴰ ⵜⴰⵣⴷⴷⴰⵔⵜ ⵉⵔⵓⵔⴰⵏ ⴰⵎ ⵜⵎⴷⵉⵏⵉⵏ ⵜⵉⵎⵔⴰⵔⵓⵜⵉⵏ ⵏ ⵍⵎⵖⵔⵉⴱ. ⵉⴱⵔⵉⴷⵏ ⴷ ⵜⵉⵎⵉⴽⵉⵡⵉⵏ ⵜⵜⵡⴰⵙⵓⵖⴰⵏⵉⵏ ⵙ ⵡⵓⵏⴳⵍⵓ ⵙⴽⴰⵔⵏ ⴰⵡⴰⵏ ⵓⵙⵙⴰⵏ ⴷ ⵉⵛⵡⴰⵏ ⵉⵜⵜⴰⵔⵉⵏ ⵉⴼⵍⵍⴰⵀⵏ ⴷ ⵉⵎⵙⵓⵔⴰⵔ ⵙⴳ ⴰⵎⴰⴹⴰⵍ ⴰⴽⴽⵯ. ⴰⵔⵎ ⴰⵎⴷⴰⵏ ⵉⵥⵡⴰⵢⵏⵉⵏ, ⵜⴰⴷⴷⴰⴳ ⴳ ⵉⴷⵔⴰⵔ ⵉⵡⵔⴰⵏⵉⵏ ⵏⵖ ⵙⵙⵓⴼⵖ ⵜⴰⵢⵢⵓⵜ ⵙ ⵜⴷⵍⵙⴰ ⵏ ⵉⵇⴰⵀⵡⵉⵜⵏ ⵉⵔⵓⵔⴰⵏⵉⵏ. ⵜⴰⵎⴷⵉⵏⵜ ⵜⵜⴰⴽⴰ ⴰⵡⴷ ⵜⴰⵣⵏⵣⴰ ⵉⵛⵡⴰⵏ ⵏ ⵜⵉⵏⴰⵡⵉⵏ ⵜⵉⴷⵖⴰⵔⴰⵏⵉⵏ, ⴰⵙⵙⴰⵖ ⵉⴳⵍⴰⵢⵏ ⵉⵡⵍⵍⵓⴼⵏ ⴷ ⵉⵛⵕⴰⵕⵏ ⵉⵜⵜⵡⴰⵙⵡⵡⵓⵜⵏ, ⴰⵎ ⵜⴰⵎⵏⴰⴹⵜ ⵜⵜⵡⴰⵙⵙⴰⵏ ⵙ ⵜⴰⴳⴳⵓⵔⵜ ⵏ ⵜⴰⵙⵙⴰ."
+    },
     image: "/images/chefchaouen.jpg",
     gallery: [
       "/images/chefchaouen-1.jpg",
       "/images/chefchaouen-2.jpg",
       "/images/chefchaouen-3.jpg"
     ],
-    location: "Northern Morocco",
+    location: {
+      en: "Northern Morocco",
+      fr: "Nord du Maroc",
+      ar: "شمال المغرب",
+      ber: "ⴰⴳⴰⴼⴰ ⵏ ⵍⵎⵖⵔⵉⴱ"
+    },
     rating: 4.7,
-    duration: "2-3 days",
-    bestTime: "April to June, September to October",
-    groupSize: "No restrictions",
-    activities: ["Photography walks", "Hiking", "Shopping for handicrafts", "Relaxing in cafés", "Museum visits"],
-    highlights: ["Blue-washed Medina", "Kasbah Museum", "Ras El Ma (Water Source)", "Spanish Mosque viewpoint", "Plaza Uta el-Hammam"]
+    duration: {
+      en: "2-3 days",
+      fr: "2-3 jours",
+      ar: "2-3 أيام",
+      ber: "2-3 ⵡⵓⵙⵙⴰⵏ"
+    },
+    bestTime: {
+      en: "April to June, September to October",
+      fr: "Avril à Juin, Septembre à Octobre",
+      ar: "أبريل إلى يونيو ، سبتمبر إلى أكتوبر",
+      ber: "ⴰⴱⵔⵉⵍ ⴰⵔ ⵢⵓⵏⵢⵓ, ⵛⵓⵜⴰⵏⴱⵉⵔ ⴰⵔ ⵓⴽⵜⵓⴱⵔ"
+    },
+    groupSize: {
+      en: "No restrictions",
+      fr: "Pas de restrictions",
+      ar: "لا قيود",
+      ber: "ⵓⵔ ⵉⵍⵍⵉ ⵓⵙⴳⵣⵉ"
+    },
+    activities: {
+      en: ["Photography walks", "Hiking", "Shopping for handicrafts", "Relaxing in cafés", "Museum visits"],
+      fr: ["Promenades photographiques", "Randonnée", "Shopping d'artisanat", "Détente dans les cafés", "Visites de musées"],
+      ar: ["جولات التصوير", "المشي لمسافات طويلة", "التسوق لشراء الحرف اليدوية", "الاسترخاء في المقاهي", "زيارات المتحف"],
+      ber: ["ⵜⵉⴽⴽⵉⵡⵉⵏ ⵏ ⵓⵙⵓⵔⵓ", "ⵜⴰⴷⴷⴰⴳⵜ", "ⵜⴰⵣⵏⵣⴰ ⵏ ⵜⵉⵏⴰⵡⵉⵏ ⵏ ⵓⴼⵓⵙ", "ⴰⵣⴷⴷⴰⵢ ⴳ ⵉⵇⴰⵀⵡⵉⵜⵏ", "ⵜⵉⵔⵣⵉⵡⵉⵏ ⵏ ⵉⵏⵙⵉⴳⵎⴰⵏ"]
+    },
+    highlights: {
+      en: ["Blue-washed Medina", "Kasbah Museum", "Ras El Ma (Water Source)", "Spanish Mosque viewpoint", "Plaza Uta el-Hammam"],
+      fr: ["Médina aux murs bleus", "Musée de la Kasbah", "Ras El Ma (Source d'eau)", "Point de vue de la mosquée espagnole", "Plaza Uta el-Hammam"],
+      ar: ["المدينة القديمة المطلية باللون الأزرق", "متحف القصبة", "رأس الماء (مصدر المياه)", "نقطة مشاهدة المسجد الإسباني", "ساحة أوتا الحمام"],
+      ber: ["ⴰⵎⴷⴰⵏ ⵉⵜⵜⵡⴰⵙⵓⵖⴰⵏ ⵙ ⵡⵓⵏⴳⵍⵓ", "ⴰ museum ⵏ ⵍⵇⴰⵚⴱⴰ", "ⵕⴰⵙ ⵍⵎⴰ (ⴰⵖⴱⴰⵍⵓ ⵏ ⵡⴰⵎⴰⵏ)", "ⵜⴰⵏⵏⴰⵥⵜ ⵏ ⵜⵎⵣⴳⵉⴷⴰ ⵜⴰⵙⴱⵍⵢⵓⵏⵉⵜ", "ⴰⵙⴰⵢⵔⴰⵔ ⵏ ⵓⵜⴰ ⵍⵃⴰⵎⵎⴰⵎ"]
+    }
   },
   "sahara": {
     id: "sahara",
-    title: "Sahara Desert",
-    description: "Experience the magic of the Sahara with camel treks and nights under the stars.",
-    fullDescription: "The Moroccan Sahara offers one of the most dramatic landscapes on earth, with endless golden dunes that change color throughout the day. Most desert excursions begin from the towns of Merzouga or M'Hamid, gateways to the renowned Erg Chebbi and Erg Chigaga dune systems. A typical desert experience includes camel trekking across the dunes, watching the sunset transform the landscape, drumming and dancing around a campfire, and spending the night in a traditional Berber tent under a blanket of stars. The silence and vastness of the desert create an unforgettable experience that connects visitors with both nature and traditional nomadic culture.",
+    title: {
+      en: "Sahara Desert",
+      fr: "Désert du Sahara",
+      ar: "الصحراء الكبرى",
+      ber: "ⵜⴰⵏⵥⵕⵓⴼⵜ ⵏ ⵙⴰⵀⴰⵔⴰ"
+    },
+    description: {
+      en: "Experience the magic of the Sahara with camel treks and nights under the stars.",
+      fr: "Découvrez la magie du Sahara avec des randonnées à dos de chameau et des nuits sous les étoiles.",
+      ar: "استمتع بسحر الصحراء الكبرى مع رحلات الجمال وليالي تحت النجوم.",
+      ber: "ⴰⵔⵎ ⵜⴰⵙⵙⴰⵙⵜ ⵏ ⵜⵏⵥⵕⵓⴼⵜ ⵏ ⵙⴰⵀⴰⵔⴰ ⵙ ⵜⵉⴽⴽⵉⵡⵉⵏ ⵏ ⵓⵍⵖⵎⵏ ⴷ ⵉⴹⴰⵏ ⴷⴷⴰⵡ ⵉⵜⵔⴰⵏ."
+    },
+    fullDescription: {
+      en: "The Moroccan Sahara offers one of the most dramatic landscapes on earth, with endless golden dunes that change color throughout the day. Most desert excursions begin from the towns of Merzouga or M'Hamid, gateways to the renowned Erg Chebbi and Erg Chigaga dune systems. A typical desert experience includes camel trekking across the dunes, watching the sunset transform the landscape, drumming and dancing around a campfire, and spending the night in a traditional Berber tent under a blanket of stars. The silence and vastness of the desert create an unforgettable experience that connects visitors with both nature and traditional nomadic culture.",
+      fr: "Le Sahara marocain offre l'un des paysages les plus spectaculaires de la planète, avec des dunes dorées sans fin qui changent de couleur tout au long de la journée. La plupart des excursions dans le désert commencent dans les villes de Merzouga ou M'Hamid, portes d'entrée des célèbres systèmes de dunes Erg Chebbi et Erg Chigaga. Une expérience typique du désert comprend une randonnée à dos de chameau à travers les dunes, en regardant le coucher de soleil transformer le paysage, en jouant du tambour et en dansant autour d'un feu de camp, et en passant la nuit dans une tente berbère traditionnelle sous une couverture d'étoiles. Le silence et l'immensité du désert créent une expérience inoubliable qui relie les visiteurs à la fois à la nature et à la culture nomade traditionnelle.",
+      ar: "تقدم الصحراء المغربية واحدة من أكثر المناظر الطبيعية إثارة على وجه الأرض ، مع كثبان ذهبية لا نهاية لها تتغير لونها على مدار اليوم. تبدأ معظم الرحلات الصحراوية من بلدتي مرزوقة أو امحاميد ، وهما بوابتان إلى نظامي الكثبان الرملية الشهيرين عرق الشبي وعرق شقاقة. تتضمن التجربة الصحراوية النموذجية رحلة جمل عبر الكثبان الرملية ، ومشاهدة غروب الشمس يغير المناظر الطبيعية ، والعزف على الطبول والرقص حول نار المخيم ، وقضاء الليلة في خيمة بربرية تقليدية تحت غطاء من النجوم. يخلق صمت واتساع الصحراء تجربة لا تُنسى تربط الزوار بالطبيعة والثقافة البدوية التقليدية.",
+      ber: "ⵜⴰⵏⵥⵕⵓⴼⵜ ⵜⴰⵎⵔⵔⵓⴽⵉⵜ ⵜⵜⴰⴽⴰ ⵢⴰⵏ ⵙⴳ ⵉⴷⵎⴰⵡⵏ ⴰⴽⴽⵯ ⵉⵅⵛⵛⵏ ⴳ ⵡⴰⴽⴰⵍ, ⵙ ⵉⴷⵓⵔⴰⵔ ⵉⵡⵔⴰⵖⵏ ⵓⵔ ⵉⵜⵜⵎⵜⵜⴰⵏ ⴱⴷⴷⴰ ⵙⵏⴼⴰⵍⵏ ⴰⴽⵍⵓ ⴰⴽⴽⵯ ⴰⵙⵙ. ⵜⴰⵎⵓⵢⴰⵜ ⴰⴽⴽⵯ ⴳ ⵜⵏⵥⵕⵓⴼⵜ ⴱⴷⴷⵓⵏ ⵙⴳ ⵜⵎⴷⵉⵏⵉⵏ ⵏ ⵎⵔⵣⵓⴳⴰ ⵏⵖ ⵎⵀⴰⵎⵉⴷ, ⵜⴰⵡⵡⵓⵔⵜ ⵖⵔ ⵉⵙⵓⵜⴰ ⵏ ⵉⴷⵓⵔⴰⵔ ⵏ ⵄⵕⴳ ⵛⴻⴱⴱⵉ ⴷ ⵄⵕⴳ ⵛⵉⴳⴰⴳⴰ. ⵜⴰⵔⵎⵜ ⵜⴰⵏⴰⵎⵎⴰⵙⵜ ⵏ ⵜⵏⵥⵕⵓⴼⵜ ⵜⵍⵍⴰ ⵜⵉⴽⴽⵉ ⵏ ⵓⵍⵖⵎⵏ ⴳ ⵉⴷⵓⵔⴰⵔ, ⴰⵔⴰⵢ ⵏ ⵜⴼⵓⴽⵜ ⵜⵙⵏⴼⴰⵍ ⴰⴷⵎⴰⵡⵏ, ⵜⴰⴳⴳⵓⵔⵜ ⴷ ⵓⵔⴰⵢ ⴷⴳⴳⵓ ⵜⴰⵎⵙⵙⵓⵜⵍⵜ, ⴷ ⴰⵣⴷⴷⴰⵢ ⴳ ⵜⴰⵇⵉⵎⵜ ⵜⴰⴱⵉⵔⴱⵉⵔⵉⵜ ⴷⴷⴰⵡ ⵜⴰⴼⵍⵡⵉⵜ ⵏ ⵉⵜⵔⴰⵏ. ⵜⴰⵙⵓⵙⵎⵉ ⴷ ⵜⴰⵏⴼⴰⵜ ⵏ ⵜⵏⵥⵕⵓⴼⵜ ⵙⴽⴰⵔⵏ ⵜⴰⵔⵎⵜ ⵓⵔ ⵉⵜⵜⵓⵏⵜⵜⵓⵏ ⵉⵙⵎⵓⵏⵏ ⵉⵎⴰⵔⴰⵡⵏ ⴷ ⵜⴰﺒⴷⴰⴷⵜ ⴷ ⵜⴷⵍⵙⴰ ⵜⴰⵏⴰⵎⵎⴰⵙⵜ."
+    },
     image: "/images/sahara.jpg",
     gallery: [
       "/images/sahara-1.jpg",
       "/images/sahara-2.jpg",
       "/images/sahara-3.jpg"
     ],
-    location: "Southern Morocco",
+    location: {
+      en: "Southern Morocco",
+      fr: "Sud du Maroc",
+      ar: "جنوب المغرب",
+      ber: "ⴰⵏⵥⵓⵍ ⵏ ⵍⵎⵖⵔⵉⴱ"
+    },
     rating: 4.9,
-    duration: "2-3 days",
-    bestTime: "October to April",
-    groupSize: "Small groups recommended",
-    activities: ["Camel trekking", "Sandboarding", "Stargazing", "Berber cultural experiences", "4x4 desert tours"],
-    highlights: ["Erg Chebbi dunes", "Erg Chigaga dunes", "Desert camps", "Nomadic villages", "Desert night sky"]
+    duration: {
+      en: "2-3 days",
+      fr: "2-3 jours",
+      ar: "2-3 أيام",
+      ber: "2-3 ⵡⵓⵙⵙⴰⵏ"
+    },
+    bestTime: {
+      en: "October to April",
+      fr: "Octobre à Avril",
+      ar: "أكتوبر إلى أبريل",
+      ber: "ⵓⴽⵜⵓⴱⵔ ⴰⵔ ⴰⴱⵔⵉⵍ"
+    },
+    groupSize: {
+      en: "Small groups recommended",
+      fr: "Petits groupes recommandés",
+      ar: "يوصى بالمجموعات الصغيرة",
+      ber: "ⵉⴳⵔⵓᱯⴰ ⵎⵥⵥⵉⵢⵏ ⵉⵜⵜⵓⵙⵎⵔⴰⵙⵏ"
+    },
+    activities: {
+      en: ["Camel trekking", "Sandboarding", "Stargazing", "Berber cultural experiences", "4x4 desert tours"],
+      fr: ["Randonnée à dos de chameau", "Sandboard", "Observation des étoiles", "Expériences culturelles berbères", "Tours en 4x4 dans le désert"],
+      ar: ["رحلات الجمال", "التزلج على الرمال", "مراقبة النجوم", "تجارب ثقافية بربرية", "جولات صحراوية بالسيارات ذات الدفع الرباعي"],
+      ber: ["ⵜⵉⴽⴽⵉⵡⵉⵏ ⵏ ⵓⵍⵖⵎⵏ", "ⴰⵙⵉⴼⴼⵉ ⴳ ⵓⵔⵎⵍ", "ⴰⵔⴰⵢ ⵏ ⵉⵜⵔⴰⵏ", "ⵜⴰⵔⵎⵉⵜⵉⵏ ⵜⵉⴷⵍⵙⴰⵏⵉⵏ ⵜⵉⴱⵉⵔⴱⵉⵔⵉⵏ", "ⵜⵉⴽⴽⵉⵡⵉⵏ 4x4 ⴳ ⵜⵏⵥⵕⵓⴼⵜ"]
+    },
+    highlights: {
+      en: ["Erg Chebbi dunes", "Erg Chigaga dunes", "Desert camps", "Nomadic villages", "Desert night sky"],
+      fr: ["Dunes de l'Erg Chebbi", "Dunes de l'Erg Chigaga", "Camps du désert", "Villages nomades", "Ciel nocturne du désert"],
+      ar: ["كثبان عرق الشبي", "كثبان عرق شقاقة", "مخيمات الصحراء", "قرى بدوية", "سماء الليل الصحراوية"],
+      ber: ["ⵉⴷⵓⵔⴰⵔ ⵏ ⵄⵕⴳ ⵛⴻⴱⴱⵉ", "ⵉⴷⵓⵔⴰⵔ ⵏ ⵄⵕⴳ ⵛⵉⴳⴰⴳⴰ", "ⵉⵎⵉⵙⵉⵔⵏ ⵏ ⵜⵏⵥⵕⵓⴼⵜ", "ⵜⵓⴷⴷⴰⵔ ⵜⵉⵎⵙⵜⴰⴳⴳⴰⵔⵉⵏ", "ⵉⴳⴳⵓ ⵏ ⵉⴹ ⵏ ⵜⵏⵥⵕⵓⴼⵜ"]
+    }
   },
   "fes": {
     id: "fes",
-    title: "Fes",
-    description: "Wander through the ancient medina, a UNESCO World Heritage site with over 9,000 streets.",
-    fullDescription: "Fes (or Fez) is considered Morocco's cultural and spiritual capital, with its UNESCO-protected medina being the largest car-free urban area in the world. Founded in the 9th century, the city reached its height as a center of learning and commerce in the 13th and 14th centuries. Today, Fes maintains much of its historical character, particularly in Fes el-Bali, the oldest walled part of the city with its labyrinthine streets. Visitors can explore traditional tanneries where leather is still processed using methods unchanged for centuries, visit religious schools with stunning Islamic architecture, and experience a city where artisans continue to practice crafts as they have for generations.",
+    title: {
+      en: "Fes",
+      fr: "Fès",
+      ar: "فاس",
+      ber: "ⴼⴰⵙ"
+    },
+    description: {
+      en: "Wander through the ancient medina, a UNESCO World Heritage site with over 9,000 streets.",
+      fr: "Promenez-vous dans l'ancienne médina, un site du patrimoine mondial de l'UNESCO avec plus de 9 000 rues.",
+      ar: "تجول في المدينة القديمة ، أحد مواقع التراث العالمي لليونسكو مع أكثر من 9000 شارع.",
+      ber: "ⵣⵡⴳ ⴳ ⵓⵎⴷⴰⵏ ⴰⵇⴱⵓⵔ, ⴰ ᱴⴰⵏⴰ ⵏ ⵜⵓⵔⴰⵔⵉⵜ ⵏ ⵓⵏⵉⵙⴽⵓ ⵙ ⵓⴳⴳⴰⵔ ⵏ 9000 ⵉⴱⵔⵉⴷⵏ."
+    },
+    fullDescription: {
+      en: "Fes (or Fez) is considered Morocco's cultural and spiritual capital, with its UNESCO-protected medina being the largest car-free urban area in the world. Founded in the 9th century, the city reached its height as a center of learning and commerce in the 13th and 14th centuries. Today, Fes maintains much of its historical character, particularly in Fes el-Bali, the oldest walled part of the city with its labyrinthine streets. Visitors can explore traditional tanneries where leather is still processed using methods unchanged for centuries, visit religious schools with stunning Islamic architecture, and experience a city where artisans continue to practice crafts as they have for generations.",
+      fr: "Fès est considérée comme la capitale culturelle et spirituelle du Maroc, avec sa médina protégée par l'UNESCO étant la plus grande zone urbaine sans voiture au monde. Fondée au IXe siècle, la ville a atteint son apogée en tant que centre d'apprentissage et de commerce aux XIIIe et XIVe siècles. Aujourd'hui, Fès conserve une grande partie de son caractère historique, en particulier à Fès el-Bali, la partie fortifiée la plus ancienne de la ville avec ses rues labyrinthiques. Les visiteurs peuvent explorer les tanneries traditionnelles où le cuir est encore traité selon des méthodes inchangées depuis des siècles, visiter des écoles religieuses avec une architecture islamique époustouflante et découvrir une ville où les artisans continuent de pratiquer l'artisanat comme ils le font depuis des générations.",
+      ar: "تعتبر فاس العاصمة الثقافية والروحية للمغرب ، حيث أن المدينة القديمة المحمية من قبل اليونسكو هي أكبر منطقة حضرية خالية من السيارات في العالم. تأسست المدينة في القرن التاسع وبلغت ذروتها كمركز للتعلم والتجارة في القرنين الثالث عشر والرابع عشر. اليوم ، تحافظ فاس على الكثير من طابعها التاريخي ، لا سيما في فاس البالي ، أقدم جزء مسور من المدينة بشوارعها المتاهة. يمكن للزوار استكشاف المدابغ التقليدية حيث لا تزال تتم معالجة الجلود باستخدام طرق لم تتغير منذ قرون ، وزيارة المدارس الدينية ذات الهندسة المعمارية الإسلامية المذهلة ، وتجربة مدينة يواصل فيها الحرفيون ممارسة الحرف اليدوية كما فعلوا لأجيال.",
+      ber: "ⴼⴰⵙ ⵜⵜⵡⴰⵇⵇⵏ ⴰⵎ ⵜⴰⵎⴰⵥⵓⵏⵜ ⵜⴰⴷⵍⵙⴰⵏⵜ ⴷ ⵜⴰⵔⵓⵊⴰⵏⵜ ⵏ ⵍⵎⵖⵔⵉⴱ, ⵙ ⵓⵎⴷⴰⵏ ⵏⵏⵙ ⵉⵜⵜⵓⵃⵔⴰⵙⵏ ⵙ ⵓⵏⵉⵙⴽⵓ ⵉⴳⴰ ⵜⵜ ⴰⴳⵯⵔⵓ ⴰⴷⵖⵔⴰⵏ ⵓⵔ ⵉⵍⵍⵉ ⴳⵉⵙ ⵜⴰⵎⵓⵟⵟⵓ ⴳ ⴰⵎⴰⴹⴰⵍ. ⵜⵜⵓⵙⵙⵉⵙⵍⴷ ⴳ ⵜⴰⵙⵓⵜ ⵜⵉⵙⵙ 9, ⵜⴰⵎⴷⵉⵏⵜ ⵜⵍⴽⵎ ⴰⵙⵙⴰⵖ ⵏⵏⵙ ⴰⵎ ⴰⵎⵎⴰⵙ ⵏ ⵜⵍⵎⵓⴷⵉ ⴷ ⵜⴰⵣⵏⵣⴰ ⴳ ⵜⴰⵙⵓⵜ ⵜⵉⵙⵙ 13 ⴷ 14. ⴰⵙⵙⴰ, ⴼⴰⵙ ⵜⵙⵙⵔⴰⵢ ⵎⴰⵙ ⴰⴷⵖⴰⵔ ⴰⵎⵣⵔⵓⵢ, ⴳ ⴼⴰⵙ ⵍⴱⴰⵍⵉ, ⴰⴳⵣⵣⵓⵎ ⴰⵇⴱⵓⵔ ⵏ ⵜⴰⵎⴷⵉⵏⵜ ⵙ ⵉⴱⵔⵉⴷⵏ ⵏⵏⵙ ⵉⵎⵙⵜⴰⴳⴳⴰⵔⵏ. ⵉⵎⴰⵔⴰⵡⵏ ⵎⵎⴽⵉⵏ ⴰⵔⵎ ⵜⵉⵏⴰⵡⵉⵏ ⵜⵉⵇⴱⵓⵔⵉⵏ ⵎⴰⵏⵉ ⴰⵔ ⵜⵜⵓⵙⴽⴰⵔ ⵉⴳⵍⵉⵎⵏ ⵙ ⵜⵉⵍⴰⵡⵉⵏ ⵓⵔ ⵉⵜⵜⵓⵙⵏⴼⴰⵍⵏ ⵙⴳ ⵜⴰⵙⵓⵜⵉⵏ, ⵣⵔⵢ ⵉⵙⵉⵏⴰⵏ ⵉⵔⵓⵊⴰⵏⵏ ⵙ ⵜⴰⵖⴰⵡⵙⴰ ⵜⴰⵏⵙⵍⴰⵎⵜ ⵉⵛⵡⴰⵏ, ⴷ ⴰⵔⵎ ⵜⴰⵎⴷⵉⵏⵜ ⵎⴰⵏⵉ ⵉⵎⵙⵏﻌⴰⵜⵉⵏ ⴱⴷⴷⴰ ⵙⴽⴰⵔⵏ ⵜⵉⵏⴰⵡⵉⵏ ⴰⵎ ⵎⴰ ⵙⴽⴰⵔⵏ ⵙⴳ ⵜⴰⵔⵡⴰ."
+    },
     image: "/images/fes.jpg",
     gallery: [
       "/images/fes-1.jpg",
       "/images/fes-2.jpg",
       "/images/fes-3.jpg"
     ],
-    location: "Northern Morocco",
+    location: {
+      en: "Northern Morocco",
+      fr: "Nord du Maroc",
+      ar: "شمال المغرب",
+      ber: "ⴰⴳⴰⴼⴰ ⵏ ⵍⵎⵖⵔⵉⴱ"
+    },
     rating: 4.6,
-    duration: "2-3 days",
-    bestTime: "March to May, September to November",
-    groupSize: "Guide recommended for medina",
-    activities: ["Medina exploration", "Cultural tours", "Traditional craft demonstrations", "Food tours", "Historical site visits"],
-    highlights: ["Chouara Tannery", "Al-Qarawiyyin University and Mosque", "Bou Inania Madrasa", "Bab Boujloud (Blue Gate)", "Nejjarine Museum of Wooden Arts & Crafts"]
-  }
-};
-
-const DestinationDetail = () => {
-  const { destinationId } = useParams<{ destinationId: string }>();
-  const destination = destinations[destinationId || ''];
-  
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [destinationId]);
-  
-  if (!destination) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold mb-2">Destination not found</h2>
-          <p className="mb-4">The destination you're looking for doesn't exist or has been moved.</p>
-          <Link to="/" className="text-morocco-clay hover:text-morocco-terracotta">
-            Return to home page
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <AnimatedTransition variant="slideUp">
-      <div className="min-h-screen">
-        <Header />
-        
-        <main className="pt-24">
-          {/* Hero section */}
-          <div className="relative h-[50vh] md:h-[70vh] overflow-hidden">
-            <img 
-              src={destination.image} 
-              alt={destination.title} 
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
-            
-            <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-12 max-w-7xl mx-auto">
-              <Link to="/" className="mb-auto text-white flex items-center hover:text-morocco-sand transition-colors">
-                <ArrowLeft className="mr-2 h-5 w-5" />
-                <span>Back to destinations</span>
-              </Link>
-              
-              <div className="mb-6">
-                <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">{destination.title}</h1>
-                <div className="flex items-center text-white/90 mb-2">
-                  <MapPin className="h-5 w-5 mr-2" />
-                  <span>{destination.location}</span>
-                </div>
-                
-                <div className="flex items-center">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star 
-                      key={i} 
-                      className={`h-5 w-5 ${i < Math.floor(destination.rating) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-400'}`}
-                    />
-                  ))}
-                  <span className="ml-2 text-white">{destination.rating.toFixed(1)}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Content */}
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-              <div className="lg:col-span-2">
-                <h2 className="text-2xl font-semibold mb-4">Overview</h2>
-                <p className="text-gray-700 mb-8 leading-relaxed">
-                  {destination.fullDescription}
-                </p>
-                
-                <h2 className="text-2xl font-semibold mb-4">Highlights</h2>
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
-                  {destination.highlights.map((highlight, index) => (
-                    <li key={index} className="flex items-start">
-                      <div className="h-6 w-6 rounded-full bg-morocco-sand flex items-center justify-center mr-3 mt-0.5">
-                        <span className="text-morocco-clay font-medium text-sm">{index + 1}</span>
-                      </div>
-                      <span>{highlight}</span>
-                    </li>
-                  ))}
-                </ul>
-                
-                <h2 className="text-2xl font-semibold mb-4">Activities</h2>
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {destination.activities.map((activity, index) => (
-                    <span key={index} className="px-3 py-1 bg-morocco-sand/30 text-morocco-clay rounded-full text-sm">
-                      {activity}
-                    </span>
-                  ))}
-                </div>
-                
-                {/* Gallery */}
-                <h2 className="text-2xl font-semibold mb-4">Gallery</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-                  {destination.gallery.map((image, index) => (
-                    <motion.div
-                      key={index}
-                      whileHover={{ scale: 1.03 }}
-                      className="aspect-square rounded-lg overflow-hidden"
-                    >
-                      <img 
-                        src={image} 
-                        alt={`${destination.title} ${index + 1}`} 
-                        className="w-full h-full object-cover"
-                      />
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-              
-              <div>
-                <div className="bg-white rounded-xl shadow-md p-6 sticky top-24">
-                  <h3 className="text-xl font-semibold mb-4">Trip Information</h3>
-                  
-                  <div className="space-y-4">
-                    <div className="flex items-center">
-                      <Clock className="h-5 w-5 text-morocco-clay mr-3" />
-                      <div>
-                        <p className="text-sm text-gray-500">Recommended Duration</p>
-                        <p className="font-medium">{destination.duration}</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <Calendar className="h-5 w-5 text-morocco-clay mr-3" />
-                      <div>
-                        <p className="text-sm text-gray-500">Best Time to Visit</p>
-                        <p className="font-medium">{destination.bestTime}</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <Users className="h-5 w-5 text-morocco-clay mr-3" />
-                      <div>
-                        <p className="text-sm text-gray-500">Group Size</p>
-                        <p className="font-medium">{destination.groupSize}</p>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-6 space-y-3">
-                    <button className="w-full bg-morocco-clay text-white py-3 rounded-lg hover:bg-morocco-clay/90 transition-colors">
-                      Plan Your Visit
-                    </button>
-                    
-                    <button className="w-full border border-morocco-clay text-morocco-clay py-3 rounded-lg hover:bg-morocco-clay/10 transition-colors">
-                      Save to Favorites
-                    </button>
-                  </div>
-                  
-                  <div className="mt-6 pt-6 border-t">
-                    <a 
-                      href="#" 
-                      className="text-morocco-terracotta hover:text-morocco-clay flex items-center justify-center"
-                    >
-                      <ExternalLink className="h-4 w-4 mr-2" />
-                      View on Map
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </main>
-        
-        <Footer />
-      </div>
-    </AnimatedTransition>
-  );
-};
-
-export default DestinationDetail;
+    duration: {
+      en: "2-3 days",
+      fr: "2-3 jours",
+      ar: "2-3 أيام",
+      ber: "2-3 ⵡⵓⵙⵙⴰⵏ"
+    },
+    bestTime: {
+      en: "March to May, September to November",
+      fr: "Mars à Mai, Septembre à Novembre",
+      ar: "مارس إلى مايو ، سبتمبر إلى نوفمبر",
+      ber: "ⵎⴰⵕⵚ ⴰⵔ ⵎⴰⵢⵢⵓ, ⵛⵓⵜⴰⵏⴱⵉⵔ ⴰⵔ ⵏⵓⵡⴰⵏⴱⵉⵔ"
+    },
+    groupSize: {
+      en: "Guide recommended for medina",
+      fr: "Guide recommandé pour la médina",
+      ar: "يوصى بالمرشد للمدينة",
+      ber: "ⴰⵎⵙⴽⴰⵔ ⵉⵜⵜⵓⵙⵎⵔⴰⵙ ⵉ ⵓⵎⴷⴰⵏ"
+    },
+    activities: {
+      en: ["Medina exploration", "Cultural tours", "Traditional craft demonstrations", "Food tours", "Historical site visits"],
+      fr: ["Exploration de la médina", "Visites culturelles", "Démonstrations d'artisanat traditionnel", "Tours gastronomiques", "Visites de sites historiques"],
+      ar: ["استكشاف المدينة", "جولات ثقافية", "عروض الحرف اليدوية التقليدية", "جولات الطعام", "زيارات المواقع التاريخية"],
+      ber: ["ⴰⵔⵎ ⵏ ⵓⵎⴷⴰⵏ", "ⵜⵉⴽⴽⵉⵡⵉⵏ ⵜⵉⴷⵍⵙⴰⵏⵉⵏ", "ⵜⵉⵎⵍⴰⵡⵉⵏ ⵏ ⵜⵉⵏⴰⵡⵉⵏ ⵜⵉⵇⴱⵓⵔⵉⵏ", "ⵜⵉⴽⴽⵉⵡⵉⵏ ⵏ ⵓⵙⵡⵓ", "ⵜⵉⵔⵣⵉⵡⵉⵏ ⵏ ⵉⴷⵖⴰⵔⵏ ⵉⵎⵣⵔⵓⵢⴰⵏ"]
+    },
+    highlights: {
+      en: ["Chouara Tannery", "Al-Qarawiyyin University and Mosque", "Bou Inania Madrasa", "Bab Boujloud
