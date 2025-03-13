@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 
 interface AnimatedTransitionProps {
   children: ReactNode;
-  variant?: 'fade' | 'slideUp' | 'slideRight' | 'slideLeft' | 'scale' | 'bounce' | 'rotate' | 'flip';
+  variant?: 'fade' | 'slideUp' | 'slideRight' | 'slideLeft' | 'scale' | 'bounce' | 'rotate' | 'flip' | 'elastic' | 'reveal' | 'glide' | 'blur';
   delay?: number;
   duration?: number;
   once?: boolean;
@@ -64,6 +64,35 @@ const variants = {
     animate: { opacity: 1, rotateX: 0 },
     exit: { opacity: 0, rotateX: -80 },
     transition: { duration: 0.6, type: "spring", stiffness: 300, damping: 15 }
+  },
+  elastic: {
+    initial: { opacity: 0, scale: 0.5 },
+    animate: { opacity: 1, scale: 1 },
+    exit: { opacity: 0, scale: 0.5 },
+    transition: { 
+      type: "spring", 
+      stiffness: 400, 
+      damping: 10,
+      mass: 1.2
+    }
+  },
+  reveal: {
+    initial: { clipPath: "inset(0 100% 0 0)" },
+    animate: { clipPath: "inset(0 0% 0 0)" },
+    exit: { clipPath: "inset(0 0 0 100%)" },
+    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] }
+  },
+  glide: {
+    initial: { opacity: 0, y: 20, skewY: 2 },
+    animate: { opacity: 1, y: 0, skewY: 0 },
+    exit: { opacity: 0, y: 20, skewY: 2 },
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] }
+  },
+  blur: {
+    initial: { opacity: 0, filter: "blur(8px)" },
+    animate: { opacity: 1, filter: "blur(0px)" },
+    exit: { opacity: 0, filter: "blur(8px)" },
+    transition: { duration: 0.6 }
   }
 };
 

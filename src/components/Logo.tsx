@@ -61,7 +61,7 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
   const arabicLetterVariants = {
     rest: { y: 0 },
     hover: { 
-      y: -30,
+      y: -20,
       transition: {
         type: "spring",
         stiffness: 300,
@@ -81,6 +81,11 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
     ...initialRotateVariants.animate
   };
 
+  // Enhanced gradient colors based on variant
+  const gradientColors = variant === 'footer' 
+    ? "from-morocco-gold to-morocco-terracotta" 
+    : "from-morocco-clay to-morocco-terracotta";
+
   return (
     <Link to="/" className="flex items-center group">
       <motion.div
@@ -89,13 +94,28 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
         whileHover="hover"
         whileTap="tap"
         variants={logoBoxVariants}
-        className={`h-9 w-9 rounded-md ${variant === 'footer' ? 'bg-morocco-terracotta' : 'bg-morocco-clay'} flex items-center justify-center mr-2 overflow-hidden shadow-md`}
+        className={`h-10 w-10 rounded-full relative ${
+          variant === 'footer' 
+            ? 'bg-gradient-to-br from-morocco-gold to-morocco-terracotta' 
+            : 'bg-gradient-to-br from-morocco-teal to-morocco-clay'
+        } flex items-center justify-center mr-2 overflow-hidden shadow-lg`}
       >
+        {/* Inner circle with glow effect */}
+        <motion.div 
+          className="absolute inset-0.5 rounded-full bg-white/10 backdrop-blur-sm"
+          animate={{ opacity: [0.5, 0.8, 0.5] }}
+          transition={{ 
+            duration: 2,
+            repeat: Infinity,
+            repeatType: "reverse"
+          }}
+        />
+        
         <motion.span 
           variants={arabicLetterVariants}
           initial="rest"
           whileHover="hover"
-          className="flex flex-col items-center"
+          className="flex flex-col items-center relative z-10"
         >
           <motion.span 
             className="font-bold text-white text-xl"
@@ -122,6 +142,7 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.5 }}
+            className="relative"
           >
             {Array.from("Azoul").map((letter, i) => (
               <motion.span
@@ -130,11 +151,18 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
                 variants={letterVariants}
                 initial="hidden"
                 animate="visible"
-                className="font-bold text-xl inline-block tracking-tight bg-gradient-to-r from-morocco-clay to-morocco-terracotta bg-clip-text text-transparent hover:tracking-normal transition-all duration-300"
+                className="font-bold text-xl inline-block tracking-tight bg-gradient-to-r from-morocco-teal to-morocco-terracotta bg-clip-text text-transparent hover:tracking-normal transition-all duration-300"
               >
                 {letter}
               </motion.span>
             ))}
+            {/* Animated underline effect */}
+            <motion.span 
+              className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-morocco-teal to-morocco-terracotta rounded-full"
+              initial={{ width: "0%" }}
+              whileInView={{ width: "100%" }}
+              transition={{ delay: 1, duration: 0.8 }}
+            />
           </motion.div>
         </motion.div>
       )}

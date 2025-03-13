@@ -1,10 +1,18 @@
 
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Compass, Globe, Calendar, Newspaper, MessageCircle } from 'lucide-react';
+import { Menu, X, Compass, Globe, Calendar, Newspaper, MessageCircle, MapPin, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Logo from './Logo';
+import { 
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger
+} from "@/components/ui/navigation-menu";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -27,11 +35,42 @@ const Header = () => {
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
   const navLinks = [
-    { name: 'Discover', href: '/feature/guides', icon: <Compass className="h-4 w-4 mr-1" /> },
-    { name: 'Experiences', href: '/feature/suggestions', icon: <Globe className="h-4 w-4 mr-1" /> },
-    { name: 'Events', href: '/feature/events', icon: <Calendar className="h-4 w-4 mr-1" /> },
-    { name: 'News', href: '/feature/guides', icon: <Newspaper className="h-4 w-4 mr-1" /> },
-    { name: 'Chat', href: '/feature/chat', icon: <MessageCircle className="h-4 w-4 mr-1" /> },
+    { 
+      name: 'Discover', 
+      href: '/feature/guides', 
+      icon: <Compass className="h-4 w-4 mr-1" />,
+      description: 'Explore travel guides and articles about Morocco'
+    },
+    { 
+      name: 'Experiences', 
+      href: '/feature/suggestions', 
+      icon: <Globe className="h-4 w-4 mr-1" />,
+      description: 'Find unique activities and experiences'
+    },
+    { 
+      name: 'Events', 
+      href: '/feature/events', 
+      icon: <Calendar className="h-4 w-4 mr-1" />,
+      description: 'Browse upcoming festivals and cultural events'
+    },
+    { 
+      name: 'News', 
+      href: '/feature/guides', 
+      icon: <Newspaper className="h-4 w-4 mr-1" />,
+      description: 'Latest news and updates from Morocco'
+    },
+    { 
+      name: 'Destinations', 
+      href: '/destination/marrakech', 
+      icon: <MapPin className="h-4 w-4 mr-1" />,
+      description: 'Explore popular cities and regions'
+    },
+    { 
+      name: 'Chat', 
+      href: '/feature/chat', 
+      icon: <MessageCircle className="h-4 w-4 mr-1" />,
+      description: 'Get personalized assistance from our AI'
+    },
   ];
 
   const navVariants = {
@@ -52,100 +91,144 @@ const Header = () => {
   return (
     <header 
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-custom-bezier",
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-custom-bezier backdrop-blur-sm",
         isScrolled 
-          ? "py-3 bg-white/95 backdrop-blur-lg shadow-sm" 
-          : "py-5 bg-transparent"
+          ? "py-3 bg-white/90 shadow-sm" 
+          : "py-5 bg-white/5"
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
           >
             <Logo variant={isScrolled ? 'default' : 'default'} />
           </motion.div>
 
           {/* Desktop Navigation */}
-          <motion.nav 
-            className="hidden md:flex space-x-8"
-            variants={navVariants}
-            initial="initial"
-            animate="animate"
-          >
-            {navLinks.map((link) => (
-              <motion.div key={link.name} variants={linkVariants}>
-                <Link
-                  to={link.href}
-                  className={cn(
-                    "flex items-center text-sm font-medium transition-colors relative group",
-                    isActive(link.href)
-                      ? "text-morocco-clay" 
-                      : isScrolled 
-                        ? "text-gray-900 hover:text-morocco-teal" 
-                        : "text-gray-800 hover:text-morocco-teal"
-                  )}
-                >
-                  {link.icon}
-                  {link.name}
-                  <span 
+          <NavigationMenu className="hidden md:flex">
+            <NavigationMenuList>
+              {navLinks.map((link) => (
+                <NavigationMenuItem key={link.name}>
+                  <Link 
+                    to={link.href}
                     className={cn(
-                      "absolute -bottom-1 left-0 h-0.5 bg-morocco-clay transition-all duration-300 rounded-full",
-                      isActive(link.href) ? "w-full" : "w-0 group-hover:w-full"
+                      "flex items-center text-sm font-medium px-4 py-2 rounded-full transition-colors relative group",
+                      isActive(link.href)
+                        ? "bg-morocco-sand/30 text-morocco-clay" 
+                        : isScrolled 
+                          ? "text-gray-800 hover:bg-morocco-sand/20" 
+                          : "text-gray-800 hover:bg-white/20"
                     )}
-                  />
-                </Link>
-              </motion.div>
-            ))}
-          </motion.nav>
+                  >
+                    {link.icon}
+                    <span>{link.name}</span>
+                    
+                    {isActive(link.href) && (
+                      <motion.span 
+                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-morocco-clay"
+                        layoutId="navbar-indicator"
+                        transition={{ type: 'spring', duration: 0.6 }}
+                      />
+                    )}
+                  </Link>
+                </NavigationMenuItem>
+              ))}
+            </NavigationMenuList>
+          </NavigationMenu>
           
           {/* Mobile menu button */}
           <div className="md:hidden">
-            <button
+            <motion.button
               onClick={toggleMobileMenu}
-              className="inline-flex items-center justify-center rounded-md p-2 text-gray-800"
+              className="inline-flex items-center justify-center rounded-full p-2 text-gray-800 bg-morocco-sand/20"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              {isMobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </button>
+              <AnimatePresence mode="wait">
+                {isMobileMenuOpen ? (
+                  <motion.span
+                    key="close"
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <X className="h-6 w-6" />
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="menu"
+                    initial={{ rotate: 90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: -90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Menu className="h-6 w-6" />
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </motion.button>
           </div>
         </div>
       </div>
 
       {/* Mobile menu */}
-      {isMobileMenuOpen && (
-        <motion.div
-          className="md:hidden"
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
-          exit={{ opacity: 0, height: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <div className="bg-white shadow-lg rounded-b-lg px-4 pt-2 pb-4 space-y-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.href}
-                className={cn(
-                  "flex items-center px-3 py-3 text-base font-medium rounded-md",
-                  isActive(link.href)
-                    ? "bg-morocco-sand/20 text-morocco-clay"
-                    : "text-gray-900 hover:bg-gray-50 hover:text-morocco-teal"
-                )}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            className="md:hidden"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="bg-white shadow-lg rounded-b-2xl px-4 pt-2 pb-4 space-y-1 mt-2">
+              {navLinks.map((link, index) => (
+                <motion.div
+                  key={link.name}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                >
+                  <Link
+                    to={link.href}
+                    className={cn(
+                      "flex items-center px-3 py-3 text-base font-medium rounded-xl",
+                      isActive(link.href)
+                        ? "bg-morocco-sand/20 text-morocco-clay"
+                        : "text-gray-900 hover:bg-morocco-sand/10 hover:text-morocco-teal"
+                    )}
+                  >
+                    {link.icon}
+                    <span className="ml-2">{link.name}</span>
+                  </Link>
+                </motion.div>
+              ))}
+
+              <motion.div
+                className="pt-2 mt-2 border-t border-gray-100"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
               >
-                {link.icon}
-                <span className="ml-2">{link.name}</span>
-              </Link>
-            ))}
-          </div>
-        </motion.div>
-      )}
+                <div className="flex space-x-2 justify-center">
+                  <Link 
+                    to="/feature/chat"
+                    className="inline-flex items-center px-4 py-2 rounded-full bg-morocco-clay text-white text-sm font-medium"
+                  >
+                    <MessageCircle className="h-4 w-4 mr-1" />
+                    Chat with Azoul
+                  </Link>
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };
