@@ -70,17 +70,26 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
     }
   };
 
+  // Combined initial and animate states
+  const combinedInitial = {
+    ...logoBoxVariants.rest,
+    ...initialRotateVariants.initial
+  };
+  
+  const combinedAnimate = {
+    ...logoBoxVariants.rest,
+    ...initialRotateVariants.animate
+  };
+
   return (
     <Link to="/" className="flex items-center group">
       <motion.div
-        variants={logoBoxVariants}
-        initial="rest"
+        initial={combinedInitial}
+        animate={combinedAnimate}
         whileHover="hover"
         whileTap="tap"
+        variants={logoBoxVariants}
         className={`h-9 w-9 rounded-md ${variant === 'footer' ? 'bg-morocco-terracotta' : 'bg-morocco-clay'} flex items-center justify-center mr-2 overflow-hidden shadow-md`}
-        // Fixed issue by combining these into a single animate/initial props with the variants
-        animate={initialRotateVariants.animate}
-        initial={initialRotateVariants.initial}
       >
         <motion.span 
           variants={arabicLetterVariants}
