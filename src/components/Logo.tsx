@@ -77,9 +77,10 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
         initial="rest"
         whileHover="hover"
         whileTap="tap"
+        className={`h-9 w-9 rounded-md ${variant === 'footer' ? 'bg-morocco-terracotta' : 'bg-morocco-clay'} flex items-center justify-center mr-2 overflow-hidden shadow-md`}
+        // Fixed issue by combining these into a single animate/initial props with the variants
         animate={initialRotateVariants.animate}
         initial={initialRotateVariants.initial}
-        className={`h-9 w-9 rounded-md ${variant === 'footer' ? 'bg-morocco-terracotta' : 'bg-morocco-clay'} flex items-center justify-center mr-2 overflow-hidden shadow-md`}
       >
         <motion.span 
           variants={arabicLetterVariants}
