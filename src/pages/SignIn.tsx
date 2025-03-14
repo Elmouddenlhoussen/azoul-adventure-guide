@@ -1,33 +1,44 @@
 
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { User, Key } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { LogIn, Eye, EyeOff } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Link, useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnimatedTransition from '@/components/AnimatedTransition';
+import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import SocialLoginButtons from '@/components/SocialLoginButtons';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    
-    // This is a placeholder for actual authentication logic
-    // In a real app, you would call your authentication service here
-    console.log('Signing in with:', email, password);
-    
+    setIsLoading(true);
+
+    // Simulate API call
     setTimeout(() => {
-      setIsSubmitting(false);
-      navigate('/');
+      setIsLoading(false);
+      
+      if (email && password) {
+        toast({
+          title: "Sign in successful",
+          description: "Welcome back to Azoul!",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Please enter both email and password.",
+          variant: "destructive",
+        });
+      }
     }, 1500);
   };
 
@@ -36,89 +47,105 @@ const SignIn = () => {
       <div className="min-h-screen flex flex-col">
         <Header />
         
-        <main className="flex-grow flex items-center justify-center pt-24 pb-16 px-4">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="max-w-md w-full bg-white rounded-xl shadow-lg overflow-hidden"
-          >
-            <div className="p-8">
-              <div className="text-center mb-8">
-                <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome Back</h1>
-                <p className="text-gray-600">Sign in to your Azoul account</p>
-              </div>
-              
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="example@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="border-morocco-sand/30 focus-visible:ring-morocco-terracotta"
-                  />
+        <main className="flex-grow pt-24 pb-16">
+          <div className="max-w-md mx-auto px-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="bg-white rounded-xl shadow-xl overflow-hidden"
+            >
+              <div className="p-6 sm:p-8">
+                <div className="text-center mb-8">
+                  <h1 className="text-2xl font-bold">Welcome Back</h1>
+                  <p className="text-gray-500 mt-2">Sign in to continue your Moroccan journey</p>
                 </div>
                 
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <Label htmlFor="password">Password</Label>
-                    <Link to="/forgot-password" className="text-sm text-morocco-clay hover:underline">
-                      Forgot password?
-                    </Link>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <User className="h-5 w-5 text-gray-400" />
+                      </div>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="you@example.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="pl-10"
+                      />
+                    </div>
                   </div>
+                  
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="password">Password</Label>
+                      <Link to="/forgot-password" className="text-sm text-morocco-clay hover:text-morocco-terracotta">
+                        Forgot password?
+                      </Link>
+                    </div>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <Key className="h-5 w-5 text-gray-400" />
+                      </div>
+                      <Input
+                        id="password"
+                        type="password"
+                        placeholder="••••••••"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="pl-10"
+                      />
+                    </div>
+                  </div>
+                  
+                  <Button 
+                    type="submit" 
+                    className="w-full bg-morocco-clay hover:bg-morocco-clay/90"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <span className="flex items-center justify-center">
+                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Signing in...
+                      </span>
+                    ) : (
+                      "Sign In"
+                    )}
+                  </Button>
+                </form>
+                
+                <div className="mt-6">
                   <div className="relative">
-                    <Input
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="••••••••"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      className="border-morocco-sand/30 focus-visible:ring-morocco-terracotta pr-10"
-                    />
-                    <button
-                      type="button"
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                    </button>
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-gray-200"></div>
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                      <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-6">
+                    <SocialLoginButtons mode="signin" />
                   </div>
                 </div>
                 
-                <Button
-                  type="submit"
-                  className="w-full bg-morocco-clay hover:bg-morocco-clay/90"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    <div className="flex items-center justify-center">
-                      <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full mr-2" />
-                      Signing in...
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-center">
-                      <LogIn className="mr-2 h-4 w-4" />
-                      Sign In
-                    </div>
-                  )}
-                </Button>
-              </form>
-              
-              <div className="mt-6 text-center">
-                <p className="text-sm text-gray-600">
-                  Don't have an account?{' '}
-                  <Link to="/signup" className="text-morocco-clay font-medium hover:underline">
-                    Sign Up
-                  </Link>
-                </p>
+                <div className="mt-8 text-center">
+                  <p className="text-gray-500">
+                    Don't have an account?{' '}
+                    <Link to="/signup" className="text-morocco-clay hover:text-morocco-terracotta font-medium">
+                      Sign up
+                    </Link>
+                  </p>
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </main>
         
         <Footer />
