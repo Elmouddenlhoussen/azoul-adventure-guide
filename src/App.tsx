@@ -11,6 +11,9 @@ import NotFound from "./pages/NotFound";
 import DestinationDetail from "./pages/DestinationDetail";
 import FeatureDetail from "./pages/FeatureDetail";
 import ChatAssistant from "./components/ChatAssistant";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
+import SearchResults from "./pages/SearchResults";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +26,9 @@ const AppRoutes = () => {
         <Route path="/" element={<Index />} />
         <Route path="/destination/:destinationId" element={<DestinationDetail />} />
         <Route path="/feature/:featureId" element={<FeatureDetail />} />
+        <Route path="/feature/search" element={<SearchResults />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>

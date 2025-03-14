@@ -93,7 +93,7 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
     }
   };
 
-  // Moroccan-inspired color palette
+  // Enhanced Moroccan-inspired color palette
   const bgGradient = "bg-gradient-to-br from-morocco-terracotta to-morocco-clay";
   const textGradient = "bg-gradient-to-r from-morocco-gold via-morocco-terracotta to-morocco-clay bg-clip-text text-transparent";
 
@@ -107,7 +107,7 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
         variants={logoContainerVariants}
         className={`h-12 w-12 rounded-xl relative ${bgGradient} flex items-center justify-center mr-3 overflow-hidden shadow-lg border border-morocco-sand/20`}
       >
-        {/* Inner glow effect */}
+        {/* Enhanced inner glow effect */}
         <motion.div 
           className="absolute inset-1 rounded-lg bg-white/10 backdrop-blur-sm"
           variants={glowVariants}
@@ -154,7 +154,7 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.2 }}
         >
-          <span className="text-white text-2xl">ⵣ</span>
+          <span className="text-white text-3xl">ⵣ</span>
         </motion.div>
       </motion.div>
       
@@ -179,7 +179,7 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
               </motion.span>
             ))}
             
-            {/* Animated underline effect */}
+            {/* Enhanced animated underline effect */}
             <motion.span 
               className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-morocco-gold via-morocco-terracotta to-morocco-clay rounded-full"
               initial={{ width: "0%" }}

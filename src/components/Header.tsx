@@ -2,10 +2,12 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Compass, Globe, Calendar, Newspaper, MessageCircle, MapPin, Search } from 'lucide-react';
+import { Menu, X, Compass, Globe, Calendar, Newspaper, MessageCircle, MapPin } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Logo from './Logo';
 import LanguageSwitcher from './LanguageSwitcher';
+import SearchBar from './SearchBar';
+import AuthButtons from './AuthButtons';
 import { 
   NavigationMenu,
   NavigationMenuContent,
@@ -75,16 +77,6 @@ const Header = () => {
     },
   ];
 
-  const navVariants = {
-    initial: { opacity: 0, y: -10 },
-    animate: { opacity: 1, y: 0, transition: { staggerChildren: 0.1, delayChildren: 0.3 } }
-  };
-
-  const linkVariants = {
-    initial: { opacity: 0, y: -10 },
-    animate: { opacity: 1, y: 0 }
-  };
-
   const isActive = (path: string) => {
     if (path === '/') return location.pathname === '/';
     return location.pathname.startsWith(path);
@@ -143,20 +135,16 @@ const Header = () => {
               </NavigationMenuList>
             </NavigationMenu>
             
-            <LanguageSwitcher />
-            
-            {/* Enhanced search button */}
-            <motion.button
-              className="ml-2 p-2 rounded-full bg-morocco-sand/10 text-morocco-clay hover:bg-morocco-sand/30 transition-colors"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Search className="h-4 w-4" />
-            </motion.button>
+            <div className="flex items-center space-x-2">
+              <SearchBar />
+              <LanguageSwitcher />
+              <AuthButtons />
+            </div>
           </div>
           
           {/* Mobile menu button with Moroccan styling */}
           <div className="md:hidden flex items-center">
+            <SearchBar />
             <LanguageSwitcher />
             
             <motion.button
@@ -232,18 +220,15 @@ const Header = () => {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
               >
-                <div className="flex space-x-2 justify-between">
+                <div className="flex flex-col space-y-2">
+                  <AuthButtons />
                   <Link 
                     to="/feature/chat"
-                    className="flex-1 flex items-center justify-center px-4 py-2 rounded-full bg-morocco-clay text-white text-sm font-medium"
+                    className="flex items-center justify-center px-4 py-2 rounded-full bg-morocco-clay text-white text-sm font-medium"
                   >
                     <MessageCircle className="h-4 w-4 mr-1" />
                     Chat with Azoul
                   </Link>
-                  
-                  <button className="p-2 rounded-full bg-morocco-sand/10 text-morocco-clay">
-                    <Search className="h-5 w-5" />
-                  </button>
                 </div>
               </motion.div>
             </div>
