@@ -1,7 +1,7 @@
 
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Star } from 'lucide-react';
+import { Sun, MountainSnow, Compass, Palm } from 'lucide-react';
 
 interface LogoProps {
   variant?: 'default' | 'footer';
@@ -9,26 +9,12 @@ interface LogoProps {
 }
 
 const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
-  // Letter animation variants
-  const letterVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: (i: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: {
-        delay: i * 0.05,
-        duration: 0.5,
-        ease: [0.22, 1, 0.36, 1],
-      }
-    })
-  };
-
   // Logo animations
   const logoContainerVariants = {
     initial: { 
       scale: 0.9, 
       opacity: 0,
-      rotate: -10
+      rotate: -5
     },
     animate: { 
       scale: 1, 
@@ -52,27 +38,49 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
     tap: { scale: 0.95 }
   };
 
-  // Star animation
-  const starVariants = {
-    initial: { scale: 1, opacity: 1 },
-    hover: { 
-      scale: 0,
-      opacity: 0,
-      transition: { duration: 0.3 }
-    }
-  };
-
-  // Tifinagh symbol animation
-  const tifinaghVariants = {
-    initial: { scale: 0, opacity: 0 },
-    hover: { 
+  // Inner elements animation
+  const innerElementsVariants = {
+    initial: { 
+      opacity: 0, 
+      y: 10,
+      scale: 0.8
+    },
+    animate: (i: number) => ({ 
+      opacity: 1, 
+      y: 0,
       scale: 1,
-      opacity: 1,
-      transition: { duration: 0.3, delay: 0.1 }
-    }
+      transition: {
+        delay: i * 0.1,
+        duration: 0.5,
+        ease: [0.22, 1, 0.36, 1]
+      }
+    }),
+    hover: (i: number) => ({ 
+      y: [-2, 0, -2],
+      transition: {
+        duration: 2,
+        repeat: Infinity,
+        repeatType: "reverse" as const,
+        delay: i * 0.1
+      }
+    })
   };
 
-  // Circle glow animation - Fixed the type error by specifying "reverse" as the repeatType
+  // Letter animation variants
+  const letterVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.05,
+        duration: 0.5,
+        ease: [0.22, 1, 0.36, 1],
+      }
+    })
+  };
+
+  // Glow animation
   const glowVariants = {
     initial: { opacity: 0.5 },
     animate: { 
@@ -80,14 +88,14 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
       transition: { 
         duration: 2, 
         repeat: Infinity, 
-        repeatType: "reverse" as const  // Fixed here - explicitly typed as "reverse"
+        repeatType: "reverse" as const
       }
     }
   };
 
-  // Moroccan flag colors
-  const bgColor = "bg-[#c1272d]"; // Moroccan flag red
-  const starColor = "text-[#006233] fill-[#006233] stroke-[#006233]"; // Moroccan flag green
+  // Moroccan-inspired color palette
+  const bgGradient = "bg-gradient-to-br from-morocco-terracotta to-morocco-clay";
+  const textGradient = "bg-gradient-to-r from-morocco-gold via-morocco-terracotta to-morocco-clay bg-clip-text text-transparent";
 
   return (
     <Link to="/" className="flex items-center group">
@@ -97,25 +105,56 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
         whileHover="hover"
         whileTap="tap"
         variants={logoContainerVariants}
-        className={`h-10 w-10 rounded-full relative ${bgColor} flex items-center justify-center mr-2 overflow-hidden shadow-lg`}
+        className={`h-12 w-12 rounded-xl relative ${bgGradient} flex items-center justify-center mr-3 overflow-hidden shadow-lg border border-morocco-sand/20`}
       >
-        {/* Inner circle with glow effect */}
+        {/* Inner glow effect */}
         <motion.div 
-          className="absolute inset-0.5 rounded-full bg-white/10 backdrop-blur-sm"
+          className="absolute inset-1 rounded-lg bg-white/10 backdrop-blur-sm"
           variants={glowVariants}
         />
         
-        {/* Moroccan flag star */}
-        <motion.div className="relative z-10" variants={starVariants}>
-          <Star className={`h-6 w-6 ${starColor}`} strokeWidth={1} />
-        </motion.div>
+        {/* Logo elements - Moroccan inspired */}
+        <div className="relative grid grid-cols-2 gap-0.5 p-1">
+          <motion.div 
+            custom={0}
+            variants={innerElementsVariants}
+            className="flex items-center justify-center"
+          >
+            <Sun className="h-4 w-4 text-white/90" strokeWidth={2.5} />
+          </motion.div>
+          
+          <motion.div 
+            custom={1}
+            variants={innerElementsVariants}
+            className="flex items-center justify-center"
+          >
+            <MountainSnow className="h-4 w-4 text-white/90" strokeWidth={2.5} />
+          </motion.div>
+          
+          <motion.div 
+            custom={2}
+            variants={innerElementsVariants}
+            className="flex items-center justify-center"
+          >
+            <Compass className="h-4 w-4 text-white/90" strokeWidth={2.5} />
+          </motion.div>
+          
+          <motion.div 
+            custom={3}
+            variants={innerElementsVariants}
+            className="flex items-center justify-center"
+          >
+            <Palm className="h-4 w-4 text-white/90" strokeWidth={2.5} />
+          </motion.div>
+        </div>
         
-        {/* Tifinagh symbol "ⵣ" (Yaz) - symbolizes free men (Amazigh) */}
+        {/* Traditional Moroccan symbol overlay */}
         <motion.div 
-          className="absolute inset-0 flex items-center justify-center"
-          variants={tifinaghVariants}
+          className="absolute inset-0 flex items-center justify-center opacity-20"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.2 }}
         >
-          <span className={`${starColor} text-xl font-bold`}>ⵣ</span>
+          <span className="text-white text-2xl">ⵣ</span>
         </motion.div>
       </motion.div>
       
@@ -134,14 +173,15 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
                 variants={letterVariants}
                 initial="hidden"
                 animate="visible"
-                className="font-bold text-xl inline-block tracking-tight bg-gradient-to-r from-[#006233] to-[#c1272d] bg-clip-text text-transparent hover:tracking-normal transition-all duration-300"
+                className={`font-bold text-2xl inline-block tracking-tight ${textGradient} hover:tracking-normal transition-all duration-300`}
               >
                 {letter}
               </motion.span>
             ))}
+            
             {/* Animated underline effect */}
             <motion.span 
-              className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-[#006233] to-[#c1272d] rounded-full"
+              className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-morocco-gold via-morocco-terracotta to-morocco-clay rounded-full"
               initial={{ width: "0%" }}
               whileInView={{ width: "100%" }}
               transition={{ delay: 1, duration: 0.8 }}

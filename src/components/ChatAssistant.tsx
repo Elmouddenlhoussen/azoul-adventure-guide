@@ -1,7 +1,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { MessageCircle, X, Send, Star, User } from 'lucide-react';
+import { MessageCircle, X, Send, Star, User, MessageSquare, Palm, Sparkles } from 'lucide-react';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { Avatar } from './ui/avatar';
@@ -157,11 +157,11 @@ const ChatAssistant = () => {
     }
   };
 
-  // Moroccan flag colors
-  const redBg = "bg-[#c1272d]";
-  const greenText = "text-[#006233]";
-  const greenBg = "bg-[#006233]";
-  const redText = "text-[#c1272d]";
+  // Enhanced Moroccan-inspired color palette
+  const primaryBg = "bg-gradient-to-r from-morocco-terracotta to-morocco-clay";
+  const secondaryBg = "bg-morocco-gold";
+  const chatBubbleUser = "bg-morocco-clay text-white";
+  const chatBubbleAssistant = "bg-white border border-morocco-sand/30 text-gray-800";
 
   return (
     <AnimatePresence>
@@ -172,17 +172,25 @@ const ChatAssistant = () => {
             {!isMinimized && (
               <AnimatedTransition variant="scale">
                 <motion.div 
-                  className="mb-4 w-[350px] h-[500px] bg-white rounded-lg shadow-lg overflow-hidden border border-morocco-sand/30 backdrop-blur-sm"
+                  className="mb-4 w-[350px] h-[500px] bg-white rounded-lg shadow-xl overflow-hidden border border-morocco-sand/30 backdrop-blur-sm"
                   initial={{ opacity: 0, y: 20, scale: 0.9 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 20, scale: 0.9 }}
                   transition={{ type: "spring", damping: 25, stiffness: 350 }}
                 >
-                  {/* Header with Moroccan flag styling */}
-                  <div className={`p-4 border-b ${redBg} text-white flex justify-between items-center`}>
+                  {/* Header with enhanced Moroccan styling */}
+                  <div className={`${primaryBg} p-4 border-b flex justify-between items-center`}>
                     <div className="flex items-center">
-                      <span className={`mr-2 text-lg font-bold ${greenText}`}>ⵣ</span>
-                      <span className="font-semibold">Azoul Assistant</span>
+                      <div className="mr-2 flex items-center justify-center w-8 h-8 rounded-full bg-white/20">
+                        <Palm className="h-4 w-4 text-white" />
+                      </div>
+                      <div>
+                        <span className="font-semibold text-white">Azoul Assistant</span>
+                        <div className="flex items-center text-white/70 text-xs">
+                          <span className="inline-block w-2 h-2 bg-green-400 rounded-full mr-1"></span>
+                          Online now
+                        </div>
+                      </div>
                     </div>
                     <Button 
                       variant="ghost" 
@@ -194,7 +202,7 @@ const ChatAssistant = () => {
                     </Button>
                   </div>
                   
-                  {/* Messages */}
+                  {/* Messages with enhanced styling */}
                   <ScrollArea className="flex-1 p-4 bg-morocco-sand/5">
                     <div className="space-y-4">
                       {messages.map((message) => (
@@ -203,17 +211,17 @@ const ChatAssistant = () => {
                           className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                         >
                           <div className={`flex ${message.sender === 'user' ? 'flex-row-reverse' : 'flex-row'} gap-2 max-w-[80%]`}>
-                            <Avatar className={`h-8 w-8 ${message.sender === 'assistant' ? redBg : greenBg}`}>
+                            <Avatar className={`h-8 w-8 ${message.sender === 'assistant' ? primaryBg : secondaryBg}`}>
                               {message.sender === 'assistant' ? 
-                                <span className="text-white text-xs font-bold">ⵣ</span> : 
+                                <Palm className="h-4 w-4 text-white" /> : 
                                 <User className="h-4 w-4 text-white" />
                               }
                             </Avatar>
                             <div 
-                              className={`p-3 rounded-lg ${
+                              className={`p-3 rounded-lg shadow-sm ${
                                 message.sender === 'user' 
-                                  ? `${greenBg} text-white rounded-tr-none` 
-                                  : 'bg-white border border-morocco-sand/30 text-gray-800 rounded-tl-none shadow-sm'
+                                  ? `${chatBubbleUser} rounded-tr-none` 
+                                  : `${chatBubbleAssistant} rounded-tl-none`
                               }`}
                             >
                               <p className="text-sm">{message.content}</p>
@@ -224,14 +232,14 @@ const ChatAssistant = () => {
                       {isTyping && (
                         <div className="flex justify-start">
                           <div className="flex flex-row gap-2 max-w-[80%]">
-                            <Avatar className={`h-8 w-8 ${redBg}`}>
-                              <span className="text-white text-xs font-bold">ⵣ</span>
+                            <Avatar className={`h-8 w-8 ${primaryBg}`}>
+                              <Palm className="h-4 w-4 text-white" />
                             </Avatar>
                             <div className="p-3 rounded-lg bg-white border border-morocco-sand/30 text-gray-800 rounded-tl-none shadow-sm">
                               <div className="flex space-x-1">
-                                <div className={`h-2 w-2 ${redBg} rounded-full animate-bounce`}></div>
-                                <div className={`h-2 w-2 ${redBg} rounded-full animate-bounce`} style={{ animationDelay: '0.2s' }}></div>
-                                <div className={`h-2 w-2 ${redBg} rounded-full animate-bounce`} style={{ animationDelay: '0.4s' }}></div>
+                                <div className={`h-2 w-2 ${primaryBg} rounded-full animate-bounce`}></div>
+                                <div className={`h-2 w-2 ${primaryBg} rounded-full animate-bounce`} style={{ animationDelay: '0.2s' }}></div>
+                                <div className={`h-2 w-2 ${primaryBg} rounded-full animate-bounce`} style={{ animationDelay: '0.4s' }}></div>
                               </div>
                             </div>
                           </div>
@@ -241,7 +249,7 @@ const ChatAssistant = () => {
                     </div>
                   </ScrollArea>
                   
-                  {/* Input with Moroccan styling */}
+                  {/* Input with enhanced Moroccan styling */}
                   <div className="p-3 border-t border-morocco-sand/30 flex gap-2 bg-white">
                     <Textarea
                       ref={inputRef}
@@ -249,15 +257,14 @@ const ChatAssistant = () => {
                       onChange={(e) => setInput(e.target.value)}
                       onKeyDown={handleKeyDown}
                       placeholder="Type your message..."
-                      className="resize-none min-h-[44px] max-h-[120px] border-morocco-sand/30 focus-visible:ring-[#006233]"
+                      className="resize-none min-h-[44px] max-h-[120px] border-morocco-sand/30 focus-visible:ring-morocco-terracotta"
                       rows={1}
                     />
                     <Button 
                       onClick={handleSend} 
-                      size="icon"
-                      className={`h-9 w-9 ${redBg} hover:bg-[#006233] transition-colors duration-300`}
+                      className={`h-9 w-9 p-0 ${primaryBg} hover:opacity-90 transition-opacity`}
                     >
-                      <Send className="h-4 w-4" />
+                      <Send className="h-4 w-4 text-white" />
                     </Button>
                   </div>
                 </motion.div>
@@ -265,14 +272,14 @@ const ChatAssistant = () => {
             )}
           </AnimatePresence>
 
-          {/* Chat button with Moroccan flag styling */}
+          {/* Enhanced chat button with Moroccan-inspired design */}
           <motion.button
             onClick={toggleChat}
-            className={`flex items-center justify-center rounded-full shadow-lg ${
+            className={`flex items-center justify-center rounded-xl shadow-lg ${
               isMinimized 
-                ? `${redBg} hover:${greenBg}` 
+                ? primaryBg
                 : 'bg-gray-200 hover:bg-gray-300'
-            } text-white p-3 transition-all duration-300 relative`}
+            } text-white p-4 transition-all duration-300 relative overflow-hidden border border-white/10`}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             initial={{ opacity: 0, scale: 0 }}
@@ -281,22 +288,42 @@ const ChatAssistant = () => {
           >
             {isMinimized ? (
               <>
+                {/* Visual elements for the chat button */}
+                <div className="absolute inset-0 opacity-20 bg-pattern" style={{ 
+                  backgroundImage: "url('/images/pattern.svg')",
+                  backgroundSize: "cover",
+                }}></div>
+                
+                {/* Chat icon with animation */}
                 <div className="relative">
-                  <MessageCircle className="h-6 w-6" />
+                  <MessageSquare className="h-6 w-6 text-white" />
                   <motion.div 
-                    className="absolute -top-1 -right-1 h-3 w-3"
+                    className="absolute -top-2 -right-2 h-4 w-4"
                     animate={{ 
                       scale: [1, 1.2, 1],
+                      rotate: [0, 15, 0],
                       opacity: [0.7, 1, 0.7]
                     }}
                     transition={{ duration: 2, repeat: Infinity }}
                   >
-                    <Star className={`h-3 w-3 ${greenText} fill-[#006233]`} />
+                    <Sparkles className="h-4 w-4 text-yellow-300" />
                   </motion.div>
                 </div>
-                <span className={`absolute -top-2 -right-2 h-5 w-5 ${greenBg} rounded-full flex items-center justify-center text-[10px] font-bold animate-pulse`}>
+                
+                {/* Notification badge */}
+                <span className="absolute -top-2 -right-2 h-6 w-6 bg-morocco-gold rounded-full flex items-center justify-center text-[10px] font-bold text-white">
                   1
                 </span>
+                
+                {/* Animated glow effect */}
+                <motion.div 
+                  className="absolute inset-0 bg-white rounded-xl"
+                  animate={{ 
+                    opacity: [0, 0.2, 0],
+                    scale: [1, 1.2, 1],
+                  }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                ></motion.div>
               </>
             ) : (
               <X className="h-6 w-6 text-gray-600" />

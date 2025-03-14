@@ -35,9 +35,15 @@
 
     --radius: 0.75rem;
     
-    /* Moroccan flag colors */
-    --morocco-red: 357 81% 48%;     /* #c1272d */
-    --morocco-green: 153 100% 19%;   /* #006233 */
+    /* Moroccan-inspired color palette */
+    --morocco-red: 357 81% 48%;         /* #c1272d - Traditional Moroccan flag red */
+    --morocco-green: 153 100% 19%;      /* #006233 - Traditional Moroccan flag green */
+    --morocco-clay: 10 79% 48%;         /* #d35a43 - Terracotta/clay color for architecture */
+    --morocco-terracotta: 15 85% 55%;   /* #e86a40 - Brighter terracotta */
+    --morocco-gold: 42 100% 59%;        /* #ffca28 - Golden/saffron color */
+    --morocco-sand: 35 33% 90%;         /* #f0e6d9 - Desert sand color */
+    --morocco-navy: 213 55% 28%;        /* #235789 - Deep blue for contrast */
+    --morocco-teal: 182 66% 33%;        /* #1b9aaa - Blue from Majorelle Garden */
   }
 
   .dark {
@@ -69,9 +75,15 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
 
-    /* Moroccan flag colors - same in dark mode */
-    --morocco-red: 357 81% 48%;     /* #c1272d */
-    --morocco-green: 153 100% 19%;   /* #006233 */
+    /* Moroccan colors stay the same in dark mode */
+    --morocco-red: 357 81% 48%;
+    --morocco-green: 153 100% 19%;
+    --morocco-clay: 10 79% 48%;
+    --morocco-terracotta: 15 85% 55%;
+    --morocco-gold: 42 100% 59%;
+    --morocco-sand: 35 33% 90%;
+    --morocco-navy: 213 55% 28%;
+    --morocco-teal: 182 66% 33%;
   }
 }
 
@@ -142,5 +154,58 @@
 
   .morocco-gradient {
     @apply bg-gradient-to-r from-morocco-green to-morocco-red;
+  }
+  
+  /* Moroccan-specific utility classes */
+  .bg-morocco-red {
+    @apply bg-[#c1272d];
+  }
+  
+  .bg-morocco-green {
+    @apply bg-[#006233];
+  }
+  
+  .bg-morocco-clay {
+    @apply bg-[#d35a43];
+  }
+  
+  .bg-morocco-terracotta {
+    @apply bg-[#e86a40];
+  }
+  
+  .bg-morocco-gold {
+    @apply bg-[#ffca28];
+  }
+  
+  .bg-morocco-sand {
+    @apply bg-[#f0e6d9];
+  }
+  
+  .text-morocco-red {
+    @apply text-[#c1272d];
+  }
+  
+  .text-morocco-green {
+    @apply text-[#006233];
+  }
+  
+  .text-morocco-clay {
+    @apply text-[#d35a43];
+  }
+  
+  .text-morocco-terracotta {
+    @apply text-[#e86a40];
+  }
+  
+  .text-morocco-gold {
+    @apply text-[#ffca28];
+  }
+  
+  .morocco-card {
+    @apply bg-white rounded-lg border border-morocco-sand/20 shadow-sm hover:shadow-md transition-shadow;
+  }
+  
+  .moroccan-button {
+    @apply bg-gradient-to-r from-morocco-terracotta to-morocco-clay text-white font-medium rounded-full px-4 py-2 hover:opacity-90 transition-opacity;
   }
 }
