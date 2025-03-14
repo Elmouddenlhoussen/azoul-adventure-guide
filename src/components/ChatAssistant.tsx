@@ -1,7 +1,6 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { MessageCircle, X, Send, Star, User, MessageSquare, Palm, Sparkles } from 'lucide-react';
+import { MessageCircle, X, Send, Star, User, MessageSquare, PalmTree, Sparkles } from 'lucide-react';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { Avatar } from './ui/avatar';
@@ -182,7 +181,7 @@ const ChatAssistant = () => {
                   <div className={`${primaryBg} p-4 border-b flex justify-between items-center`}>
                     <div className="flex items-center">
                       <div className="mr-2 flex items-center justify-center w-8 h-8 rounded-full bg-white/20">
-                        <Palm className="h-4 w-4 text-white" />
+                        <PalmTree className="h-4 w-4 text-white" />
                       </div>
                       <div>
                         <span className="font-semibold text-white">Azoul Assistant</span>
@@ -203,6 +202,8 @@ const ChatAssistant = () => {
                   </div>
                   
                   {/* Messages with enhanced styling */}
+                  
+                  {/* Update all other PalmTree references in the Avatar components */}
                   <ScrollArea className="flex-1 p-4 bg-morocco-sand/5">
                     <div className="space-y-4">
                       {messages.map((message) => (
@@ -213,7 +214,7 @@ const ChatAssistant = () => {
                           <div className={`flex ${message.sender === 'user' ? 'flex-row-reverse' : 'flex-row'} gap-2 max-w-[80%]`}>
                             <Avatar className={`h-8 w-8 ${message.sender === 'assistant' ? primaryBg : secondaryBg}`}>
                               {message.sender === 'assistant' ? 
-                                <Palm className="h-4 w-4 text-white" /> : 
+                                <PalmTree className="h-4 w-4 text-white" /> : 
                                 <User className="h-4 w-4 text-white" />
                               }
                             </Avatar>
@@ -233,7 +234,7 @@ const ChatAssistant = () => {
                         <div className="flex justify-start">
                           <div className="flex flex-row gap-2 max-w-[80%]">
                             <Avatar className={`h-8 w-8 ${primaryBg}`}>
-                              <Palm className="h-4 w-4 text-white" />
+                              <PalmTree className="h-4 w-4 text-white" />
                             </Avatar>
                             <div className="p-3 rounded-lg bg-white border border-morocco-sand/30 text-gray-800 rounded-tl-none shadow-sm">
                               <div className="flex space-x-1">

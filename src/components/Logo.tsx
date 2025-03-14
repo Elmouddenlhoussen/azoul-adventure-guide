@@ -1,7 +1,6 @@
-
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Sun, MountainSnow, Compass, Palm } from 'lucide-react';
+import { Sun, MountainSnow, Compass, PalmTree } from 'lucide-react';
 
 interface LogoProps {
   variant?: 'default' | 'footer';
@@ -144,7 +143,7 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
             variants={innerElementsVariants}
             className="flex items-center justify-center"
           >
-            <Palm className="h-4 w-4 text-white/90" strokeWidth={2.5} />
+            <PalmTree className="h-4 w-4 text-white/90" strokeWidth={2.5} />
           </motion.div>
         </div>
         
