@@ -14,6 +14,9 @@ import ChatAssistant from "./components/ChatAssistant";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import SearchResults from "./pages/SearchResults";
+import Courses from "./pages/Courses";
+import CourseDetail from "./pages/CourseDetail";
+import UserProfile from "./pages/UserProfile";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +32,9 @@ const AppRoutes = () => {
         <Route path="/feature/search" element={<SearchResults />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/courses" element={<Courses />} />
+        <Route path="/courses/:courseId" element={<CourseDetail />} />
+        <Route path="/profile" element={<UserProfile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>
