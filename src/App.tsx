@@ -17,6 +17,7 @@ import SearchResults from "./pages/SearchResults";
 import Courses from "./pages/Courses";
 import CourseDetail from "./pages/CourseDetail";
 import UserProfile from "./pages/UserProfile";
+import AdminDashboard from "./pages/AdminDashboard";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,7 @@ const AppRoutes = () => {
         <Route path="/courses" element={<Courses />} />
         <Route path="/courses/:courseId" element={<CourseDetail />} />
         <Route path="/profile" element={<UserProfile />} />
+        <Route path="/admin" element={<AdminDashboard />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>
