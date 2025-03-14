@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Filter, Search, BookOpen, GraduationCap, SlidersHorizontal } from 'lucide-react';
+import { Filter, Search, BookOpen, GraduationCap, SlidersHorizontal, Star } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnimatedTransition from '@/components/AnimatedTransition';
