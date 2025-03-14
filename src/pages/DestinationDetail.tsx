@@ -1,3 +1,4 @@
+
 import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -319,4 +320,203 @@ const destinations: Record<string, DestinationData> = {
       ber: ["ⴰⵔⵎ ⵏ ⵓⵎⴷⴰⵏ", "ⵜⵉⴽⴽⵉⵡⵉⵏ ⵜⵉⴷⵍⵙⴰⵏⵉⵏ", "ⵜⵉⵎⵍⴰⵡⵉⵏ ⵏ ⵜⵉⵏⴰⵡⵉⵏ ⵜⵉⵇⴱⵓⵔⵉⵏ", "ⵜⵉⴽⴽⵉⵡⵉⵏ ⵏ ⵓⵙⵡⵓ", "ⵜⵉⵔⵣⵉⵡⵉⵏ ⵏ ⵉⴷⵖⴰⵔⵏ ⵉⵎⵣⵔⵓⵢⴰⵏ"]
     },
     highlights: {
-      en: ["Chouara Tannery", "Al-Qarawiyyin University and Mosque", "Bou Inania Madrasa", "Bab Boujloud
+      en: ["Chouara Tannery", "Al-Qarawiyyin University and Mosque", "Bou Inania Madrasa", "Bab Boujloud"],
+      fr: ["Tannerie Chouara", "Université et Mosquée Al-Qarawiyyin", "Médersa Bou Inania", "Bab Boujloud"],
+      ar: ["دباغة الشوارة", "جامعة ومسجد القرويين", "مدرسة بو عنانية", "باب بوجلود"],
+      ber: ["ⵜⴰⵙⵉⵛⵓⵜ ⵏ ⵛⵡⴰⵔⴰ", "ⵜⵉⵏⵎⵍ ⴷ ⵜⵎⵣⴳⵉⴷⴰ ⵏ ⵍⵇⴰⵔⴰⵡⵉⵢⵉⵏ", "ⵜⵉⵏⵎⵍ ⵏ ⴱⵓ ⵄⵏⴰⵏⵉⵢⴰ", "ⴱⴰⴱ ⴱⵓⵊⵍⵓⴷ"]
+    }
+  }
+};
+
+const DestinationDetail = () => {
+  const { destinationId } = useParams<{ destinationId: string }>();
+  const { language } = useLanguage();
+  
+  const destination = destinations[destinationId || ''] || null;
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [destinationId]);
+  
+  if (!destination) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold mb-2">Destination not found</h2>
+            <p className="mb-4">The destination you're looking for doesn't exist.</p>
+            <Link to="/" className="text-primary hover:underline flex items-center justify-center gap-2">
+              <ArrowLeft size={16} />
+              Return to homepage
+            </Link>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+  
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      
+      <main className="flex-1">
+        <div className="w-full h-[40vh] relative">
+          <img 
+            src={destination.image} 
+            alt={destination.title[language]} 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+            <AnimatedTransition variant="slideUp">
+              <h1 className="text-white text-4xl md:text-5xl lg:text-6xl font-bold text-center">
+                {destination.title[language]}
+              </h1>
+            </AnimatedTransition>
+          </div>
+        </div>
+        
+        <div className="container mx-auto px-4 py-8">
+          <AnimatedTransition variant="fade">
+            <Link to="/" className="inline-flex items-center text-primary hover:underline mb-6">
+              <ArrowLeft size={16} className="mr-2" />
+              Back to destinations
+            </Link>
+          </AnimatedTransition>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <AnimatedTransition variant="slideUp" delay={0.1}>
+                <p className="text-lg mb-6">
+                  {destination.description[language]}
+                </p>
+                
+                <h2 className="text-2xl font-semibold mb-4">About {destination.title[language]}</h2>
+                <p className="mb-6">
+                  {destination.fullDescription[language]}
+                </p>
+                
+                <h2 className="text-2xl font-semibold mb-4">Highlights</h2>
+                <ul className="list-disc pl-5 mb-6 space-y-1">
+                  {destination.highlights[language].map((highlight, idx) => (
+                    <motion.li 
+                      key={idx}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 + (idx * 0.05) }}
+                    >
+                      {highlight}
+                    </motion.li>
+                  ))}
+                </ul>
+                
+                <h2 className="text-2xl font-semibold mb-4">Activities</h2>
+                <ul className="list-disc pl-5 mb-6 space-y-1">
+                  {destination.activities[language].map((activity, idx) => (
+                    <motion.li 
+                      key={idx}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 + (idx * 0.05) }}
+                    >
+                      {activity}
+                    </motion.li>
+                  ))}
+                </ul>
+              </AnimatedTransition>
+            </div>
+            
+            <div>
+              <AnimatedTransition variant="slideLeft" delay={0.2}>
+                <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+                  <h3 className="text-xl font-semibold mb-4">Travel Information</h3>
+                  
+                  <div className="space-y-4">
+                    <div className="flex items-start">
+                      <MapPin className="text-primary w-5 h-5 mt-0.5 mr-3" />
+                      <div>
+                        <h4 className="font-medium">Location</h4>
+                        <p>{destination.location[language]}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start">
+                      <Star className="text-primary w-5 h-5 mt-0.5 mr-3" />
+                      <div>
+                        <h4 className="font-medium">Rating</h4>
+                        <p>{destination.rating}/5</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start">
+                      <Clock className="text-primary w-5 h-5 mt-0.5 mr-3" />
+                      <div>
+                        <h4 className="font-medium">Duration</h4>
+                        <p>{destination.duration[language]}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start">
+                      <Calendar className="text-primary w-5 h-5 mt-0.5 mr-3" />
+                      <div>
+                        <h4 className="font-medium">Best Time to Visit</h4>
+                        <p>{destination.bestTime[language]}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start">
+                      <Users className="text-primary w-5 h-5 mt-0.5 mr-3" />
+                      <div>
+                        <h4 className="font-medium">Group Size</h4>
+                        <p>{destination.groupSize[language]}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-white rounded-lg shadow-md p-6">
+                  <h3 className="text-xl font-semibold mb-4">Gallery</h3>
+                  <div className="grid grid-cols-1 gap-4">
+                    {destination.gallery.map((img, idx) => (
+                      <motion.div 
+                        key={idx} 
+                        className="aspect-video rounded-md overflow-hidden"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.2 + (idx * 0.1) }}
+                      >
+                        <img 
+                          src={img} 
+                          alt={`${destination.title[language]} ${idx + 1}`} 
+                          className="w-full h-full object-cover transition-transform hover:scale-105 duration-300"
+                        />
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </AnimatedTransition>
+            </div>
+          </div>
+          
+          <AnimatedTransition variant="slideUp" delay={0.3}>
+            <div className="mt-12 text-center">
+              <h2 className="text-2xl font-semibold mb-4">Ready to Explore {destination.title[language]}?</h2>
+              <a 
+                href="#" 
+                className="inline-flex items-center bg-primary text-white px-6 py-3 rounded-md hover:bg-primary/90 transition-colors"
+              >
+                Book your adventure
+                <ExternalLink className="ml-2 w-4 h-4" />
+              </a>
+            </div>
+          </AnimatedTransition>
+        </div>
+      </main>
+      
+      <Footer />
+    </div>
+  );
+};
+
+export default DestinationDetail;
