@@ -1,170 +1,67 @@
 
-import { useEffect, useState, useRef } from 'react';
-import { motion, useAnimation, useScroll, useTransform } from 'framer-motion';
-import { MapPin, Search } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-
-const backgrounds = [
-  '/images/morocco-1.jpg',
-  '/images/morocco-2.jpg',
-  '/images/morocco-3.jpg'
-];
+import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { Search, MapPin } from 'lucide-react';
 
 const Hero = () => {
-  const [currentBg, setCurrentBg] = useState(0);
-  const [searchQuery, setSearchQuery] = useState('');
-  const navigate = useNavigate();
-  const controls = useAnimation();
-  const ref = useRef(null);
-
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"]
-  });
-  
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 1.1]);
-  const y = useTransform(scrollYProgress, [0, 0.5], [0, 100]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentBg((prev) => (prev + 1) % backgrounds.length);
-    }, 6000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    controls.start({
-      opacity: 1,
-      y: 0,
-      transition: { duration: 1, ease: [0.22, 1, 0.36, 1] }
-    });
-  }, [controls]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/feature/search?q=${encodeURIComponent(searchQuery)}`);
-    }
-  };
-
   return (
-    <motion.section 
-      ref={ref}
-      className="relative h-screen w-full overflow-hidden"
-      initial={{ opacity: 0.5 }}
-      animate={{ opacity: 1 }}
-      style={{ opacity }}
-    >
-      {/* Background Images */}
-      {backgrounds.map((bg, index) => (
-        <motion.div
-          key={bg}
-          className="absolute inset-0 w-full h-full"
-          initial={{ opacity: 0 }}
-          animate={{
-            opacity: currentBg === index ? 1 : 0,
-            scale: currentBg === index ? 1 : 1.1,
-          }}
-          transition={{
-            opacity: { duration: 1.5, ease: 'easeInOut' },
-            scale: { duration: 8, ease: 'easeInOut' }
+    <div className="relative h-[90vh] flex items-center overflow-hidden">
+      {/* Background with fallback color */}
+      <div className="absolute inset-0 bg-morocco-navy/20">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1539020140153-e69ed81792c6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80')",
           }}
         >
-          <div 
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${bg})` }}
-          />
-          <div className="absolute inset-0 bg-black/30" />
-        </motion.div>
-      ))}
+          <div className="absolute inset-0 bg-black/40" />
+        </div>
+      </div>
 
-      {/* Overlay Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/50" />
-
-      {/* Parallax effect on scroll */}
-      <motion.div 
-        className="absolute inset-0 w-full h-full z-0"
-        style={{ scale, y }}
-      />
-
-      {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full text-white px-4 sm:px-6 text-center">
+      <div className="relative z-10 container mx-auto px-4 py-16 flex flex-col items-center text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.8 }}
-          className="mb-2"
+          transition={{ duration: 0.6 }}
         >
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/10 backdrop-blur-sm border border-white/20">
-            <MapPin className="w-3 h-3 mr-1" />
-            Explore Morocco
-          </span>
+          <h1 className="text-4xl md:text-6xl font-bold mb-4 text-white">
+            Experience the Magic of <span className="text-morocco-gold">Morocco</span>
+          </h1>
         </motion.div>
-        
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={controls}
-          className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 max-w-3xl leading-tight"
-        >
-          Discover The Magic of Morocco
-        </motion.h1>
-        
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.8 }}
-          className="text-lg md:text-xl text-white/90 max-w-2xl mb-10"
-        >
-          Your ultimate guide to exploring the beautiful landscapes, rich culture, and breathtaking experiences of Morocco.
-        </motion.p>
-        
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.8 }}
-          className="w-full max-w-md"
+          transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <form onSubmit={handleSubmit} className="relative">
-            <input
-              type="text"
-              placeholder="Search for destinations, experiences..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-6 py-4 pr-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white placeholder:text-white/70 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all"
-            />
-            <motion.button 
-              type="submit"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white text-morocco-navy p-2 rounded-full hover:bg-white/90 transition-colors"
-            >
-              <Search className="h-5 w-5" />
-            </motion.button>
-          </form>
+          <p className="text-lg md:text-xl text-white/80 max-w-2xl mb-8">
+            From ancient medinas to vast deserts, discover the wonders of Morocco with a personalized travel experience
+          </p>
         </motion.div>
-        
+
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5, duration: 1 }}
-          className="absolute bottom-10 left-0 right-0 flex justify-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4"
         >
-          <div className="flex space-x-2">
-            {backgrounds.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setCurrentBg(i)}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  currentBg === i ? 'bg-white w-8' : 'bg-white/50'
-                }`}
-              />
-            ))}
-          </div>
+          <Link
+            to="/destination/marrakech"
+            className="px-6 py-3 bg-morocco-clay text-white rounded-full font-medium hover:bg-morocco-clay/90 transition-colors inline-flex items-center justify-center"
+          >
+            <MapPin className="mr-2 h-5 w-5" />
+            Explore Destinations
+          </Link>
+          <Link
+            to="/feature/search"
+            className="px-6 py-3 bg-white text-morocco-navy rounded-full font-medium hover:bg-white/90 transition-colors inline-flex items-center justify-center"
+          >
+            <Search className="mr-2 h-5 w-5" />
+            Find Experiences
+          </Link>
         </motion.div>
       </div>
-    </motion.section>
+    </div>
   );
 };
 
