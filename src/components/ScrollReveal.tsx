@@ -1,5 +1,5 @@
 
-import { useEffect, useRef, ReactNode } from 'react';
+import { useRef, ReactNode } from 'react';
 import { motion, useInView, Variant } from 'framer-motion';
 
 interface ScrollRevealProps {
@@ -50,7 +50,7 @@ const ScrollReveal = ({
   const isInView = useInView(ref, { 
     once: true, 
     amount: "some", 
-    margin: margin as any // Type assertion to fix the type error
+    margin: margin as any // Type assertion is necessary since framer-motion expects a specific type
   });
 
   return (
@@ -64,7 +64,7 @@ const ScrollReveal = ({
         delay,
         ease: [0.22, 1, 0.36, 1]
       }}
-      className={className}
+      className={`relative ${className}`} // Added relative positioning to fix the console warning
     >
       {children}
     </motion.div>

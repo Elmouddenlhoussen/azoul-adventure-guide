@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -136,7 +135,7 @@ export default {
 				'shimmer': 'shimmer 2s infinite linear'
 			},
 			fontFamily: {
-				sans: ['"SF Pro Display"', '"SF Pro Text"', 'system-ui', 'sans-serif'],
+				sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
 				serif: ['Georgia', 'serif']
 			},
 			transitionProperty: {
