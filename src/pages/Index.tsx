@@ -10,6 +10,8 @@ import MapPreview from '@/components/MapPreview';
 import SmartSuggestions from '@/components/SmartSuggestions';
 import Footer from '@/components/Footer';
 import AnimatedTransition from '@/components/AnimatedTransition';
+import ScrollReveal from '@/components/ScrollReveal';
+import { initScrollAnimations } from '@/utils/scrollAnimations';
 import { Globe, Compass, MessageCircle, Calendar, MapPin, Search } from 'lucide-react';
 
 const Index = () => {
@@ -19,6 +21,11 @@ const Index = () => {
       top: 0,
       behavior: 'smooth',
     });
+
+    // Initialize scroll animations
+    const cleanup = initScrollAnimations();
+    
+    return cleanup;
   }, []);
 
   const destinations = [
@@ -99,72 +106,62 @@ const Index = () => {
 
         {/* Destinations Section */}
         <section className="section-container">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true, margin: "-100px" }}
-            className="text-center mb-12"
-          >
-            <h2 className="section-title">Popular Destinations</h2>
-            <p className="section-subtitle mx-auto">
-              Explore Morocco's most iconic locations, from ancient medinas to breathtaking landscapes
-            </p>
-          </motion.div>
+          <ScrollReveal variant="slideUp">
+            <div className="text-center mb-12">
+              <h2 className="section-title">Popular Destinations</h2>
+              <p className="section-subtitle mx-auto">
+                Explore Morocco's most iconic locations, from ancient medinas to breathtaking landscapes
+              </p>
+            </div>
+          </ScrollReveal>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 stagger-container">
             {destinations.map((destination, index) => (
-              <DestinationCard
-                key={destination.title}
-                title={destination.title}
-                description={destination.description}
-                image={destination.image}
-                location={destination.location}
-                href={destination.href}
-                index={index}
-              />
+              <div key={destination.title} className="stagger-item">
+                <DestinationCard
+                  title={destination.title}
+                  description={destination.description}
+                  image={destination.image}
+                  location={destination.location}
+                  href={destination.href}
+                  index={index}
+                />
+              </div>
             ))}
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            viewport={{ once: true, margin: "-100px" }}
-            className="mt-12 text-center"
-          >
-            <Link to="/destination/marrakech" className="px-6 py-3 bg-morocco-clay text-white rounded-full font-medium hover:bg-morocco-clay/90 transition-colors inline-block">
-              View All Destinations
-            </Link>
-          </motion.div>
+          <ScrollReveal variant="fadeIn" delay={0.4}>
+            <div className="mt-12 text-center">
+              <Link to="/destination/marrakech" className="px-6 py-3 bg-morocco-clay text-white rounded-full font-medium hover:bg-morocco-clay/90 transition-colors inline-block">
+                View All Destinations
+              </Link>
+            </div>
+          </ScrollReveal>
         </section>
 
         {/* Features Section */}
         <section className="py-20 bg-morocco-sand/30">
           <div className="section-container">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true, margin: "-100px" }}
-              className="text-center mb-12"
-            >
-              <h2 className="section-title">Why Choose Azoul</h2>
-              <p className="section-subtitle mx-auto">
-                We've designed Azoul to make your Moroccan adventure seamless and unforgettable
-              </p>
-            </motion.div>
+            <ScrollReveal variant="slideUp">
+              <div className="text-center mb-12">
+                <h2 className="section-title">Why Choose Azoul</h2>
+                <p className="section-subtitle mx-auto">
+                  We've designed Azoul to make your Moroccan adventure seamless and unforgettable
+                </p>
+              </div>
+            </ScrollReveal>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 stagger-container">
               {features.map((feature, index) => (
-                <FeatureCard
-                  key={feature.title}
-                  title={feature.title}
-                  description={feature.description}
-                  icon={feature.icon}
-                  index={index}
-                  href={feature.href}
-                />
+                <div key={feature.title} className="stagger-item">
+                  <FeatureCard
+                    title={feature.title}
+                    description={feature.description}
+                    icon={feature.icon}
+                    index={index}
+                    href={feature.href}
+                  />
+                </div>
               ))}
             </div>
           </div>
@@ -172,20 +169,18 @@ const Index = () => {
 
         {/* Map Section */}
         <section className="section-container">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true, margin: "-100px" }}
-            className="text-center mb-12"
-          >
-            <h2 className="section-title">Explore Morocco</h2>
-            <p className="section-subtitle mx-auto">
-              Navigate through Morocco's diverse regions and plan your journey with our interactive map
-            </p>
-          </motion.div>
+          <ScrollReveal variant="slideUp">
+            <div className="text-center mb-12">
+              <h2 className="section-title">Explore Morocco</h2>
+              <p className="section-subtitle mx-auto">
+                Navigate through Morocco's diverse regions and plan your journey with our interactive map
+              </p>
+            </div>
+          </ScrollReveal>
 
-          <MapPreview />
+          <ScrollReveal variant="scale" delay={0.2}>
+            <MapPreview />
+          </ScrollReveal>
         </section>
 
         {/* Smart Suggestions Section */}
@@ -203,40 +198,28 @@ const Index = () => {
           
           <div className="relative section-container">
             <div className="max-w-3xl mx-auto text-center">
-              <motion.h2
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                viewport={{ once: true, margin: "-100px" }}
-                className="text-3xl md:text-4xl font-bold mb-6"
-              >
-                Ready to Experience the Magic of Morocco?
-              </motion.h2>
+              <ScrollReveal variant="fadeIn">
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                  Ready to Experience the Magic of Morocco?
+                </h2>
+              </ScrollReveal>
               
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                viewport={{ once: true, margin: "-100px" }}
-                className="text-lg text-white/80 mb-8"
-              >
-                Start planning your unforgettable Moroccan adventure today with Azoul as your trusted guide.
-              </motion.p>
+              <ScrollReveal variant="fadeIn" delay={0.1}>
+                <p className="text-lg text-white/80 mb-8">
+                  Start planning your unforgettable Moroccan adventure today with Azoul as your trusted guide.
+                </p>
+              </ScrollReveal>
               
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                viewport={{ once: true, margin: "-100px" }}
-                className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4"
-              >
-                <Link to="/destination/marrakech" className="px-6 py-3 bg-white text-morocco-navy rounded-full font-medium hover:bg-white/90 transition-colors inline-block">
-                  Start Exploring
-                </Link>
-                <Link to="/feature/chat" className="px-6 py-3 border border-white text-white rounded-full font-medium hover:bg-white/10 transition-colors inline-block">
-                  Chat with Azoul
-                </Link>
-              </motion.div>
+              <ScrollReveal variant="slideUp" delay={0.2}>
+                <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                  <Link to="/destination/marrakech" className="px-6 py-3 bg-white text-morocco-navy rounded-full font-medium hover:bg-white/90 transition-colors inline-block">
+                    Start Exploring
+                  </Link>
+                  <Link to="/feature/chat" className="px-6 py-3 border border-white text-white rounded-full font-medium hover:bg-white/10 transition-colors inline-block">
+                    Chat with Azoul
+                  </Link>
+                </div>
+              </ScrollReveal>
             </div>
           </div>
         </section>

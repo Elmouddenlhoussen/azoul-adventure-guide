@@ -7,7 +7,9 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { LanguageProvider } from "@/hooks/use-language";
 import { AuthProvider } from "@/hooks/use-auth-context";
+import { useSmoothScroll } from "@/hooks/use-smooth-scroll";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import ScrollToTop from "@/components/ScrollToTop";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import DestinationDetail from "./pages/DestinationDetail";
@@ -25,6 +27,7 @@ const queryClient = new QueryClient();
 
 const AppRoutes = () => {
   const location = useLocation();
+  useSmoothScroll();
   
   return (
     <AnimatePresence mode="wait">
@@ -61,6 +64,7 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <ScrollToTop />
             <AppRoutes />
             <ChatAssistant />
           </BrowserRouter>
