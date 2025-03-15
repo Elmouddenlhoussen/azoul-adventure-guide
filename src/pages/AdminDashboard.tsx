@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { 
@@ -602,6 +601,14 @@ const AdminDashboard = () => {
   const [editingFeature, setEditingFeature] = useState(null);
   const [editingCourse, setEditingCourse] = useState(null);
   
+  // Helper function to close dialog with proper typing
+  const closeDialog = (selector: string) => {
+    const closeButton = document.querySelector(selector) as HTMLElement | null;
+    if (closeButton) {
+      closeButton.click();
+    }
+  };
+  
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
@@ -733,7 +740,7 @@ const AdminDashboard = () => {
                       </DialogDescription>
                     </DialogHeader>
                     <DestinationForm 
-                      onClose={() => document.querySelector(".destinations-dialog[data-state='open'] button[data-state='closed']")?.click()} 
+                      onClose={() => closeDialog(".destinations-dialog[data-state='open'] button[data-state='closed']")} 
                       onSubmit={handleAddDestination}
                     />
                   </DialogContent>
@@ -779,7 +786,7 @@ const AdminDashboard = () => {
                                 </DialogHeader>
                                 <DestinationForm 
                                   initialData={editingDestination}
-                                  onClose={() => document.querySelector(".destinations-dialog[data-state='open'] button[data-state='closed']")?.click()}
+                                  onClose={() => closeDialog(".destinations-dialog[data-state='open'] button[data-state='closed']")}
                                   onSubmit={(updatedData) => handleEditDestination(destination.id, updatedData)}
                                 />
                               </DialogContent>
@@ -819,7 +826,7 @@ const AdminDashboard = () => {
                       </DialogDescription>
                     </DialogHeader>
                     <FeatureForm 
-                      onClose={() => document.querySelector(".features-dialog[data-state='open'] button[data-state='closed']")?.click()}
+                      onClose={() => closeDialog(".features-dialog[data-state='open'] button[data-state='closed']")}
                       onSubmit={handleAddFeature}
                     />
                   </DialogContent>
@@ -863,7 +870,7 @@ const AdminDashboard = () => {
                                 </DialogHeader>
                                 <FeatureForm 
                                   initialData={editingFeature}
-                                  onClose={() => document.querySelector(".features-dialog[data-state='open'] button[data-state='closed']")?.click()}
+                                  onClose={() => closeDialog(".features-dialog[data-state='open'] button[data-state='closed']")}
                                   onSubmit={(updatedData) => handleEditFeature(feature.id, updatedData)}
                                 />
                               </DialogContent>
@@ -903,7 +910,7 @@ const AdminDashboard = () => {
                       </DialogDescription>
                     </DialogHeader>
                     <CourseForm 
-                      onClose={() => document.querySelector(".courses-dialog[data-state='open'] button[data-state='closed']")?.click()}
+                      onClose={() => closeDialog(".courses-dialog[data-state='open'] button[data-state='closed']")}
                       onSubmit={handleAddCourse}
                     />
                   </DialogContent>
@@ -940,41 +947,3 @@ const AdminDashboard = () => {
                                   Edit
                                 </Button>
                               </DialogTrigger>
-                              <DialogContent className="courses-dialog">
-                                <DialogHeader>
-                                  <DialogTitle>Edit Course</DialogTitle>
-                                  <DialogDescription>
-                                    Make changes to the course details.
-                                  </DialogDescription>
-                                </DialogHeader>
-                                <CourseForm 
-                                  initialData={editingCourse}
-                                  onClose={() => document.querySelector(".courses-dialog[data-state='open'] button[data-state='closed']")?.click()}
-                                  onSubmit={(updatedData) => handleEditCourse(course.id, updatedData)}
-                                />
-                              </DialogContent>
-                            </Dialog>
-                            <Button 
-                              variant="ghost" 
-                              size="sm" 
-                              className="text-destructive"
-                              onClick={() => handleDeleteCourse(course.id)}
-                            >
-                              Delete
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </div>
-      </div>
-    </SidebarProvider>
-  );
-};
-
-export default AdminDashboard;
