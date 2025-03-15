@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { 
@@ -947,3 +948,41 @@ const AdminDashboard = () => {
                                   Edit
                                 </Button>
                               </DialogTrigger>
+                              <DialogContent className="courses-dialog">
+                                <DialogHeader>
+                                  <DialogTitle>Edit Course</DialogTitle>
+                                  <DialogDescription>
+                                    Make changes to the course details.
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <CourseForm 
+                                  initialData={editingCourse}
+                                  onClose={() => closeDialog(".courses-dialog[data-state='open'] button[data-state='closed']")} 
+                                  onSubmit={(updatedData) => handleEditCourse(course.id, updatedData)}
+                                />
+                              </DialogContent>
+                            </Dialog>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="text-destructive"
+                              onClick={() => handleDeleteCourse(course.id)}
+                            >
+                              Delete
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </div>
+    </SidebarProvider>
+  );
+};
+
+export default AdminDashboard;
