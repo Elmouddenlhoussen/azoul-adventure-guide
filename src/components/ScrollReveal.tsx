@@ -47,7 +47,7 @@ const ScrollReveal = ({
   className = ""
 }: ScrollRevealProps) => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: "some", rootMargin: margin });
+  const isInView = useInView(ref, { once: true, amount: "some", margin });
 
   return (
     <motion.div
