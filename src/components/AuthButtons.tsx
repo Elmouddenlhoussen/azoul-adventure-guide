@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { User, LogIn, UserPlus, ChevronDown, Facebook, Github, Mail } from 'lucide-react';
+import { User, LogIn, UserPlus, ChevronDown, Facebook, Github, Mail, Shield } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { 
   Popover,
@@ -19,21 +19,18 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
+import { useAuth } from '@/hooks/use-auth-context';
+import AdminLink from './AdminLink';
 
 const AuthButtons = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { user, isLoggedIn, isAdmin, logout } = useAuth();
 
-  // This is a placeholder for actual authentication logic
   const handleLogout = () => {
-    setIsLoggedIn(false);
-    toast({
-      title: "Logged out successfully",
-      description: "You have been logged out of your account.",
-      duration: 3000,
-    });
+    logout();
+    navigate('/');
   };
 
   const handleSocialLogin = (provider: string) => {
@@ -46,65 +43,63 @@ const AuthButtons = () => {
     });
     setIsAuthDialogOpen(false);
     // In a real implementation, this would redirect to the OAuth flow
-    // For demo purposes, we'll simulate login
-    setTimeout(() => {
-      setIsLoggedIn(true);
-      navigate('/');
-    }, 1000);
   };
 
   return (
     <div className="flex items-center">
       {isLoggedIn ? (
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button 
-              variant="ghost" 
-              className="flex items-center space-x-1 rounded-full bg-morocco-sand/10 hover:bg-morocco-sand/20 text-gray-700 px-3 py-1.5 h-9"
-            >
-              <div className="w-6 h-6 rounded-full bg-morocco-clay flex items-center justify-center text-white">
-                <User className="h-3.5 w-3.5" />
+        <div className="flex items-center">
+          {isAdmin && <AdminLink />}
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button 
+                variant="ghost" 
+                className="flex items-center space-x-1 rounded-full bg-morocco-sand/10 hover:bg-morocco-sand/20 text-gray-700 px-3 py-1.5 h-9 ml-2"
+              >
+                <div className="w-6 h-6 rounded-full bg-morocco-clay flex items-center justify-center text-white">
+                  <User className="h-3.5 w-3.5" />
+                </div>
+                <span className="text-sm font-medium">{user?.name || "Account"}</span>
+                <ChevronDown className="h-3.5 w-3.5 text-gray-500" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-56 p-2">
+              <div className="space-y-1">
+                <Link 
+                  to="/profile" 
+                  className="block w-full text-left px-3 py-2 text-sm rounded-md hover:bg-morocco-sand/10"
+                >
+                  My Profile
+                </Link>
+                <Link 
+                  to="/bookings" 
+                  className="block w-full text-left px-3 py-2 text-sm rounded-md hover:bg-morocco-sand/10"
+                >
+                  My Bookings
+                </Link>
+                <Link 
+                  to="/courses/my-courses" 
+                  className="block w-full text-left px-3 py-2 text-sm rounded-md hover:bg-morocco-sand/10"
+                >
+                  My Courses
+                </Link>
+                <Link 
+                  to="/settings" 
+                  className="block w-full text-left px-3 py-2 text-sm rounded-md hover:bg-morocco-sand/10"
+                >
+                  Settings
+                </Link>
+                <hr className="my-1 border-morocco-sand/20" />
+                <button
+                  onClick={handleLogout}
+                  className="block w-full text-left px-3 py-2 text-sm text-morocco-clay rounded-md hover:bg-morocco-sand/10"
+                >
+                  Sign Out
+                </button>
               </div>
-              <span className="text-sm font-medium">Account</span>
-              <ChevronDown className="h-3.5 w-3.5 text-gray-500" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-56 p-2">
-            <div className="space-y-1">
-              <Link 
-                to="/profile" 
-                className="block w-full text-left px-3 py-2 text-sm rounded-md hover:bg-morocco-sand/10"
-              >
-                My Profile
-              </Link>
-              <Link 
-                to="/bookings" 
-                className="block w-full text-left px-3 py-2 text-sm rounded-md hover:bg-morocco-sand/10"
-              >
-                My Bookings
-              </Link>
-              <Link 
-                to="/courses/my-courses" 
-                className="block w-full text-left px-3 py-2 text-sm rounded-md hover:bg-morocco-sand/10"
-              >
-                My Courses
-              </Link>
-              <Link 
-                to="/settings" 
-                className="block w-full text-left px-3 py-2 text-sm rounded-md hover:bg-morocco-sand/10"
-              >
-                Settings
-              </Link>
-              <hr className="my-1 border-morocco-sand/20" />
-              <button
-                onClick={handleLogout}
-                className="block w-full text-left px-3 py-2 text-sm text-morocco-clay rounded-md hover:bg-morocco-sand/10"
-              >
-                Sign Out
-              </button>
-            </div>
-          </PopoverContent>
-        </Popover>
+            </PopoverContent>
+          </Popover>
+        </div>
       ) : (
         <div className="flex items-center space-x-2">
           <Dialog open={isAuthDialogOpen} onOpenChange={setIsAuthDialogOpen}>
@@ -182,7 +177,7 @@ const AuthButtons = () => {
                   </div>
                 </div>
                 
-                <Link to="/signin">
+                <Link to="/signin" onClick={() => setIsAuthDialogOpen(false)}>
                   <Button 
                     variant="outline" 
                     className="w-full flex items-center justify-center gap-2 py-5"

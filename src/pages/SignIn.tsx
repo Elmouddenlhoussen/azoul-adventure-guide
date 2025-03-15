@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { User, Key } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { User, Key, Info } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -11,35 +11,42 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Checkbox } from '@/components/ui/checkbox';
 import SocialLoginButtons from '@/components/SocialLoginButtons';
+import { useAuth } from '@/hooks/use-auth-context';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showAdminHint, setShowAdminHint] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-      
-      if (email && password) {
-        toast({
-          title: "Sign in successful",
-          description: "Welcome back to Azoul!",
-        });
-      } else {
-        toast({
-          title: "Error",
-          description: "Please enter both email and password.",
-          variant: "destructive",
-        });
+    try {
+      const success = await login(email, password);
+      if (success) {
+        // Navigate based on where they should go
+        if (email === 'admin@azoul.com') {
+          navigate('/admin');
+        } else {
+          navigate('/');
+        }
       }
-    }, 1500);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const toggleAdminHint = () => {
+    setShowAdminHint(!showAdminHint);
   };
 
   return (
@@ -59,7 +66,26 @@ const SignIn = () => {
                 <div className="text-center mb-8">
                   <h1 className="text-2xl font-bold">Welcome Back</h1>
                   <p className="text-gray-500 mt-2">Sign in to continue your Moroccan journey</p>
+                  <div className="mt-2">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-gray-400 hover:text-morocco-terracotta"
+                      onClick={toggleAdminHint}
+                    >
+                      <Info className="h-4 w-4 mr-1" />
+                      Need admin access?
+                    </Button>
+                  </div>
                 </div>
+                
+                {showAdminHint && (
+                  <Alert className="mb-4 bg-morocco-sand/10 border-morocco-terracotta/20">
+                    <AlertDescription className="text-sm text-gray-600">
+                      <strong>Admin Login:</strong> Use <code>admin@azoul.com</code> with password <code>admin123</code> to access the administrator dashboard.
+                    </AlertDescription>
+                  </Alert>
+                )}
                 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
@@ -99,6 +125,11 @@ const SignIn = () => {
                         className="pl-10"
                       />
                     </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="remember" />
+                    <Label htmlFor="remember" className="text-sm">Remember me for 30 days</Label>
                   </div>
                   
                   <Button 

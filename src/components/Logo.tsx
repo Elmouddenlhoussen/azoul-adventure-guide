@@ -93,6 +93,39 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
     }
   };
 
+  // Tifinagh symbol animation
+  const tifinaghVariants = {
+    initial: { 
+      opacity: 0,
+      scale: 0.5,
+      rotate: -180
+    },
+    hover: { 
+      opacity: 1,
+      scale: 1,
+      rotate: 0,
+      transition: {
+        type: "spring",
+        stiffness: 200,
+        damping: 15
+      }
+    },
+    exit: {
+      opacity: 0,
+      scale: 0.5,
+      rotate: 180,
+      transition: {
+        duration: 0.3
+      }
+    }
+  };
+
+  // Icon elements variants
+  const iconElementsVariants = {
+    initial: { opacity: 1 },
+    hover: { opacity: 0 }
+  };
+
   // Enhanced Moroccan-inspired color palette
   const bgGradient = "bg-gradient-to-br from-morocco-terracotta to-morocco-clay";
   const textGradient = "bg-gradient-to-r from-morocco-gold via-morocco-terracotta to-morocco-clay bg-clip-text text-transparent";
@@ -114,7 +147,10 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
         />
         
         {/* Logo elements - Moroccan inspired */}
-        <div className="relative grid grid-cols-2 gap-0.5 p-1">
+        <motion.div 
+          className="relative grid grid-cols-2 gap-0.5 p-1 z-10"
+          variants={iconElementsVariants}
+        >
           <motion.div 
             custom={0}
             variants={innerElementsVariants}
@@ -146,11 +182,19 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
           >
             <Palmtree className="h-4 w-4 text-white/90" strokeWidth={2.5} />
           </motion.div>
-        </div>
+        </motion.div>
         
-        {/* Traditional Moroccan symbol overlay */}
+        {/* Traditional Amazigh Tifinagh symbols that appears on hover */}
         <motion.div 
-          className="absolute inset-0 flex items-center justify-center opacity-20"
+          className="absolute inset-0 flex items-center justify-center z-20"
+          variants={tifinaghVariants}
+        >
+          <span className="text-white text-4xl font-bold" style={{ fontFamily: 'sans-serif' }}>ⵣ</span>
+        </motion.div>
+        
+        {/* Small Tifinagh overlay that's always visible */}
+        <motion.div 
+          className="absolute inset-0 flex items-center justify-center opacity-20 z-0"
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.2 }}
         >

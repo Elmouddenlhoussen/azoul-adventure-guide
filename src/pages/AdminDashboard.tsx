@@ -25,6 +25,8 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupConte
 import { Label } from "@/components/ui/label";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/hooks/use-auth-context";
 
 const AdminSidebar = () => {
   const navigate = useNavigate();
@@ -95,32 +97,83 @@ const StatCard = ({ title, value, description, icon: Icon }) => (
   </Card>
 );
 
-const DestinationForm = ({ onClose }) => {
+const DestinationForm = ({ onClose, onSubmit, initialData = null }) => {
+  const [formData, setFormData] = useState({
+    title: initialData?.title || '',
+    location: initialData?.location || '',
+    description: initialData?.description || '',
+    image: initialData?.image || '',
+    featured: initialData?.featured || false
+  });
+  
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({ ...prev, [id]: value }));
+  };
+  
+  const handleSwitchChange = (checked) => {
+    setFormData(prev => ({ ...prev, featured: checked }));
+  };
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(formData);
+    onClose();
+  };
+
   return (
-    <form className="space-y-4">
+    <form className="space-y-4" onSubmit={handleSubmit}>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="title">Title</Label>
-          <Input id="title" placeholder="Destination title" />
+          <Input 
+            id="title" 
+            placeholder="Destination title" 
+            value={formData.title}
+            onChange={handleChange}
+            required
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="location">Location</Label>
-          <Input id="location" placeholder="City, Country" />
+          <Input 
+            id="location" 
+            placeholder="City, Country" 
+            value={formData.location}
+            onChange={handleChange}
+            required
+          />
         </div>
       </div>
       
       <div className="space-y-2">
         <Label htmlFor="description">Description</Label>
-        <Textarea id="description" placeholder="Write a description" />
+        <Textarea 
+          id="description" 
+          placeholder="Write a description" 
+          value={formData.description}
+          onChange={handleChange}
+          required
+        />
       </div>
       
       <div className="space-y-2">
         <Label htmlFor="image">Image URL</Label>
-        <Input id="image" placeholder="https://example.com/image.jpg" />
+        <Input 
+          id="image" 
+          placeholder="https://example.com/image.jpg" 
+          value={formData.image}
+          onChange={handleChange}
+          required
+        />
       </div>
       
       <div className="flex items-center space-x-2">
-        <Switch id="featured" />
+        <Switch 
+          id="featured" 
+          checked={formData.featured}
+          onCheckedChange={handleSwitchChange}
+        />
         <Label htmlFor="featured">Featured destination</Label>
       </div>
       
@@ -132,32 +185,83 @@ const DestinationForm = ({ onClose }) => {
   );
 };
 
-const FeatureForm = ({ onClose }) => {
+const FeatureForm = ({ onClose, onSubmit, initialData = null }) => {
+  const [formData, setFormData] = useState({
+    title: initialData?.title || '',
+    category: initialData?.category || '',
+    description: initialData?.description || '',
+    image: initialData?.image || '',
+    featured: initialData?.featured || false
+  });
+  
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({ ...prev, [id]: value }));
+  };
+  
+  const handleSwitchChange = (checked) => {
+    setFormData(prev => ({ ...prev, featured: checked }));
+  };
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(formData);
+    onClose();
+  };
+
   return (
-    <form className="space-y-4">
+    <form className="space-y-4" onSubmit={handleSubmit}>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="title">Title</Label>
-          <Input id="title" placeholder="Feature title" />
+          <Input 
+            id="title" 
+            placeholder="Feature title" 
+            value={formData.title}
+            onChange={handleChange}
+            required
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="category">Category</Label>
-          <Input id="category" placeholder="Category" />
+          <Input 
+            id="category" 
+            placeholder="Category" 
+            value={formData.category}
+            onChange={handleChange}
+            required
+          />
         </div>
       </div>
       
       <div className="space-y-2">
         <Label htmlFor="description">Description</Label>
-        <Textarea id="description" placeholder="Write a description" />
+        <Textarea 
+          id="description" 
+          placeholder="Write a description" 
+          value={formData.description}
+          onChange={handleChange}
+          required
+        />
       </div>
       
       <div className="space-y-2">
         <Label htmlFor="image">Image URL</Label>
-        <Input id="image" placeholder="https://example.com/image.jpg" />
+        <Input 
+          id="image" 
+          placeholder="https://example.com/image.jpg" 
+          value={formData.image}
+          onChange={handleChange}
+          required
+        />
       </div>
       
       <div className="flex items-center space-x-2">
-        <Switch id="featured" />
+        <Switch 
+          id="featured" 
+          checked={formData.featured}
+          onCheckedChange={handleSwitchChange}
+        />
         <Label htmlFor="featured">Featured item</Label>
       </div>
       
@@ -169,39 +273,98 @@ const FeatureForm = ({ onClose }) => {
   );
 };
 
-const CourseForm = ({ onClose }) => {
+const CourseForm = ({ onClose, onSubmit, initialData = null }) => {
+  const [formData, setFormData] = useState({
+    title: initialData?.title || '',
+    instructor: initialData?.instructor || '',
+    description: initialData?.description || '',
+    price: initialData?.price || '',
+    duration: initialData?.duration || '',
+    image: initialData?.image || ''
+  });
+  
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({ ...prev, [id]: value }));
+  };
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(formData);
+    onClose();
+  };
+
   return (
-    <form className="space-y-4">
+    <form className="space-y-4" onSubmit={handleSubmit}>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="title">Title</Label>
-          <Input id="title" placeholder="Course title" />
+          <Input 
+            id="title" 
+            placeholder="Course title" 
+            value={formData.title}
+            onChange={handleChange}
+            required
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="instructor">Instructor</Label>
-          <Input id="instructor" placeholder="Instructor name" />
+          <Input 
+            id="instructor" 
+            placeholder="Instructor name" 
+            value={formData.instructor}
+            onChange={handleChange}
+            required
+          />
         </div>
       </div>
       
       <div className="space-y-2">
         <Label htmlFor="description">Description</Label>
-        <Textarea id="description" placeholder="Write a description" />
+        <Textarea 
+          id="description" 
+          placeholder="Write a description" 
+          value={formData.description}
+          onChange={handleChange}
+          required
+        />
       </div>
       
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="price">Price ($)</Label>
-          <Input id="price" placeholder="29.99" type="number" />
+          <Input 
+            id="price" 
+            placeholder="29.99" 
+            type="number" 
+            step="0.01"
+            value={formData.price}
+            onChange={handleChange}
+            required
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="duration">Duration (hours)</Label>
-          <Input id="duration" placeholder="8" type="number" />
+          <Input 
+            id="duration" 
+            placeholder="8" 
+            type="number"
+            value={formData.duration}
+            onChange={handleChange}
+            required
+          />
         </div>
       </div>
       
       <div className="space-y-2">
         <Label htmlFor="image">Image URL</Label>
-        <Input id="image" placeholder="https://example.com/image.jpg" />
+        <Input 
+          id="image" 
+          placeholder="https://example.com/image.jpg" 
+          value={formData.image}
+          onChange={handleChange}
+          required
+        />
       </div>
       
       <DialogFooter>
@@ -213,6 +376,9 @@ const CourseForm = ({ onClose }) => {
 };
 
 const AdminDashboard = () => {
+  const { toast } = useToast();
+  const { user } = useAuth();
+  
   // Mock data for demo
   const [stats, setStats] = useState({
     visitors: { daily: 256, monthly: 7843 },
@@ -222,20 +388,219 @@ const AdminDashboard = () => {
   });
   
   const [destinations, setDestinations] = useState([
-    { id: 1, title: "Marrakech", location: "Morocco", featured: true, visits: 543 },
-    { id: 2, title: "Chefchaouen", location: "Morocco", featured: true, visits: 421 },
-    { id: 3, title: "Fes", location: "Morocco", featured: false, visits: 385 }
+    { id: 1, title: "Marrakech", location: "Morocco", description: "A vibrant city known for its markets and culture", image: "https://images.unsplash.com/photo-1597212720452-0576ff58b32c", featured: true, visits: 543 },
+    { id: 2, title: "Chefchaouen", location: "Morocco", description: "The blue city in the mountains", image: "https://images.unsplash.com/photo-1548018560-c7196548ed6d", featured: true, visits: 421 },
+    { id: 3, title: "Fes", location: "Morocco", description: "Ancient medina and historical sites", image: "https://images.unsplash.com/photo-1570193825602-b86d19101838", featured: false, visits: 385 }
   ]);
   
   const [features, setFeatures] = useState([
-    { id: 1, title: "Desert Safari", category: "Adventure", featured: true },
-    { id: 2, title: "Markets Tour", category: "Culture", featured: true }
+    { id: 1, title: "Desert Safari", category: "Adventure", description: "Experience the Sahara desert with expert guides", image: "https://images.unsplash.com/photo-1536077295113-9bd404bdbfc1", featured: true },
+    { id: 2, title: "Markets Tour", category: "Culture", description: "Explore traditional Moroccan souks", image: "https://images.unsplash.com/photo-1559734840-f9509ee5677f", featured: true }
   ]);
   
   const [courses, setCourses] = useState([
-    { id: 1, title: "Morocco Photography", instructor: "John Smith", price: 29.99, students: 124 },
-    { id: 2, title: "Arabic for Travelers", instructor: "Amina Hassan", price: 19.99, students: 86 }
+    { id: 1, title: "Morocco Photography", instructor: "John Smith", description: "Learn to capture the beauty of Morocco", price: 29.99, duration: 8, image: "https://images.unsplash.com/photo-1551655510-955bbd0c9898", students: 124 },
+    { id: 2, title: "Arabic for Travelers", instructor: "Amina Hassan", description: "Essential Arabic phrases for your trip", price: 19.99, duration: 6, image: "https://images.unsplash.com/photo-1520256788229-d4640c632855", students: 86 }
   ]);
+  
+  // Add new destination
+  const handleAddDestination = (newDestination) => {
+    const id = destinations.length > 0 ? Math.max(...destinations.map(d => d.id)) + 1 : 1;
+    const destinationWithId = { 
+      ...newDestination, 
+      id, 
+      visits: 0 
+    };
+    
+    setDestinations([...destinations, destinationWithId]);
+    setStats(prev => ({
+      ...prev,
+      destinations: {
+        count: prev.destinations.count + 1,
+        featured: newDestination.featured ? prev.destinations.featured + 1 : prev.destinations.featured
+      }
+    }));
+    
+    toast({
+      title: "Destination added",
+      description: `${newDestination.title} has been added successfully.`,
+    });
+  };
+  
+  // Edit destination
+  const handleEditDestination = (id, updatedDestination) => {
+    const wasFeaturedbefore = destinations.find(d => d.id === id)?.featured;
+    
+    setDestinations(destinations.map(dest => 
+      dest.id === id ? { ...dest, ...updatedDestination } : dest
+    ));
+    
+    if (wasFeaturedbefore !== updatedDestination.featured) {
+      setStats(prev => ({
+        ...prev,
+        destinations: {
+          ...prev.destinations,
+          featured: updatedDestination.featured 
+            ? prev.destinations.featured + 1 
+            : prev.destinations.featured - 1
+        }
+      }));
+    }
+    
+    toast({
+      title: "Destination updated",
+      description: `${updatedDestination.title} has been updated successfully.`,
+    });
+  };
+  
+  // Delete destination
+  const handleDeleteDestination = (id) => {
+    const destToDelete = destinations.find(d => d.id === id);
+    
+    setDestinations(destinations.filter(dest => dest.id !== id));
+    
+    setStats(prev => ({
+      ...prev,
+      destinations: {
+        count: prev.destinations.count - 1,
+        featured: destToDelete?.featured ? prev.destinations.featured - 1 : prev.destinations.featured
+      }
+    }));
+    
+    toast({
+      title: "Destination deleted",
+      description: `${destToDelete?.title} has been deleted successfully.`,
+      variant: "destructive",
+    });
+  };
+  
+  // Add new feature
+  const handleAddFeature = (newFeature) => {
+    const id = features.length > 0 ? Math.max(...features.map(f => f.id)) + 1 : 1;
+    const featureWithId = { ...newFeature, id };
+    
+    setFeatures([...features, featureWithId]);
+    
+    // Update stats
+    const categories = new Set([...features, featureWithId].map(f => f.category));
+    
+    setStats(prev => ({
+      ...prev,
+      features: {
+        count: prev.features.count + 1,
+        categories: categories.size
+      }
+    }));
+    
+    toast({
+      title: "Feature added",
+      description: `${newFeature.title} has been added successfully.`,
+    });
+  };
+  
+  // Edit feature
+  const handleEditFeature = (id, updatedFeature) => {
+    setFeatures(features.map(feat => 
+      feat.id === id ? { ...feat, ...updatedFeature } : feat
+    ));
+    
+    // Update categories count if needed
+    const categories = new Set(features.map(f => 
+      f.id === id ? updatedFeature.category : f.category
+    ));
+    
+    setStats(prev => ({
+      ...prev,
+      features: {
+        ...prev.features,
+        categories: categories.size
+      }
+    }));
+    
+    toast({
+      title: "Feature updated",
+      description: `${updatedFeature.title} has been updated successfully.`,
+    });
+  };
+  
+  // Delete feature
+  const handleDeleteFeature = (id) => {
+    const featureToDelete = features.find(f => f.id === id);
+    const newFeatures = features.filter(feat => feat.id !== id);
+    
+    setFeatures(newFeatures);
+    
+    // Update categories count
+    const categories = new Set(newFeatures.map(f => f.category));
+    
+    setStats(prev => ({
+      ...prev,
+      features: {
+        count: prev.features.count - 1,
+        categories: categories.size
+      }
+    }));
+    
+    toast({
+      title: "Feature deleted",
+      description: `${featureToDelete?.title} has been deleted successfully.`,
+      variant: "destructive",
+    });
+  };
+  
+  // Add new course
+  const handleAddCourse = (newCourse) => {
+    const id = courses.length > 0 ? Math.max(...courses.map(c => c.id)) + 1 : 1;
+    const courseWithId = { 
+      ...newCourse, 
+      id, 
+      students: 0,
+      price: parseFloat(newCourse.price),
+      duration: parseInt(newCourse.duration)
+    };
+    
+    setCourses([...courses, courseWithId]);
+    
+    toast({
+      title: "Course added",
+      description: `${newCourse.title} has been added successfully.`,
+    });
+  };
+  
+  // Edit course
+  const handleEditCourse = (id, updatedCourse) => {
+    setCourses(courses.map(course => 
+      course.id === id ? { 
+        ...course, 
+        ...updatedCourse,
+        price: parseFloat(updatedCourse.price),
+        duration: parseInt(updatedCourse.duration)
+      } : course
+    ));
+    
+    toast({
+      title: "Course updated",
+      description: `${updatedCourse.title} has been updated successfully.`,
+    });
+  };
+  
+  // Delete course
+  const handleDeleteCourse = (id) => {
+    const courseToDelete = courses.find(c => c.id === id);
+    
+    setCourses(courses.filter(course => course.id !== id));
+    
+    toast({
+      title: "Course deleted",
+      description: `${courseToDelete?.title} has been deleted successfully.`,
+      variant: "destructive",
+    });
+  };
+  
+  // Dialogs state
+  const [editingDestination, setEditingDestination] = useState(null);
+  const [editingFeature, setEditingFeature] = useState(null);
+  const [editingCourse, setEditingCourse] = useState(null);
   
   return (
     <SidebarProvider>
@@ -245,7 +610,7 @@ const AdminDashboard = () => {
           <div className="flex justify-between items-center mb-8">
             <div>
               <h1 className="text-3xl font-bold">Dashboard</h1>
-              <p className="text-muted-foreground">Welcome back, Admin</p>
+              <p className="text-muted-foreground">Welcome back, {user?.name || 'Admin'}</p>
             </div>
             <SidebarTrigger />
           </div>
@@ -367,7 +732,10 @@ const AdminDashboard = () => {
                         Create a new destination for your travel website.
                       </DialogDescription>
                     </DialogHeader>
-                    <DestinationForm onClose={() => document.querySelector("[data-state='open']")?.dispatchEvent(new MouseEvent("click", { bubbles: true }))} />
+                    <DestinationForm 
+                      onClose={() => document.querySelector(".destinations-dialog[data-state='open'] button[data-state='closed']")?.click()} 
+                      onSubmit={handleAddDestination}
+                    />
                   </DialogContent>
                 </Dialog>
               </div>
@@ -392,8 +760,38 @@ const AdminDashboard = () => {
                           <TableCell>{destination.featured ? "Yes" : "No"}</TableCell>
                           <TableCell>{destination.visits}</TableCell>
                           <TableCell className="text-right">
-                            <Button variant="ghost" size="sm">Edit</Button>
-                            <Button variant="ghost" size="sm" className="text-destructive">Delete</Button>
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm"
+                                  onClick={() => setEditingDestination(destination)}
+                                >
+                                  Edit
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent className="destinations-dialog">
+                                <DialogHeader>
+                                  <DialogTitle>Edit Destination</DialogTitle>
+                                  <DialogDescription>
+                                    Make changes to the destination details.
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <DestinationForm 
+                                  initialData={editingDestination}
+                                  onClose={() => document.querySelector(".destinations-dialog[data-state='open'] button[data-state='closed']")?.click()}
+                                  onSubmit={(updatedData) => handleEditDestination(destination.id, updatedData)}
+                                />
+                              </DialogContent>
+                            </Dialog>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="text-destructive"
+                              onClick={() => handleDeleteDestination(destination.id)}
+                            >
+                              Delete
+                            </Button>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -413,14 +811,17 @@ const AdminDashboard = () => {
                       Add Feature
                     </Button>
                   </DialogTrigger>
-                  <DialogContent>
+                  <DialogContent className="features-dialog">
                     <DialogHeader>
                       <DialogTitle>Add New Feature</DialogTitle>
                       <DialogDescription>
                         Create a new feature for your travel website.
                       </DialogDescription>
                     </DialogHeader>
-                    <FeatureForm onClose={() => document.querySelector("[data-state='open']")?.dispatchEvent(new MouseEvent("click", { bubbles: true }))} />
+                    <FeatureForm 
+                      onClose={() => document.querySelector(".features-dialog[data-state='open'] button[data-state='closed']")?.click()}
+                      onSubmit={handleAddFeature}
+                    />
                   </DialogContent>
                 </Dialog>
               </div>
@@ -443,8 +844,38 @@ const AdminDashboard = () => {
                           <TableCell>{feature.category}</TableCell>
                           <TableCell>{feature.featured ? "Yes" : "No"}</TableCell>
                           <TableCell className="text-right">
-                            <Button variant="ghost" size="sm">Edit</Button>
-                            <Button variant="ghost" size="sm" className="text-destructive">Delete</Button>
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm"
+                                  onClick={() => setEditingFeature(feature)}
+                                >
+                                  Edit
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent className="features-dialog">
+                                <DialogHeader>
+                                  <DialogTitle>Edit Feature</DialogTitle>
+                                  <DialogDescription>
+                                    Make changes to the feature details.
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <FeatureForm 
+                                  initialData={editingFeature}
+                                  onClose={() => document.querySelector(".features-dialog[data-state='open'] button[data-state='closed']")?.click()}
+                                  onSubmit={(updatedData) => handleEditFeature(feature.id, updatedData)}
+                                />
+                              </DialogContent>
+                            </Dialog>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="text-destructive"
+                              onClick={() => handleDeleteFeature(feature.id)}
+                            >
+                              Delete
+                            </Button>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -464,14 +895,17 @@ const AdminDashboard = () => {
                       Add Course
                     </Button>
                   </DialogTrigger>
-                  <DialogContent>
+                  <DialogContent className="courses-dialog">
                     <DialogHeader>
                       <DialogTitle>Add New Course</DialogTitle>
                       <DialogDescription>
                         Create a new course for your travel website.
                       </DialogDescription>
                     </DialogHeader>
-                    <CourseForm onClose={() => document.querySelector("[data-state='open']")?.dispatchEvent(new MouseEvent("click", { bubbles: true }))} />
+                    <CourseForm 
+                      onClose={() => document.querySelector(".courses-dialog[data-state='open'] button[data-state='closed']")?.click()}
+                      onSubmit={handleAddCourse}
+                    />
                   </DialogContent>
                 </Dialog>
               </div>
@@ -496,8 +930,38 @@ const AdminDashboard = () => {
                           <TableCell>${course.price}</TableCell>
                           <TableCell>{course.students}</TableCell>
                           <TableCell className="text-right">
-                            <Button variant="ghost" size="sm">Edit</Button>
-                            <Button variant="ghost" size="sm" className="text-destructive">Delete</Button>
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm"
+                                  onClick={() => setEditingCourse(course)}
+                                >
+                                  Edit
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent className="courses-dialog">
+                                <DialogHeader>
+                                  <DialogTitle>Edit Course</DialogTitle>
+                                  <DialogDescription>
+                                    Make changes to the course details.
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <CourseForm 
+                                  initialData={editingCourse}
+                                  onClose={() => document.querySelector(".courses-dialog[data-state='open'] button[data-state='closed']")?.click()}
+                                  onSubmit={(updatedData) => handleEditCourse(course.id, updatedData)}
+                                />
+                              </DialogContent>
+                            </Dialog>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="text-destructive"
+                              onClick={() => handleDeleteCourse(course.id)}
+                            >
+                              Delete
+                            </Button>
                           </TableCell>
                         </TableRow>
                       ))}
