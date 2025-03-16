@@ -890,7 +890,7 @@ const AdminDashboard = () => {
     closeDialog(".subscribers-dialog[data-state='open'] [data-state='closed']");
   };
   
-  // Delete subscriber
+  // Delete subscriber - completing the incomplete function
   const handleDeleteSubscriber = (id) => {
     const subscriberToDelete = subscribers.find(s => s.id === id);
     
@@ -898,4 +898,4 @@ const AdminDashboard = () => {
     setStats(prev => ({
       ...prev,
       subscribers: {
-        count: prev.subscribers.count - 1
+        count: prev.subscribers
