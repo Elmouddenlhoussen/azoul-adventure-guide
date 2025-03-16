@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { 
   LayoutDashboard, 
   Map, 
@@ -11,7 +11,8 @@ import {
   Image, 
   BarChart,
   LogOut,
-  Plus
+  Plus,
+  AlertCircle
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,16 +21,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Label } from "@/components/ui/label";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { useNavigate } from "react-router-dom";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth-context";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const AdminSidebar = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
+  
+  const handleExitAdmin = () => {
+    navigate('/');
+  };
   
   const menuItems = [
     { label: "Dashboard", icon: LayoutDashboard, onClick: () => {} },
@@ -68,14 +74,23 @@ const AdminSidebar = () => {
       </SidebarContent>
       
       <SidebarFooter>
-        <div className="px-6 py-4">
+        <div className="px-6 py-4 space-y-3">
           <Button 
             variant="outline" 
             className="w-full justify-start" 
-            onClick={() => navigate('/')}
+            onClick={handleExitAdmin}
           >
             <LogOut className="mr-2 h-4 w-4" />
             Exit Admin Panel
+          </Button>
+          
+          <Button 
+            variant="destructive" 
+            className="w-full justify-start" 
+            onClick={logout}
+          >
+            <LogOut className="mr-2 h-4 w-4" />
+            Logout
           </Button>
         </div>
       </SidebarFooter>
@@ -118,7 +133,6 @@ const DestinationForm = ({ onClose, onSubmit, initialData = null }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(formData);
-    onClose();
   };
 
   return (
@@ -206,7 +220,6 @@ const FeatureForm = ({ onClose, onSubmit, initialData = null }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(formData);
-    onClose();
   };
 
   return (
@@ -291,7 +304,6 @@ const CourseForm = ({ onClose, onSubmit, initialData = null }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(formData);
-    onClose();
   };
 
   return (
@@ -375,6 +387,131 @@ const CourseForm = ({ onClose, onSubmit, initialData = null }) => {
   );
 };
 
+const UserForm = ({ onClose, onSubmit, initialData = null }) => {
+  const [formData, setFormData] = useState({
+    name: initialData?.name || '',
+    email: initialData?.email || '',
+    role: initialData?.role || 'user',
+  });
+  
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({ ...prev, [id]: value }));
+  };
+  
+  const handleRoleChange = (e) => {
+    setFormData(prev => ({ ...prev, role: e.target.value }));
+  };
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(formData);
+  };
+
+  return (
+    <form className="space-y-4" onSubmit={handleSubmit}>
+      <div className="space-y-2">
+        <Label htmlFor="name">Name</Label>
+        <Input 
+          id="name" 
+          placeholder="User name" 
+          value={formData.name}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      
+      <div className="space-y-2">
+        <Label htmlFor="email">Email</Label>
+        <Input 
+          id="email" 
+          placeholder="user@example.com" 
+          type="email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      
+      <div className="space-y-2">
+        <Label htmlFor="role">Role</Label>
+        <select
+          id="role"
+          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          value={formData.role}
+          onChange={handleRoleChange}
+          required
+        >
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      
+      <DialogFooter>
+        <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
+        <Button type="submit">Save User</Button>
+      </DialogFooter>
+    </form>
+  );
+};
+
+const SubscriberForm = ({ onClose, onSubmit, initialData = null }) => {
+  const [formData, setFormData] = useState({
+    email: initialData?.email || '',
+    status: initialData?.status || 'active',
+  });
+  
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({ ...prev, [id]: value }));
+  };
+  
+  const handleStatusChange = (e) => {
+    setFormData(prev => ({ ...prev, status: e.target.value }));
+  };
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(formData);
+  };
+
+  return (
+    <form className="space-y-4" onSubmit={handleSubmit}>
+      <div className="space-y-2">
+        <Label htmlFor="email">Email</Label>
+        <Input 
+          id="email" 
+          placeholder="subscriber@example.com" 
+          type="email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      
+      <div className="space-y-2">
+        <Label htmlFor="status">Status</Label>
+        <select
+          id="status"
+          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          value={formData.status}
+          onChange={handleStatusChange}
+          required
+        >
+          <option value="active">Active</option>
+          <option value="unsubscribed">Unsubscribed</option>
+          <option value="bounced">Bounced</option>
+        </select>
+      </div>
+      
+      <DialogFooter>
+        <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
+        <Button type="submit">Save Subscriber</Button>
+      </DialogFooter>
+    </form>
+  );
+};
+
 const AdminDashboard = () => {
   const { toast } = useToast();
   const { user } = useAuth();
@@ -402,6 +539,18 @@ const AdminDashboard = () => {
     { id: 1, title: "Morocco Photography", instructor: "John Smith", description: "Learn to capture the beauty of Morocco", price: 29.99, duration: 8, image: "https://images.unsplash.com/photo-1551655510-955bbd0c9898", students: 124 },
     { id: 2, title: "Arabic for Travelers", instructor: "Amina Hassan", description: "Essential Arabic phrases for your trip", price: 19.99, duration: 6, image: "https://images.unsplash.com/photo-1520256788229-d4640c632855", students: 86 }
   ]);
+
+  const [users, setUsers] = useState([
+    { id: 1, name: "John Doe", email: "john@example.com", role: "user", status: "active", lastLogin: "2023-05-15" },
+    { id: 2, name: "Jane Smith", email: "jane@example.com", role: "user", status: "active", lastLogin: "2023-05-12" },
+    { id: 3, name: "Admin", email: "admin@azoul.com", role: "admin", status: "active", lastLogin: "2023-05-18" }
+  ]);
+
+  const [subscribers, setSubscribers] = useState([
+    { id: 1, email: "mark@example.com", status: "active", joinedDate: "2023-04-10" },
+    { id: 2, email: "sarah@example.com", status: "active", joinedDate: "2023-04-15" },
+    { id: 3, email: "alex@example.com", status: "unsubscribed", joinedDate: "2023-03-20" }
+  ]);
   
   // Add new destination
   const handleAddDestination = (newDestination) => {
@@ -425,6 +574,8 @@ const AdminDashboard = () => {
       title: "Destination added",
       description: `${newDestination.title} has been added successfully.`,
     });
+    
+    closeDialog(".destinations-dialog[data-state='open'] [data-state='closed']");
   };
   
   // Edit destination
@@ -451,6 +602,8 @@ const AdminDashboard = () => {
       title: "Destination updated",
       description: `${updatedDestination.title} has been updated successfully.`,
     });
+    
+    closeDialog(".destinations-dialog[data-state='open'] [data-state='closed']");
   };
   
   // Delete destination
@@ -496,6 +649,8 @@ const AdminDashboard = () => {
       title: "Feature added",
       description: `${newFeature.title} has been added successfully.`,
     });
+    
+    closeDialog(".features-dialog[data-state='open'] [data-state='closed']");
   };
   
   // Edit feature
@@ -521,6 +676,8 @@ const AdminDashboard = () => {
       title: "Feature updated",
       description: `${updatedFeature.title} has been updated successfully.`,
     });
+    
+    closeDialog(".features-dialog[data-state='open'] [data-state='closed']");
   };
   
   // Delete feature
@@ -565,6 +722,8 @@ const AdminDashboard = () => {
       title: "Course added",
       description: `${newCourse.title} has been added successfully.`,
     });
+    
+    closeDialog(".courses-dialog[data-state='open'] [data-state='closed']");
   };
   
   // Edit course
@@ -582,6 +741,8 @@ const AdminDashboard = () => {
       title: "Course updated",
       description: `${updatedCourse.title} has been updated successfully.`,
     });
+    
+    closeDialog(".courses-dialog[data-state='open'] [data-state='closed']");
   };
   
   // Delete course
@@ -597,10 +758,131 @@ const AdminDashboard = () => {
     });
   };
   
-  // Dialogs state
-  const [editingDestination, setEditingDestination] = useState(null);
-  const [editingFeature, setEditingFeature] = useState(null);
-  const [editingCourse, setEditingCourse] = useState(null);
+  // Add new user
+  const handleAddUser = (newUser) => {
+    const id = users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1;
+    const userWithId = {
+      ...newUser,
+      id,
+      status: 'active',
+      lastLogin: new Date().toISOString().split('T')[0]
+    };
+    
+    setUsers([...users, userWithId]);
+    
+    toast({
+      title: "User added",
+      description: `${newUser.name} has been added successfully.`,
+    });
+    
+    closeDialog(".users-dialog[data-state='open'] [data-state='closed']");
+  };
+  
+  // Edit user
+  const handleEditUser = (id, updatedUser) => {
+    setUsers(users.map(user => 
+      user.id === id ? { ...user, ...updatedUser } : user
+    ));
+    
+    toast({
+      title: "User updated",
+      description: `${updatedUser.name} has been updated successfully.`,
+    });
+    
+    closeDialog(".users-dialog[data-state='open'] [data-state='closed']");
+  };
+  
+  // Delete user
+  const handleDeleteUser = (id) => {
+    const userToDelete = users.find(u => u.id === id);
+    
+    // Prevent deleting current user
+    if (userToDelete.email === user?.email) {
+      toast({
+        title: "Action not allowed",
+        description: "You cannot delete your own account while logged in.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setUsers(users.filter(user => user.id !== id));
+    
+    toast({
+      title: "User deleted",
+      description: `${userToDelete?.name} has been deleted successfully.`,
+      variant: "destructive",
+    });
+  };
+  
+  // Add new subscriber
+  const handleAddSubscriber = (newSubscriber) => {
+    const id = subscribers.length > 0 ? Math.max(...subscribers.map(s => s.id)) + 1 : 1;
+    const subscriberWithId = {
+      ...newSubscriber,
+      id,
+      joinedDate: new Date().toISOString().split('T')[0]
+    };
+    
+    setSubscribers([...subscribers, subscriberWithId]);
+    setStats(prev => ({
+      ...prev,
+      subscribers: {
+        count: prev.subscribers.count + 1,
+        growth: prev.subscribers.growth // In a real app, this would be recalculated
+      }
+    }));
+    
+    toast({
+      title: "Subscriber added",
+      description: `${newSubscriber.email} has been added successfully.`,
+    });
+    
+    closeDialog(".subscribers-dialog[data-state='open'] [data-state='closed']");
+  };
+  
+  // Edit subscriber
+  const handleEditSubscriber = (id, updatedSubscriber) => {
+    setSubscribers(subscribers.map(subscriber => 
+      subscriber.id === id ? { ...subscriber, ...updatedSubscriber } : subscriber
+    ));
+    
+    toast({
+      title: "Subscriber updated",
+      description: `${updatedSubscriber.email} has been updated successfully.`,
+    });
+    
+    closeDialog(".subscribers-dialog[data-state='open'] [data-state='closed']");
+  };
+  
+  // Delete subscriber
+  const handleDeleteSubscriber = (id) => {
+    const subscriberToDelete = subscribers.find(s => s.id === id);
+    
+    setSubscribers(subscribers.filter(subscriber => subscriber.id !== id));
+    setStats(prev => ({
+      ...prev,
+      subscribers: {
+        count: prev.subscribers.count - 1,
+        growth: prev.subscribers.growth // In a real app, this would be recalculated
+      }
+    }));
+    
+    toast({
+      title: "Subscriber deleted",
+      description: `${subscriberToDelete?.email} has been deleted successfully.`,
+      variant: "destructive",
+    });
+  };
+  
+  // Dialog state for all content types
+  const [editingItem, setEditingItem] = useState({
+    destination: null,
+    feature: null,
+    course: null,
+    user: null,
+    subscriber: null
+  });
   
   // Helper function to close dialog with proper typing
   const closeDialog = (selector: string) => {
@@ -609,6 +891,12 @@ const AdminDashboard = () => {
       closeButton.click();
     }
   };
+
+  // Initialize the dashboard
+  useEffect(() => {
+    // This would be replaced with real API calls in a production app
+    console.log("Admin dashboard initialized");
+  }, []);
   
   return (
     <SidebarProvider>
@@ -629,6 +917,8 @@ const AdminDashboard = () => {
               <TabsTrigger value="destinations">Destinations</TabsTrigger>
               <TabsTrigger value="features">Features</TabsTrigger>
               <TabsTrigger value="courses">Courses</TabsTrigger>
+              <TabsTrigger value="users">Users</TabsTrigger>
+              <TabsTrigger value="subscribers">Subscribers</TabsTrigger>
             </TabsList>
             
             <TabsContent value="overview" className="space-y-6">
@@ -733,7 +1023,7 @@ const AdminDashboard = () => {
                       Add Destination
                     </Button>
                   </DialogTrigger>
-                  <DialogContent>
+                  <DialogContent className="destinations-dialog">
                     <DialogHeader>
                       <DialogTitle>Add New Destination</DialogTitle>
                       <DialogDescription>
@@ -741,9 +1031,10 @@ const AdminDashboard = () => {
                       </DialogDescription>
                     </DialogHeader>
                     <DestinationForm 
-                      onClose={() => closeDialog(".destinations-dialog[data-state='open'] button[data-state='closed']")} 
+                      onClose={() => closeDialog(".destinations-dialog[data-state='open'] [data-state='closed']")} 
                       onSubmit={handleAddDestination}
                     />
+                    <DialogClose className="hidden" />
                   </DialogContent>
                 </Dialog>
               </div>
@@ -773,7 +1064,7 @@ const AdminDashboard = () => {
                                 <Button 
                                   variant="ghost" 
                                   size="sm"
-                                  onClick={() => setEditingDestination(destination)}
+                                  onClick={() => setEditingItem({...editingItem, destination})}
                                 >
                                   Edit
                                 </Button>
@@ -786,10 +1077,11 @@ const AdminDashboard = () => {
                                   </DialogDescription>
                                 </DialogHeader>
                                 <DestinationForm 
-                                  initialData={editingDestination}
-                                  onClose={() => closeDialog(".destinations-dialog[data-state='open'] button[data-state='closed']")}
+                                  initialData={editingItem.destination}
+                                  onClose={() => closeDialog(".destinations-dialog[data-state='open'] [data-state='closed']")}
                                   onSubmit={(updatedData) => handleEditDestination(destination.id, updatedData)}
                                 />
+                                <DialogClose className="hidden" />
                               </DialogContent>
                             </Dialog>
                             <Button 
@@ -827,9 +1119,10 @@ const AdminDashboard = () => {
                       </DialogDescription>
                     </DialogHeader>
                     <FeatureForm 
-                      onClose={() => closeDialog(".features-dialog[data-state='open'] button[data-state='closed']")}
+                      onClose={() => closeDialog(".features-dialog[data-state='open'] [data-state='closed']")}
                       onSubmit={handleAddFeature}
                     />
+                    <DialogClose className="hidden" />
                   </DialogContent>
                 </Dialog>
               </div>
@@ -857,7 +1150,7 @@ const AdminDashboard = () => {
                                 <Button 
                                   variant="ghost" 
                                   size="sm"
-                                  onClick={() => setEditingFeature(feature)}
+                                  onClick={() => setEditingItem({...editingItem, feature})}
                                 >
                                   Edit
                                 </Button>
@@ -870,10 +1163,11 @@ const AdminDashboard = () => {
                                   </DialogDescription>
                                 </DialogHeader>
                                 <FeatureForm 
-                                  initialData={editingFeature}
-                                  onClose={() => closeDialog(".features-dialog[data-state='open'] button[data-state='closed']")}
+                                  initialData={editingItem.feature}
+                                  onClose={() => closeDialog(".features-dialog[data-state='open'] [data-state='closed']")}
                                   onSubmit={(updatedData) => handleEditFeature(feature.id, updatedData)}
                                 />
+                                <DialogClose className="hidden" />
                               </DialogContent>
                             </Dialog>
                             <Button 
@@ -911,9 +1205,10 @@ const AdminDashboard = () => {
                       </DialogDescription>
                     </DialogHeader>
                     <CourseForm 
-                      onClose={() => closeDialog(".courses-dialog[data-state='open'] button[data-state='closed']")}
+                      onClose={() => closeDialog(".courses-dialog[data-state='open'] [data-state='closed']")}
                       onSubmit={handleAddCourse}
                     />
+                    <DialogClose className="hidden" />
                   </DialogContent>
                 </Dialog>
               </div>
@@ -943,7 +1238,7 @@ const AdminDashboard = () => {
                                 <Button 
                                   variant="ghost" 
                                   size="sm"
-                                  onClick={() => setEditingCourse(course)}
+                                  onClick={() => setEditingItem({...editingItem, course})}
                                 >
                                   Edit
                                 </Button>
@@ -956,10 +1251,11 @@ const AdminDashboard = () => {
                                   </DialogDescription>
                                 </DialogHeader>
                                 <CourseForm 
-                                  initialData={editingCourse}
-                                  onClose={() => closeDialog(".courses-dialog[data-state='open'] button[data-state='closed']")} 
+                                  initialData={editingItem.course}
+                                  onClose={() => closeDialog(".courses-dialog[data-state='open'] [data-state='closed']")} 
                                   onSubmit={(updatedData) => handleEditCourse(course.id, updatedData)}
                                 />
+                                <DialogClose className="hidden" />
                               </DialogContent>
                             </Dialog>
                             <Button 
@@ -967,6 +1263,190 @@ const AdminDashboard = () => {
                               size="sm" 
                               className="text-destructive"
                               onClick={() => handleDeleteCourse(course.id)}
+                            >
+                              Delete
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="users" className="space-y-6">
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold">Users</h2>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button>
+                      <Plus className="mr-2 h-4 w-4" />
+                      Add User
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="users-dialog">
+                    <DialogHeader>
+                      <DialogTitle>Add New User</DialogTitle>
+                      <DialogDescription>
+                        Create a new user account.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <UserForm 
+                      onClose={() => closeDialog(".users-dialog[data-state='open'] [data-state='closed']")}
+                      onSubmit={handleAddUser}
+                    />
+                    <DialogClose className="hidden" />
+                  </DialogContent>
+                </Dialog>
+              </div>
+              
+              <Card>
+                <CardContent className="pt-6">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Email</TableHead>
+                        <TableHead>Role</TableHead>
+                        <TableHead>Last Login</TableHead>
+                        <TableHead className="text-right">Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {users.map(user => (
+                        <TableRow key={user.id}>
+                          <TableCell className="font-medium">{user.name}</TableCell>
+                          <TableCell>{user.email}</TableCell>
+                          <TableCell>{user.role}</TableCell>
+                          <TableCell>{user.lastLogin}</TableCell>
+                          <TableCell className="text-right">
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm"
+                                  onClick={() => setEditingItem({...editingItem, user})}
+                                >
+                                  Edit
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent className="users-dialog">
+                                <DialogHeader>
+                                  <DialogTitle>Edit User</DialogTitle>
+                                  <DialogDescription>
+                                    Make changes to the user details.
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <UserForm 
+                                  initialData={editingItem.user}
+                                  onClose={() => closeDialog(".users-dialog[data-state='open'] [data-state='closed']")}
+                                  onSubmit={(updatedData) => handleEditUser(user.id, updatedData)}
+                                />
+                                <DialogClose className="hidden" />
+                              </DialogContent>
+                            </Dialog>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="text-destructive"
+                              onClick={() => handleDeleteUser(user.id)}
+                            >
+                              Delete
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="subscribers" className="space-y-6">
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold">Subscribers</h2>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button>
+                      <Plus className="mr-2 h-4 w-4" />
+                      Add Subscriber
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="subscribers-dialog">
+                    <DialogHeader>
+                      <DialogTitle>Add New Subscriber</DialogTitle>
+                      <DialogDescription>
+                        Add a new email subscriber to your newsletter.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <SubscriberForm 
+                      onClose={() => closeDialog(".subscribers-dialog[data-state='open'] [data-state='closed']")}
+                      onSubmit={handleAddSubscriber}
+                    />
+                    <DialogClose className="hidden" />
+                  </DialogContent>
+                </Dialog>
+              </div>
+              
+              <Card>
+                <CardContent className="pt-6">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Email</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Joined Date</TableHead>
+                        <TableHead className="text-right">Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {subscribers.map(subscriber => (
+                        <TableRow key={subscriber.id}>
+                          <TableCell className="font-medium">{subscriber.email}</TableCell>
+                          <TableCell>
+                            <span className={`px-2 py-1 rounded-full text-xs ${
+                              subscriber.status === 'active' 
+                                ? 'bg-green-100 text-green-800' 
+                                : subscriber.status === 'unsubscribed'
+                                ? 'bg-yellow-100 text-yellow-800'
+                                : 'bg-red-100 text-red-800'
+                            }`}>
+                              {subscriber.status}
+                            </span>
+                          </TableCell>
+                          <TableCell>{subscriber.joinedDate}</TableCell>
+                          <TableCell className="text-right">
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm"
+                                  onClick={() => setEditingItem({...editingItem, subscriber})}
+                                >
+                                  Edit
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent className="subscribers-dialog">
+                                <DialogHeader>
+                                  <DialogTitle>Edit Subscriber</DialogTitle>
+                                  <DialogDescription>
+                                    Make changes to the subscriber details.
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <SubscriberForm 
+                                  initialData={editingItem.subscriber}
+                                  onClose={() => closeDialog(".subscribers-dialog[data-state='open'] [data-state='closed']")}
+                                  onSubmit={(updatedData) => handleEditSubscriber(subscriber.id, updatedData)}
+                                />
+                                <DialogClose className="hidden" />
+                              </DialogContent>
+                            </Dialog>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="text-destructive"
+                              onClick={() => handleDeleteSubscriber(subscriber.id)}
                             >
                               Delete
                             </Button>
