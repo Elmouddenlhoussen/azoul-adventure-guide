@@ -14,7 +14,9 @@ import {
   AlertCircle,
   Save,
   Trash2,
-  Settings
+  Settings,
+  Pencil,
+  Menu
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -897,5 +899,4 @@ const AdminDashboard = () => {
     setSubscribers(subscribers.filter(subscriber => subscriber.id !== id));
     setStats(prev => ({
       ...prev,
-      subscribers: {
-        count: prev.subscribers
+      subscribers:
