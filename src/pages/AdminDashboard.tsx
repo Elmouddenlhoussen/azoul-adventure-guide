@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
@@ -12,7 +11,10 @@ import {
   BarChart,
   LogOut,
   Plus,
-  AlertCircle
+  AlertCircle,
+  Save,
+  Trash2,
+  Settings
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -32,28 +34,30 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 const AdminSidebar = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const [activeItem, setActiveItem] = useState("Dashboard");
   
   const handleExitAdmin = () => {
     navigate('/');
   };
   
   const menuItems = [
-    { label: "Dashboard", icon: LayoutDashboard, onClick: () => {} },
-    { label: "Destinations", icon: Map, onClick: () => {} },
-    { label: "Features", icon: Compass, onClick: () => {} },
-    { label: "Courses", icon: BookOpen, onClick: () => {} },
-    { label: "Users", icon: Users, onClick: () => {} },
-    { label: "Subscribers", icon: Mail, onClick: () => {} },
-    { label: "Media", icon: Image, onClick: () => {} },
-    { label: "Analytics", icon: BarChart, onClick: () => {} },
+    { label: "Dashboard", icon: LayoutDashboard },
+    { label: "Destinations", icon: Map },
+    { label: "Features", icon: Compass },
+    { label: "Courses", icon: BookOpen },
+    { label: "Users", icon: Users },
+    { label: "Subscribers", icon: Mail },
+    { label: "Media", icon: Image },
+    { label: "Analytics", icon: BarChart },
+    { label: "Settings", icon: Settings },
   ];
 
   return (
     <Sidebar>
       <SidebarContent>
         <div className="mb-8 px-6 pt-6">
-          <h1 className="text-2xl font-bold">Admin Panel</h1>
-          <p className="text-sm text-muted-foreground">Manage your travel site</p>
+          <h1 className="text-2xl font-bold">Azoul Admin Panel</h1>
+          <p className="text-sm text-muted-foreground">Manage your travel platform</p>
         </div>
         
         <SidebarGroup>
@@ -62,7 +66,10 @@ const AdminSidebar = () => {
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.label}>
-                  <SidebarMenuButton onClick={item.onClick}>
+                  <SidebarMenuButton 
+                    onClick={() => setActiveItem(item.label)}
+                    className={activeItem === item.label ? "bg-accent" : ""}
+                  >
                     <item.icon className="h-5 w-5" />
                     <span>{item.label}</span>
                   </SidebarMenuButton>
@@ -193,7 +200,10 @@ const DestinationForm = ({ onClose, onSubmit, initialData = null }) => {
       
       <DialogFooter>
         <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
-        <Button type="submit">Save Destination</Button>
+        <Button type="submit">
+          <Save className="mr-2 h-4 w-4" />
+          Save Destination
+        </Button>
       </DialogFooter>
     </form>
   );
@@ -280,7 +290,10 @@ const FeatureForm = ({ onClose, onSubmit, initialData = null }) => {
       
       <DialogFooter>
         <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
-        <Button type="submit">Save Feature</Button>
+        <Button type="submit">
+          <Save className="mr-2 h-4 w-4" />
+          Save Feature
+        </Button>
       </DialogFooter>
     </form>
   );
@@ -381,7 +394,10 @@ const CourseForm = ({ onClose, onSubmit, initialData = null }) => {
       
       <DialogFooter>
         <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
-        <Button type="submit">Save Course</Button>
+        <Button type="submit">
+          <Save className="mr-2 h-4 w-4" />
+          Save Course
+        </Button>
       </DialogFooter>
     </form>
   );
@@ -449,7 +465,10 @@ const UserForm = ({ onClose, onSubmit, initialData = null }) => {
       
       <DialogFooter>
         <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
-        <Button type="submit">Save User</Button>
+        <Button type="submit">
+          <Save className="mr-2 h-4 w-4" />
+          Save User
+        </Button>
       </DialogFooter>
     </form>
   );
@@ -506,7 +525,10 @@ const SubscriberForm = ({ onClose, onSubmit, initialData = null }) => {
       
       <DialogFooter>
         <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
-        <Button type="submit">Save Subscriber</Button>
+        <Button type="submit">
+          <Save className="mr-2 h-4 w-4" />
+          Save Subscriber
+        </Button>
       </DialogFooter>
     </form>
   );
@@ -515,6 +537,7 @@ const SubscriberForm = ({ onClose, onSubmit, initialData = null }) => {
 const AdminDashboard = () => {
   const { toast } = useToast();
   const { user } = useAuth();
+  const [activeTab, setActiveTab] = useState("overview");
   
   // Mock data for demo
   const [stats, setStats] = useState({
@@ -891,11 +914,27 @@ const AdminDashboard = () => {
       closeButton.click();
     }
   };
+  
+  // Save all changes functionality
+  const handleSaveAllChanges = () => {
+    toast({
+      title: "Changes saved",
+      description: "All changes have been saved successfully.",
+    });
+  };
 
   // Initialize the dashboard
   useEffect(() => {
     // This would be replaced with real API calls in a production app
-    console.log("Admin dashboard initialized");
+    console.log("Azoul Admin dashboard initialized");
+    
+    // Set the document title
+    document.title = "Azoul Admin Dashboard";
+    
+    return () => {
+      // Reset title when leaving
+      document.title = "Azoul";
+    };
   }, []);
   
   return (
@@ -905,13 +944,27 @@ const AdminDashboard = () => {
         <div className="flex-1 p-8">
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h1 className="text-3xl font-bold">Dashboard</h1>
+              <h1 className="text-3xl font-bold">Azoul Dashboard</h1>
               <p className="text-muted-foreground">Welcome back, {user?.name || 'Admin'}</p>
             </div>
-            <SidebarTrigger />
+            <div className="flex gap-2">
+              <Button onClick={handleSaveAllChanges}>
+                <Save className="mr-2 h-4 w-4" />
+                Save All Changes
+              </Button>
+              <SidebarTrigger />
+            </div>
           </div>
           
-          <Tabs defaultValue="overview">
+          <Alert className="mb-6 border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Welcome to Azoul Admin Panel</AlertTitle>
+            <AlertDescription>
+              This is where you can manage all aspects of your Azoul travel platform. Use the sidebar to navigate.
+            </AlertDescription>
+          </Alert>
+          
+          <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="mb-6">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="destinations">Destinations</TabsTrigger>
@@ -921,6 +974,7 @@ const AdminDashboard = () => {
               <TabsTrigger value="subscribers">Subscribers</TabsTrigger>
             </TabsList>
             
+            {/* Overview Tab */}
             <TabsContent value="overview" className="space-y-6">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <StatCard 
@@ -1013,6 +1067,7 @@ const AdminDashboard = () => {
               </div>
             </TabsContent>
             
+            {/* Destinations Tab */}
             <TabsContent value="destinations" className="space-y-6">
               <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold">Destinations</h2>
@@ -1027,7 +1082,7 @@ const AdminDashboard = () => {
                     <DialogHeader>
                       <DialogTitle>Add New Destination</DialogTitle>
                       <DialogDescription>
-                        Create a new destination for your travel website.
+                        Create a new destination for your Azoul travel platform.
                       </DialogDescription>
                     </DialogHeader>
                     <DestinationForm 
@@ -1056,7 +1111,15 @@ const AdminDashboard = () => {
                         <TableRow key={destination.id}>
                           <TableCell className="font-medium">{destination.title}</TableCell>
                           <TableCell>{destination.location}</TableCell>
-                          <TableCell>{destination.featured ? "Yes" : "No"}</TableCell>
+                          <TableCell>
+                            <span className={`px-2 py-1 rounded-full text-xs ${
+                              destination.featured 
+                                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' 
+                                : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300'
+                            }`}>
+                              {destination.featured ? "Featured" : "Standard"}
+                            </span>
+                          </TableCell>
                           <TableCell>{destination.visits}</TableCell>
                           <TableCell className="text-right">
                             <Dialog>
@@ -1090,6 +1153,7 @@ const AdminDashboard = () => {
                               className="text-destructive"
                               onClick={() => handleDeleteDestination(destination.id)}
                             >
+                              <Trash2 className="mr-2 h-4 w-4" />
                               Delete
                             </Button>
                           </TableCell>
@@ -1101,6 +1165,7 @@ const AdminDashboard = () => {
               </Card>
             </TabsContent>
             
+            {/* Features Tab */}
             <TabsContent value="features" className="space-y-6">
               <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold">Features</h2>
@@ -1115,7 +1180,7 @@ const AdminDashboard = () => {
                     <DialogHeader>
                       <DialogTitle>Add New Feature</DialogTitle>
                       <DialogDescription>
-                        Create a new feature for your travel website.
+                        Create a new feature for your Azoul travel platform.
                       </DialogDescription>
                     </DialogHeader>
                     <FeatureForm 
@@ -1143,7 +1208,15 @@ const AdminDashboard = () => {
                         <TableRow key={feature.id}>
                           <TableCell className="font-medium">{feature.title}</TableCell>
                           <TableCell>{feature.category}</TableCell>
-                          <TableCell>{feature.featured ? "Yes" : "No"}</TableCell>
+                          <TableCell>
+                            <span className={`px-2 py-1 rounded-full text-xs ${
+                              feature.featured 
+                                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' 
+                                : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300'
+                            }`}>
+                              {feature.featured ? "Featured" : "Standard"}
+                            </span>
+                          </TableCell>
                           <TableCell className="text-right">
                             <Dialog>
                               <DialogTrigger asChild>
@@ -1176,6 +1249,7 @@ const AdminDashboard = () => {
                               className="text-destructive"
                               onClick={() => handleDeleteFeature(feature.id)}
                             >
+                              <Trash2 className="mr-2 h-4 w-4" />
                               Delete
                             </Button>
                           </TableCell>
@@ -1187,6 +1261,7 @@ const AdminDashboard = () => {
               </Card>
             </TabsContent>
             
+            {/* Courses Tab */}
             <TabsContent value="courses" className="space-y-6">
               <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold">Courses</h2>
@@ -1201,7 +1276,7 @@ const AdminDashboard = () => {
                     <DialogHeader>
                       <DialogTitle>Add New Course</DialogTitle>
                       <DialogDescription>
-                        Create a new course for your travel website.
+                        Create a new course for your Azoul travel platform.
                       </DialogDescription>
                     </DialogHeader>
                     <CourseForm 
@@ -1264,6 +1339,7 @@ const AdminDashboard = () => {
                               className="text-destructive"
                               onClick={() => handleDeleteCourse(course.id)}
                             >
+                              <Trash2 className="mr-2 h-4 w-4" />
                               Delete
                             </Button>
                           </TableCell>
@@ -1275,6 +1351,7 @@ const AdminDashboard = () => {
               </Card>
             </TabsContent>
 
+            {/* Users Tab */}
             <TabsContent value="users" className="space-y-6">
               <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold">Users</h2>
@@ -1289,7 +1366,7 @@ const AdminDashboard = () => {
                     <DialogHeader>
                       <DialogTitle>Add New User</DialogTitle>
                       <DialogDescription>
-                        Create a new user account.
+                        Create a new user account for Azoul.
                       </DialogDescription>
                     </DialogHeader>
                     <UserForm 
@@ -1318,7 +1395,15 @@ const AdminDashboard = () => {
                         <TableRow key={user.id}>
                           <TableCell className="font-medium">{user.name}</TableCell>
                           <TableCell>{user.email}</TableCell>
-                          <TableCell>{user.role}</TableCell>
+                          <TableCell>
+                            <span className={`px-2 py-1 rounded-full text-xs ${
+                              user.role === 'admin' 
+                                ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300' 
+                                : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300'
+                            }`}>
+                              {user.role}
+                            </span>
+                          </TableCell>
                           <TableCell>{user.lastLogin}</TableCell>
                           <TableCell className="text-right">
                             <Dialog>
@@ -1352,6 +1437,7 @@ const AdminDashboard = () => {
                               className="text-destructive"
                               onClick={() => handleDeleteUser(user.id)}
                             >
+                              <Trash2 className="mr-2 h-4 w-4" />
                               Delete
                             </Button>
                           </TableCell>
@@ -1363,6 +1449,7 @@ const AdminDashboard = () => {
               </Card>
             </TabsContent>
 
+            {/* Subscribers Tab */}
             <TabsContent value="subscribers" className="space-y-6">
               <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold">Subscribers</h2>
@@ -1377,7 +1464,7 @@ const AdminDashboard = () => {
                     <DialogHeader>
                       <DialogTitle>Add New Subscriber</DialogTitle>
                       <DialogDescription>
-                        Add a new email subscriber to your newsletter.
+                        Add a new email subscriber to your Azoul newsletter.
                       </DialogDescription>
                     </DialogHeader>
                     <SubscriberForm 
@@ -1407,10 +1494,10 @@ const AdminDashboard = () => {
                           <TableCell>
                             <span className={`px-2 py-1 rounded-full text-xs ${
                               subscriber.status === 'active' 
-                                ? 'bg-green-100 text-green-800' 
+                                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' 
                                 : subscriber.status === 'unsubscribed'
-                                ? 'bg-yellow-100 text-yellow-800'
-                                : 'bg-red-100 text-red-800'
+                                ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'
+                                : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
                             }`}>
                               {subscriber.status}
                             </span>
@@ -1448,6 +1535,7 @@ const AdminDashboard = () => {
                               className="text-destructive"
                               onClick={() => handleDeleteSubscriber(subscriber.id)}
                             >
+                              <Trash2 className="mr-2 h-4 w-4" />
                               Delete
                             </Button>
                           </TableCell>
