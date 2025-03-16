@@ -31,6 +31,14 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth-context";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
+// Helper function to close dialogs
+const closeDialog = (selector: string) => {
+  const closeButton = document.querySelector(selector) as HTMLButtonElement | null;
+  if (closeButton) {
+    closeButton.click();
+  }
+};
+
 const AdminSidebar = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
@@ -890,11 +898,4 @@ const AdminDashboard = () => {
     setStats(prev => ({
       ...prev,
       subscribers: {
-        count: prev.subscribers.count - 1,
-        growth: prev.subscribers.growth // In a real app, this would be recalculated
-      }
-    }));
-    
-    toast({
-      title: "Subscriber deleted",
-      description: `${subscriberToDelete?.email} has been deleted successfully.`,
+        count: prev.subscribers.count - 1
