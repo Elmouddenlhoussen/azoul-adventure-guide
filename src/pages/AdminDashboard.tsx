@@ -898,3 +898,4 @@ const AdminDashboard = () => {
     toast({
       title: "Subscriber deleted",
       description: `${subscriberToDelete?.email} has been deleted successfully.`,
+      variant: "
