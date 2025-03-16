@@ -1,8 +1,9 @@
 
-import React from 'react';
-import { Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/use-auth-context';
 import { toast } from '@/hooks/use-toast';
+import { motion } from 'framer-motion';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -14,6 +15,16 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   requireAdmin = false 
 }) => {
   const { isLoggedIn, isAdmin } = useAuth();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Add page transition class to body
+    document.body.classList.add('page-transition');
+    
+    return () => {
+      document.body.classList.remove('page-transition');
+    };
+  }, [location.pathname]);
 
   if (!isLoggedIn) {
     toast({
@@ -33,7 +44,16 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to="/" replace />;
   }
 
-  return <>{children}</>;
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      {children}
+    </motion.div>
+  );
 };
 
 export default ProtectedRoute;
