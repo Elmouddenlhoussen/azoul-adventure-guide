@@ -78,12 +78,12 @@ const AdminSidebar = () => {
                 <SidebarMenuItem key={item.label}>
                   <SidebarMenuButton 
                     onClick={() => setActiveItem(item.label)}
-                    className={`transition-all duration-200 ease-in-out hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-700 dark:hover:text-purple-300 ${\
-                      activeItem === item.label \
-                        ? "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border-l-4 border-purple-500" \
-                        : ""\
-                    }`}\
-                  >\
+                    className={`transition-all duration-200 ease-in-out hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-700 dark:hover:text-purple-300 ${
+                      activeItem === item.label 
+                        ? "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border-l-4 border-purple-500" 
+                        : ""
+                    }`}
+                  >
                     <item.icon className={`h-5 w-5 transition-transform duration-200 ${activeItem === item.label ? "text-purple-600 dark:text-purple-400" : ""}`} />
                     <span>{item.label}</span>
                   </SidebarMenuButton>
@@ -899,4 +899,4 @@ const AdminDashboard = () => {
     setSubscribers(subscribers.filter(subscriber => subscriber.id !== id));
     setStats(prev => ({
       ...prev,
-      sub
+      subscribers:
