@@ -74,8 +74,8 @@ const AdminDashboard = () => {
   ]);
   
   const [courses, setCourses] = useState([
-    { id: 1, title: "Morocco Photography", instructor: "John Smith", description: "Learn to capture the beauty of Morocco", price: 29.99, duration: 8, image: "https://images.unsplash.com/photo-1551655510-955bbd0c9898", students: 124 },
-    { id: 2, title: "Arabic for Travelers", instructor: "Amina Hassan", description: "Essential Arabic phrases for your trip", price: 19.99, duration: 6, image: "https://images.unsplash.com/photo-1520256788229-d4640c632855", students: 86 }
+    { id: 1, title: "Morocco Photography", instructor: "John Smith", description: "Learn to capture the beauty of Morocco", price: "29.99", duration: "8", image: "https://images.unsplash.com/photo-1551655510-955bbd0c9898", students: 124 },
+    { id: 2, title: "Arabic for Travelers", instructor: "Amina Hassan", description: "Essential Arabic phrases for your trip", price: "19.99", duration: "6", image: "https://images.unsplash.com/photo-1520256788229-d4640c632855", students: 86 }
   ]);
 
   const [users, setUsers] = useState([
@@ -250,8 +250,8 @@ const AdminDashboard = () => {
       ...newCourse, 
       id, 
       students: 0,
-      price: parseFloat(newCourse.price),
-      duration: parseInt(newCourse.duration)
+      price: newCourse.price,
+      duration: newCourse.duration
     };
     
     setCourses([...courses, courseWithId]);
@@ -270,8 +270,8 @@ const AdminDashboard = () => {
       course.id === id ? { 
         ...course, 
         ...updatedCourse,
-        price: parseFloat(updatedCourse.price),
-        duration: parseInt(updatedCourse.duration)
+        price: updatedCourse.price,
+        duration: updatedCourse.duration
       } : course
     ));
     
@@ -393,7 +393,7 @@ const AdminDashboard = () => {
     closeDialog(".subscribers-dialog[data-state='open'] [data-state='closed']");
   };
   
-  // Delete subscriber - fixing the incomplete function
+  // Delete subscriber
   const handleDeleteSubscriber = (id) => {
     const subscriberToDelete = subscribers.find(s => s.id === id);
     
@@ -558,7 +558,7 @@ const AdminDashboard = () => {
               <TabsContent value="destinations">
                 <div className="mb-4 flex items-center justify-between">
                   <h2 className="text-xl font-semibold">Manage Destinations</h2>
-                  <Dialog className="destinations-dialog">
+                  <Dialog>
                     <DialogTrigger asChild>
                       <Button>
                         <Plus className="mr-2 h-4 w-4" />
@@ -599,7 +599,7 @@ const AdminDashboard = () => {
                           <TableCell>{dest.featured ? "Yes" : "No"}</TableCell>
                           <TableCell>{dest.visits}</TableCell>
                           <TableCell className="flex justify-end gap-2">
-                            <Dialog className="destinations-dialog">
+                            <Dialog>
                               <DialogTrigger asChild>
                                 <Button variant="ghost" size="icon">
                                   <Pencil className="h-4 w-4" />
@@ -638,7 +638,7 @@ const AdminDashboard = () => {
               <TabsContent value="features">
                 <div className="mb-4 flex items-center justify-between">
                   <h2 className="text-xl font-semibold">Manage Features</h2>
-                  <Dialog className="features-dialog">
+                  <Dialog>
                     <DialogTrigger asChild>
                       <Button>
                         <Plus className="mr-2 h-4 w-4" />
@@ -677,7 +677,7 @@ const AdminDashboard = () => {
                           <TableCell>{feature.category}</TableCell>
                           <TableCell>{feature.featured ? "Yes" : "No"}</TableCell>
                           <TableCell className="flex justify-end gap-2">
-                            <Dialog className="features-dialog">
+                            <Dialog>
                               <DialogTrigger asChild>
                                 <Button variant="ghost" size="icon">
                                   <Pencil className="h-4 w-4" />
@@ -716,7 +716,7 @@ const AdminDashboard = () => {
               <TabsContent value="courses">
                 <div className="mb-4 flex items-center justify-between">
                   <h2 className="text-xl font-semibold">Manage Courses</h2>
-                  <Dialog className="courses-dialog">
+                  <Dialog>
                     <DialogTrigger asChild>
                       <Button>
                         <Plus className="mr-2 h-4 w-4" />
@@ -759,7 +759,7 @@ const AdminDashboard = () => {
                           <TableCell>{course.duration} hours</TableCell>
                           <TableCell>{course.students}</TableCell>
                           <TableCell className="flex justify-end gap-2">
-                            <Dialog className="courses-dialog">
+                            <Dialog>
                               <DialogTrigger asChild>
                                 <Button variant="ghost" size="icon">
                                   <Pencil className="h-4 w-4" />
@@ -798,7 +798,7 @@ const AdminDashboard = () => {
               <TabsContent value="users">
                 <div className="mb-4 flex items-center justify-between">
                   <h2 className="text-xl font-semibold">Manage Users</h2>
-                  <Dialog className="users-dialog">
+                  <Dialog>
                     <DialogTrigger asChild>
                       <Button>
                         <Plus className="mr-2 h-4 w-4" />
@@ -845,7 +845,7 @@ const AdminDashboard = () => {
                               <TableCell>{user.role}</TableCell>
                               <TableCell>{user.lastLogin}</TableCell>
                               <TableCell className="flex justify-end gap-2">
-                                <Dialog className="users-dialog">
+                                <Dialog>
                                   <DialogTrigger asChild>
                                     <Button variant="ghost" size="icon">
                                       <Pencil className="h-4 w-4" />
@@ -884,7 +884,7 @@ const AdminDashboard = () => {
                   <TabsContent value="subscribers">
                     <div className="mb-4 flex items-center justify-between">
                       <h2 className="text-xl font-semibold">Email Subscribers</h2>
-                      <Dialog className="subscribers-dialog">
+                      <Dialog>
                         <DialogTrigger asChild>
                           <Button>
                             <Plus className="mr-2 h-4 w-4" />
@@ -932,7 +932,7 @@ const AdminDashboard = () => {
                               </TableCell>
                               <TableCell>{subscriber.joinedDate}</TableCell>
                               <TableCell className="flex justify-end gap-2">
-                                <Dialog className="subscribers-dialog">
+                                <Dialog>
                                   <DialogTrigger asChild>
                                     <Button variant="ghost" size="icon">
                                       <Pencil className="h-4 w-4" />

@@ -13,7 +13,7 @@ interface CourseFormProps {
   initialData?: CourseFormData | null;
 }
 
-interface CourseFormData {
+export interface CourseFormData {
   title: string;
   instructor: string;
   description: string;
