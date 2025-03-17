@@ -1,3 +1,4 @@
+
 import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -7,6 +8,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/hooks/use-language';
+import ChatAssistant from '@/components/ChatAssistant';
 
 interface FeatureData {
   id: string;
@@ -343,6 +345,9 @@ const FeatureDetail = () => {
   const title = feature.title[language as keyof typeof feature.title] || feature.title.en;
   const description = feature.description[language as keyof typeof feature.description] || feature.description.en;
 
+  // Show ChatAssistant on chat feature page
+  const showChatAssistant = featureId === 'chat';
+
   return (
     <AnimatedTransition variant="slideUp">
       <div className="min-h-screen">
@@ -365,6 +370,9 @@ const FeatureDetail = () => {
         </main>
         
         <Footer />
+        
+        {/* Only show ChatAssistant when on the chat feature page */}
+        {showChatAssistant && <ChatAssistant />}
       </div>
     </AnimatedTransition>
   );
