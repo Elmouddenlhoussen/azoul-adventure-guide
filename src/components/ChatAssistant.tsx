@@ -16,6 +16,9 @@ type Message = {
   timestamp: Date;
 };
 
+// AI responses based on different categories of questions
+type ResponseCategory = 'destinations' | 'culture' | 'food' | 'travel' | 'accommodation' | 'activities' | 'general';
+
 const initialMessagesMap: Record<string, Message> = {
   'en': {
     id: '1',
@@ -43,35 +46,130 @@ const initialMessagesMap: Record<string, Message> = {
   }
 };
 
-const sampleResponsesMap: Record<string, string[]> = {
-  'en': [
-    "Marrakech's vibrant souks are a maze of colors and scents. Visit Bahia Palace to see stunning Moroccan architecture, and don't miss Majorelle Garden's peaceful blue oasis.",
-    "The best time to visit the Sahara is October to April. I recommend a 2-3 day tour from Marrakech or Fes, with a night in a traditional camp under the stars - an unforgettable experience!",
-    "Moroccan cuisine is a delight! Try tagine (slow-cooked stew), couscous (our Friday tradition), and pastilla (sweet-savory pie). Always accept mint tea - it's our symbol of hospitality!",
-    "Essaouira offers beautiful Atlantic beaches, a historic medina, and a relaxed vibe. It's perfect for a few days after the intensity of Marrakech, and the seafood is incredible.",
-    "To truly experience Morocco, spend at least 10 days exploring different regions: the imperial cities, Atlas Mountains, Sahara Desert, and coastal towns each offer unique experiences."
-  ],
-  'fr': [
-    "Les souks animés de Marrakech sont un labyrinthe de couleurs et de parfums. Visitez le Palais Bahia pour voir l'architecture marocaine impressionnante, et ne manquez pas l'oasis bleue paisible du Jardin Majorelle.",
-    "La meilleure période pour visiter le Sahara est d'octobre à avril. Je recommande une excursion de 2-3 jours depuis Marrakech ou Fès, avec une nuit dans un camp traditionnel sous les étoiles - une expérience inoubliable!",
-    "La cuisine marocaine est un délice! Essayez le tajine (ragoût cuit lentement), le couscous (notre tradition du vendredi), et la pastilla (tarte sucrée-salée). Acceptez toujours le thé à la menthe - c'est notre symbole d'hospitalité!",
-    "Essaouira offre de belles plages atlantiques, une médina historique, et une ambiance détendue. C'est parfait pour quelques jours après l'intensité de Marrakech, et les fruits de mer sont incroyables.",
-    "Pour vraiment découvrir le Maroc, passez au moins 10 jours à explorer différentes régions: les villes impériales, les montagnes de l'Atlas, le désert du Sahara, et les villes côtières offrent chacune des expériences uniques."
-  ],
-  'ar': [
-    "أسواق مراكش النابضة بالحياة هي متاهة من الألوان والروائح. قم بزيارة قصر الباهية لمشاهدة العمارة المغربية المذهلة، ولا تفوت واحة حديقة ماجوريل الزرقاء الهادئة.",
-    "أفضل وقت لزيارة الصحراء هو من أكتوبر إلى أبريل. أوصي بجولة لمدة 2-3 أيام من مراكش أو فاس، مع ليلة في مخيم تقليدي تحت النجوم - تجربة لا تنسى!",
-    "المطبخ المغربي لذيذ! جرب الطاجين (يخنة مطبوخة ببطء)، والكسكس (تقليدنا يوم الجمعة)، والبسطيلة (فطيرة حلوة ومالحة). اقبل دائماً الشاي بالنعناع - إنه رمز الضيافة لدينا!",
-    "توفر الصويرة شواطئ أطلسية جميلة، ومدينة قديمة تاريخية، وأجواء مريحة. إنها مثالية لبضعة أيام بعد كثافة مراكش، والمأكولات البحرية مذهلة.",
-    "لتجربة المغرب حقاً، اقضِ على الأقل 10 أيام في استكشاف مناطق مختلفة: المدن الإمبراطورية، جبال الأطلس، الصحراء، والمدن الساحلية، كل منها يقدم تجارب فريدة."
-  ],
-  'ber': [
-    "ⵉⵙⵡⴰⵇⵏ ⵏ ⵎⵔⵔⴰⴽⵛ ⵙⵓⵍⵏ ⵜⵜⴼⵖⵏ ⴷ ⵉⵏⵓⵎⴰⵏ ⴷ ⵉⵔⵉⵃⵜⵏ. ⵣⵔ ⵉⵖⵔⵎ ⵏ ⴱⴰⵀⵉⴰ ⴰⴼⴰⴷ ⴰⴷ ⵜⴰⵏⵏⴰⵢⴷ ⵜⴰⵏⵓⵍⵉⵜ ⵜⴰⵎⵖⵔⴰⴱⵉⵜ ⵉⵜⵜⵙⵉⵡⵉⴷⵏ, ⵓⵔ ⴷⴰ ⵜⵜⵓ ⵓⵔⵜⵉ ⵏ ⵎⴰⵊⵓⵔⵉⵍ ⴰⵣⴳⴳⴰⵖ ⵉⵀⵏⵢⴰⵏ.",
-    "ⴰⴽⵓⴷ ⵉⴼⵓⵍⴽⵉⵏ ⵉ ⵓⵙⵓⵔⵉⴼ ⵏ ⵜⵏⵣⵔⵓⴼⵜ ⵉⴳⴰ ⵜ ⵓⴽⵜⵓⴱⵔ ⴰⵔ ⴰⴱⵔⵉⵍ. ⵣⵡⴰⵔⴰⵖ ⴰⴷ ⵜⴰⵡⵉⴷ ⵢⴰⵏ ⵓⵙⵓⵔⵉⴼ ⵏ 2-3 ⵡⵓⵙⵙⴰⵏ ⵣⵖ ⵎⵔⵔⴰⴽⵛ ⵏⵖ ⴼⴰⵙ, ⵜⵙⵙⵏⵙⴷ ⵢⴰⵜ ⵜⵍⵉⵍⵉⵜ ⴳ ⵢⴰⵏ ⵓⵅⵉⵢⵎ ⴰⵎⵖⵔⴰⴱⵉ ⴷⴷⴰⵡ ⵉⵜⵔⴰⵏ - ⵜⴰⵔⵎⵉⵜ ⵓⵔ ⵉⵜⵜⵓⵜⵜⵓⵏ!",
-    "ⵜⵉⵔⵎⵉⵜ ⵜⴰⵎⵖⵔⴰⴱⵉⵜ ⵜⵣⵣⵉⵍ! ⴰⵔⵎ ⵜⴰⵊⵉⵏ, ⴽⵙⴽⵙⵓ, ⴷ ⴱⴰⵙⵟⵉⵍⵍⴰ. ⵇⴱⵍ ⴰⵜⴰⵢ ⵙ ⵏⴰⵄⵏⴰⵄ - ⵏⵜⵜⴰ ⴰⵢⴷ ⵉⴳⴰⵏ ⴰⵎⴰⵜⴰⵔ ⵏ ⵜⴷⵓⵙⵉ ⵏⵏⵖ!",
-    "ⵜⵙⴽⴰⵔ ⵙⵙⵡⵉⵔⴰ ⵉⴼⵜⴰⵙⵏ ⵏ ⵍⴰⵟⵍⴰⵏⵟⵉⴽ ⵉⴼⵓⵍⴽⵉⵏ, ⵜⴰⵎⴷⵉⵏⵜ ⵜⴰⵇⴱⵓⵔⵜ, ⴷ ⵜⴰⵏⵣⵉ ⵉⵀⵏⵢⴰⵏ. ⵜⵎⵍⴰ ⵉ ⵛⴰ ⵏ ⵡⵓⵙⵙⴰⵏ ⴷⴼⴼⵉⵔ ⵡⴰⴼⵍⴰ ⵏ ⵎⵔⵔⴰⴽⵛ, ⵉⵙⵍⵎⴰⵏ ⵏⵏⵙ ⵓⴳⴳⴰⵔⵏ.",
-    "ⴰⴼⴰⴷ ⴰⴷ ⵜⵔⵎⵙⴷ ⵍⵎⵖⵔⵉⴱ ⵙ ⵜⵉⴷⵜ, ⵙⵓⵔⴼ ⵎⴰ ⵉⵥⵍⵉⵏ 10 ⵏ ⵡⵓⵙⵙⴰⵏ ⵜⵙⵏⵓⴱⴳⴷ ⵜⴰⵎⵏⴰⴹⵉⵏ ⵉⵎⵥⵍⵉⵏ: ⵜⵉⵎⴷⵉⵏⵉⵏ ⵜⵉⴳⵍⴷⴰⵏⵉⵏ, ⵉⴷⵓⵔⴰⵔ ⵏ ⵍⴰⵟⵍⴰⵙ, ⵜⴰⵏⵣⵔⵓⴼⵜ ⵏ ⵙⵙⴰⵃⴰⵔⴰ, ⴷ ⵜⵉⵎⴷⵉⵏⵉⵏ ⵏ ⵜⵎⴰ ⵏ ⵓⴳⴰⵔⴰⵡ ⴽⵓ ⵢⴰⵜ ⴷⴰⵢⵙⵏⵜ ⴷⴰ ⵜⴰⴽⴽ ⵜⵉⵔⵎⵉⵜⵉⵏ ⵉⵎⵥⵍⵉⵏ."
-  ]
+// Enhanced response database with more detailed answers
+const responsesDatabase: Record<string, Record<ResponseCategory, string[]>> = {
+  'en': {
+    'destinations': [
+      "Marrakech is a vibrant city with famous souks, palaces, and gardens. Don't miss Jemaa el-Fnaa square, Bahia Palace, Majorelle Garden, and the historic medina.",
+      "Chefchaouen, the 'Blue Pearl', is famous for its striking blue buildings. Nestled in the Rif Mountains, it offers a peaceful atmosphere and beautiful views.",
+      "Fes has the world's largest car-free urban area with its ancient medina. Visit the Al-Qarawiyyin University (world's oldest), the tanneries, and magnificent madrasas.",
+      "The Sahara Desert offers an unforgettable experience. Merzouga and Zagora are popular gateways where you can ride camels, stay in desert camps, and stargaze.",
+      "Essaouira is a charming coastal town with Portuguese fortifications, a vibrant fishing port, and windy beaches perfect for water sports."
+    ],
+    'culture': [
+      "Morocco has a rich tapestry of Arab, Berber, and European influences. The country's cultural diversity is reflected in its architecture, cuisine, music, and traditions.",
+      "Traditional Moroccan hospitality, or 'Diffa', is central to the culture. Guests are welcomed warmly, often with mint tea and pastries as a gesture of friendship.",
+      "Morocco's artisanal crafts include carpets, leather goods, ceramics, and metalwork. Visit local cooperatives to see artisans practice centuries-old techniques.",
+      "Moroccan music ranges from traditional Berber rhythms to Andalusian classical music and modern fusion styles. Gnawa music, with its hypnotic rhythms, is particularly distinctive.",
+      "Religious festivals like Ramadan and Eid are important cultural events in Morocco. There are also regional festivals celebrating local traditions, music, and harvest seasons."
+    ],
+    'food': [
+      "Tagine is Morocco's signature dish - a slow-cooked stew named after the conical clay pot it's cooked in. Common variations include chicken with preserved lemon, lamb with prunes, and kefta (meatball) tagine.",
+      "Couscous, traditionally served on Fridays, is steamed semolina topped with vegetables and meat. It's a communal dish often shared from a central plate.",
+      "Moroccan mint tea, or 'Whiskey Berber', is more than a drink - it's a symbol of hospitality and friendship. It's sweet, minty, and poured from height to create a light foam.",
+      "Pastilla is a sweet-savory pie traditionally made with pigeon, now often chicken. It's wrapped in crisp warka pastry and topped with cinnamon and sugar.",
+      "Street food is abundant in Morocco. Try msemen (square pancakes), harira (tomato and lentil soup), and brochettes (grilled meat skewers)."
+    ],
+    'travel': [
+      "The best time to visit Morocco is during spring (March-May) and fall (September-November) when temperatures are pleasant. Summer can be very hot, especially inland.",
+      "For transportation, trains connect major cities and are comfortable and reliable. Buses reach more destinations, and grand taxis are good for shorter distances.",
+      "A 10-14 day itinerary allows you to experience Morocco's diversity: imperial cities, mountain villages, coastal towns, and the desert.",
+      "While French and Arabic are official languages, many Moroccans in tourist areas speak English. Learning a few basic Arabic or French phrases is appreciated.",
+      "Morocco is generally safe for travelers, but take normal precautions. Solo female travelers should dress modestly and be prepared for some unwanted attention."
+    ],
+    'accommodation': [
+      "Riads are traditional Moroccan houses with interior gardens or courtyards, converted into boutique hotels. They offer an authentic and often luxurious experience in the heart of medinas.",
+      "Luxury desert camps provide comfortable beds in traditional tents, often with private bathrooms and gourmet dining under the stars.",
+      "Kasbah hotels are fortified mud-brick buildings, often in dramatic settings. Many have been converted into atmospheric hotels.",
+      "Modern hotels and international chains are available in major cities, offering familiar comforts and amenities.",
+      "For budget travelers, hostels are increasingly common in tourist cities. Family-run guesthouses (maisons d'hôte) offer a more personal experience at moderate prices."
+    ],
+    'activities': [
+      "Hiking in the Atlas Mountains offers spectacular scenery, from the lush Ourika Valley to challenging Mount Toubkal, North Africa's highest peak.",
+      "Shopping in the souks is an adventure. Negotiate for carpets, lamps, spices, and leather goods. The medinas of Fes and Marrakech are especially renowned.",
+      "Hammams (traditional bathhouses) offer a relaxing cultural experience. The ritual involves steam, scrubbing with black soap, and massage.",
+      "Cooking classes teach you to prepare Moroccan specialties. Many include a visit to local markets to select ingredients.",
+      "Camel trekking in the Sahara, especially at sunrise or sunset, is an iconic Moroccan experience not to be missed."
+    ],
+    'general': [
+      "Morocco is a year-round destination with diverse landscapes from mountains to deserts and coastlines. Each region offers unique experiences throughout the seasons.",
+      "The currency is the Moroccan Dirham (MAD). Credit cards are widely accepted in cities but carry cash for smaller towns and markets.",
+      "Electrical outlets in Morocco are type C and E, same as in Europe (220V). Travelers from the US will need adapters and possibly converters.",
+      "Tipping (around 10%) is customary in restaurants, for guides, drivers, and hotel staff. Small tips are also appreciated for service providers like bathroom attendants.",
+      "Photography etiquette: Always ask before photographing people, especially in rural areas. Some may request a small payment or decline for religious reasons."
+    ]
+  },
+  'fr': {
+    // French responses would go here - keeping abbreviated for brevity
+    'destinations': ["Marrakech est une ville dynamique avec ses souks célèbres, ses palais et ses jardins."],
+    'culture': ["Le Maroc possède une riche tapisserie d'influences arabes, berbères et européennes."],
+    'food': ["Le tajine est le plat signature du Maroc - un ragoût mijoté lentement nommé d'après le pot en argile conique dans lequel il est cuit."],
+    'travel': ["La meilleure période pour visiter le Maroc est au printemps (mars-mai) et en automne (septembre-novembre) lorsque les températures sont agréables."],
+    'accommodation': ["Les riads sont des maisons marocaines traditionnelles avec des jardins intérieurs ou des cours, convertis en hôtels boutiques."],
+    'activities': ["La randonnée dans les montagnes de l'Atlas offre des paysages spectaculaires, de la luxuriante vallée de l'Ourika au difficile mont Toubkal."],
+    'general': ["Le Maroc est une destination pour toute l'année avec des paysages divers allant des montagnes aux déserts et aux côtes."]
+  },
+  'ar': {
+    // Arabic responses would go here - keeping abbreviated for brevity
+    'destinations': ["مراكش مدينة نابضة بالحياة مع أسواقها الشهيرة وقصورها وحدائقها."],
+    'culture': ["يمتلك المغرب نسيجًا غنيًا من التأثيرات العربية والبربرية والأوروبية."],
+    'food': ["الطاجين هو الطبق المميز للمغرب - يخنة مطبوخة ببطء سميت على اسم وعاء الطين المخروطي الذي يتم طهيها فيه."],
+    'travel': ["أفضل وقت لزيارة المغرب هو خلال الربيع (مارس-مايو) والخريف (سبتمبر-نوفمبر) عندما تكون درجات الحرارة لطيفة."],
+    'accommodation': ["الرياض هي منازل مغربية تقليدية ذات حدائق داخلية أو ساحات، تم تحويلها إلى فنادق بوتيك."],
+    'activities': ["المشي لمسافات طويلة في جبال الأطلس يوفر مناظر خلابة، من وادي أوريكا الخصب إلى جبل توبقال الصعب."],
+    'general': ["المغرب وجهة على مدار السنة مع مناظر طبيعية متنوعة من الجبال إلى الصحاري والسواحل."]
+  },
+  'ber': {
+    // Berber responses would go here - keeping abbreviated for brevity
+    'destinations': ["ⵎⵔⵔⴰⴽⵛ ⵜⴳⴰ ⵜⴰⵎⴷⵉⵏⵜ ⵉⴹⵓⵏⵏ ⵙ ⵉⵙⵡⴰⵇⵏ ⵏⵏⵙ ⵉⵜⵜⵡⴰⵙⵙⵏⵏ, ⵉⵖⵔⵎⴰⵏ ⴷ ⵓⵔⵜⴰⵏ."],
+    'culture': ["ⵉⵍⴰ ⵍⵎⵖⵔⵉⴱ ⴰⵄⵔⵔⵉⵎ ⵉⵣⴷⵉⵏ ⵏ ⵉⵎⵣⵡⵓⵔⴰ ⵏ ⵡⴰⵄⵔⴰⴱ, ⵉⵎⴰⵣⵉⵖⵏ ⴷ ⵓⵔⵓⴱⴱⴰ."],
+    'food': ["ⵜⴰⵊⵉⵏ ⵜⴳⴰ ⵜⵉⵔⵎⵜ ⵏ ⵍⵎⵖⵔⵉⴱ ⵉⵣⵍⵏ - ⵜⴰⴷⴰⴼⵜ ⵉⵜⵜⵡⴰⵙⵏⵡⴰⵏ ⵙ ⵜⵏⴹⵡⵉⵜ ⵜⵜⵓⵙⵎⵎⴰⵏ ⵙ ⵜⴰⴳⵉⵏⵜ ⵏ ⵜⴰⵍⴰⵖⵜ ⴷⴳ ⵜⵜⵡⴰⵙⵏⵡⴰ."],
+    'travel': ["ⴰⴽⵓⴷ ⵉⴼⵓⵍⴽⵉⵏ ⵉ ⵓⵙⴽⴰ ⵖⵔ ⵍⵎⵖⵔⵉⴱ ⵉⴳⴰ ⵜⴰⴼⵙⵓⵜ (ⵎⴰⵔⵙ-ⵎⴰⵢⵢⵓ) ⴷ ⵍⵅⵔⵉⴼ (ⵛⵓⵜⴰⵏⴱⵉⵔ-ⵏⵓⵡⴰⵏⴱⵉⵔ) ⵉⴷ ⵉⴷⵉ ⵜⵏ ⵜⵣⵉⵍⵉⵡⵉⵏ ⴷ ⵉⵎⵛⵉ."],
+    'accommodation': ["ⵉⵔⵉⵢⴰⴹⵏ ⴳⴰⵏ ⵜⵏ ⵜⴰⴷⴷⴰⵔⵜ ⵜⴰⵎⵖⵔⴰⴱⵉⵜ ⵜⴰⵏⵙⴰⵢⵜ ⵙ ⵓⵔⵜⴰⵏ ⵏⵉⵖ ⵜⵉⴳⵎⵎⵉ ⵓⵏⵣⴰⵏⵉⵏ, ⵉⵜⵜⵡⴰⵙⵏⴼⵍⵏ ⵖⵔ ⵉⵀⵓⵜⵉⵍⴰⵜ ⵏ ⵜⵓⵜⵉⴽ."],
+    'activities': ["ⴰⵣⵣⵉⴳⵣ ⴳ ⵉⴷⵓⵔⴰⵔ ⵏ ⵡⴰⵟⵍⴰⵙ ⵉⵜⵜⴰⴽⴽ ⵉⵎⵏⵥⴰⵡⵏ ⵉⵙⵙⵉⵡⵉⴷⵏ, ⵖⵯⵔ ⵜⵉⵙⵉ ⵏ ⵡⵓⵔⵉⴽⴰ ⵉⵍⵓⵍⵓⵏ ⴰⵔ ⵡⴰⴹⵓ ⵏ ⵜⵓⴱⵇⴰⵍ."],
+    'general': ["ⵍⵎⵖⵔⵉⴱ ⵉⴳⴰ ⴰⵙⵓⴷⵓ ⵏ ⵓⵙⴳⴳⵯⴰⵙ ⵉⵎⵓⵏ ⵙ ⵉⵙⵏⵟⴰⵛ ⵉⵎⵥⵍⵉⵏ ⵉⵟⵟⴼⵏ ⵉⴷⵓⵔⴰⵔ ⴰⵔ ⵜⵉⵏⵣⵔⵓⴼⵉⵏ ⴷ ⵜⵎⴰ ⵏ ⵉⵍⵍ."]
+  }
+};
+
+// Function to categorize user input and find relevant response
+const categorizeInput = (input: string): ResponseCategory => {
+  input = input.toLowerCase();
+  
+  if (input.match(/city|marrakech|fes|casablanca|chefchaouen|essaouira|tangier|desert|sahara|atlas|mountain|beach|location|visit|place|destination/)) {
+    return 'destinations';
+  }
+  if (input.match(/culture|tradition|custom|history|people|language|music|art|festival|religion|social/)) {
+    return 'culture';
+  }
+  if (input.match(/food|eat|cuisine|dish|restaurant|tagine|couscous|pastilla|bread|mint tea|breakfast|dinner|lunch|meal|drink/)) {
+    return 'food';
+  }
+  if (input.match(/travel|transport|train|bus|taxi|car|flight|airport|itinerary|route|journey|duration|distance|drive|when|weather|season|month/)) {
+    return 'travel';
+  }
+  if (input.match(/stay|hotel|riad|hostel|resort|camp|accommodation|night|sleep|room|bed|tent|booking|reservation/)) {
+    return 'accommodation';
+  }
+  if (input.match(/do|activity|experience|tour|guide|hike|trek|shop|shopping|souk|hammam|spa|surf|swim|camel|adventure/)) {
+    return 'activities';
+  }
+  
+  return 'general';
+};
+
+// Function to get AI response based on user input and language
+const getAIResponse = (userInput: string, language: string): string => {
+  // Default to English if the language is not supported
+  const langResponses = responsesDatabase[language] || responsesDatabase['en'];
+  
+  // Categorize the input to find relevant responses
+  const category = categorizeInput(userInput);
+  
+  // Get responses for the category
+  const categoryResponses = langResponses[category];
+  
+  // Return a random response from the appropriate category
+  return categoryResponses[Math.floor(Math.random() * categoryResponses.length)];
 };
 
 const ChatAssistant = () => {
@@ -133,13 +231,13 @@ const ChatAssistant = () => {
     setInput('');
     setIsTyping(true);
     
-    // Simulate AI response (replace with actual API call in production)
+    // Get AI response based on user input
     setTimeout(() => {
-      const responses = sampleResponsesMap[language] || sampleResponsesMap['en'];
+      const aiResponse = getAIResponse(userMessage.content, language);
       
       const aiMessage: Message = {
         id: Date.now().toString(),
-        content: responses[Math.floor(Math.random() * responses.length)],
+        content: aiResponse,
         sender: 'assistant',
         timestamp: new Date(),
       };

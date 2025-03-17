@@ -208,7 +208,7 @@ const Logo = ({ variant = 'default', showText = true }: LogoProps) => {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.5 }}
-            className="relative"
+            className="relative whitespace-nowrap" // Added whitespace-nowrap to keep all text on one line
           >
             {Array.from("Azoul").map((letter, i) => (
               <motion.span
