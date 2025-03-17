@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
@@ -32,6 +33,13 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth-context";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AdminSidebar } from "@/components/admin/AdminSidebar";
+import { StatCard } from "@/components/admin/StatCard";
+import { DestinationForm } from "@/components/admin/forms/DestinationForm";
+import { FeatureForm } from "@/components/admin/forms/FeatureForm";
+import { CourseForm } from "@/components/admin/forms/CourseForm";
+import { UserForm } from "@/components/admin/forms/UserForm";
+import { SubscriberForm } from "@/components/admin/forms/SubscriberForm";
 
 // Helper function to close dialogs
 const closeDialog = (selector: string) => {
@@ -39,513 +47,6 @@ const closeDialog = (selector: string) => {
   if (closeButton) {
     closeButton.click();
   }
-};
-
-const AdminSidebar = () => {
-  const navigate = useNavigate();
-  const { logout } = useAuth();
-  const [activeItem, setActiveItem] = useState("Dashboard");
-  
-  const handleExitAdmin = () => {
-    navigate('/');
-  };
-  
-  const menuItems = [
-    { label: "Dashboard", icon: LayoutDashboard },
-    { label: "Destinations", icon: Map },
-    { label: "Features", icon: Compass },
-    { label: "Courses", icon: BookOpen },
-    { label: "Users", icon: Users },
-    { label: "Subscribers", icon: Mail },
-    { label: "Media", icon: Image },
-    { label: "Analytics", icon: BarChart },
-    { label: "Settings", icon: Settings },
-  ];
-
-  return (
-    <Sidebar>
-      <SidebarContent>
-        <div className="mb-8 px-6 pt-6">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Azoul Admin Panel</h1>
-          <p className="text-sm text-muted-foreground">Manage your travel platform</p>
-        </div>
-        
-        <SidebarGroup>
-          <SidebarGroupLabel className="text-sm font-semibold text-gray-500 dark:text-gray-400">Main</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {menuItems.map((item) => (
-                <SidebarMenuItem key={item.label}>
-                  <SidebarMenuButton 
-                    onClick={() => setActiveItem(item.label)}
-                    className={`transition-all duration-200 ease-in-out hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-700 dark:hover:text-purple-300 ${
-                      activeItem === item.label 
-                        ? "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border-l-4 border-purple-500" 
-                        : ""
-                    }`}
-                  >
-                    <item.icon className={`h-5 w-5 transition-transform duration-200 ${activeItem === item.label ? "text-purple-600 dark:text-purple-400" : ""}`} />
-                    <span>{item.label}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-      
-      <SidebarFooter>
-        <div className="px-6 py-4 space-y-3">
-          <Button 
-            variant="outline" 
-            className="w-full justify-start hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200" 
-            onClick={handleExitAdmin}
-          >
-            <LogOut className="mr-2 h-4 w-4 text-blue-500" />
-            <span className="text-blue-700 dark:text-blue-300">Exit Admin Panel</span>
-          </Button>
-          
-          <Button 
-            variant="destructive" 
-            className="w-full justify-start hover:bg-red-600 transition-all duration-200" 
-            onClick={logout}
-          >
-            <LogOut className="mr-2 h-4 w-4" />
-            Logout
-          </Button>
-        </div>
-      </SidebarFooter>
-    </Sidebar>
-  );
-};
-
-// Placeholder components for demo data
-const StatCard = ({ title, value, description, icon: Icon }) => (
-  <Card>
-    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-      <CardTitle className="text-sm font-medium">{title}</CardTitle>
-      <Icon className="h-4 w-4 text-muted-foreground" />
-    </CardHeader>
-    <CardContent>
-      <div className="text-2xl font-bold">{value}</div>
-      <p className="text-xs text-muted-foreground">{description}</p>
-    </CardContent>
-  </Card>
-);
-
-const DestinationForm = ({ onClose, onSubmit, initialData = null }) => {
-  const [formData, setFormData] = useState({
-    title: initialData?.title || '',
-    location: initialData?.location || '',
-    description: initialData?.description || '',
-    image: initialData?.image || '',
-    featured: initialData?.featured || false
-  });
-  
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormData(prev => ({ ...prev, [id]: value }));
-  };
-  
-  const handleSwitchChange = (checked) => {
-    setFormData(prev => ({ ...prev, featured: checked }));
-  };
-  
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(formData);
-  };
-
-  return (
-    <form className="space-y-4" onSubmit={handleSubmit}>
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="title">Title</Label>
-          <Input 
-            id="title" 
-            placeholder="Destination title" 
-            value={formData.title}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="location">Location</Label>
-          <Input 
-            id="location" 
-            placeholder="City, Country" 
-            value={formData.location}
-            onChange={handleChange}
-            required
-          />
-        </div>
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="description">Description</Label>
-        <Textarea 
-          id="description" 
-          placeholder="Write a description" 
-          value={formData.description}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="image">Image URL</Label>
-        <Input 
-          id="image" 
-          placeholder="https://example.com/image.jpg" 
-          value={formData.image}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      
-      <div className="flex items-center space-x-2">
-        <Switch 
-          id="featured" 
-          checked={formData.featured}
-          onCheckedChange={handleSwitchChange}
-        />
-        <Label htmlFor="featured">Featured destination</Label>
-      </div>
-      
-      <DialogFooter>
-        <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
-        <Button type="submit">
-          <Save className="mr-2 h-4 w-4" />
-          Save Destination
-        </Button>
-      </DialogFooter>
-    </form>
-  );
-};
-
-const FeatureForm = ({ onClose, onSubmit, initialData = null }) => {
-  const [formData, setFormData] = useState({
-    title: initialData?.title || '',
-    category: initialData?.category || '',
-    description: initialData?.description || '',
-    image: initialData?.image || '',
-    featured: initialData?.featured || false
-  });
-  
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormData(prev => ({ ...prev, [id]: value }));
-  };
-  
-  const handleSwitchChange = (checked) => {
-    setFormData(prev => ({ ...prev, featured: checked }));
-  };
-  
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(formData);
-  };
-
-  return (
-    <form className="space-y-4" onSubmit={handleSubmit}>
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="title">Title</Label>
-          <Input 
-            id="title" 
-            placeholder="Feature title" 
-            value={formData.title}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="category">Category</Label>
-          <Input 
-            id="category" 
-            placeholder="Category" 
-            value={formData.category}
-            onChange={handleChange}
-            required
-          />
-        </div>
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="description">Description</Label>
-        <Textarea 
-          id="description" 
-          placeholder="Write a description" 
-          value={formData.description}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="image">Image URL</Label>
-        <Input 
-          id="image" 
-          placeholder="https://example.com/image.jpg" 
-          value={formData.image}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      
-      <div className="flex items-center space-x-2">
-        <Switch 
-          id="featured" 
-          checked={formData.featured}
-          onCheckedChange={handleSwitchChange}
-        />
-        <Label htmlFor="featured">Featured item</Label>
-      </div>
-      
-      <DialogFooter>
-        <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
-        <Button type="submit">
-          <Save className="mr-2 h-4 w-4" />
-          Save Feature
-        </Button>
-      </DialogFooter>
-    </form>
-  );
-};
-
-const CourseForm = ({ onClose, onSubmit, initialData = null }) => {
-  const [formData, setFormData] = useState({
-    title: initialData?.title || '',
-    instructor: initialData?.instructor || '',
-    description: initialData?.description || '',
-    price: initialData?.price || '',
-    duration: initialData?.duration || '',
-    image: initialData?.image || ''
-  });
-  
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormData(prev => ({ ...prev, [id]: value }));
-  };
-  
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(formData);
-  };
-
-  return (
-    <form className="space-y-4" onSubmit={handleSubmit}>
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="title">Title</Label>
-          <Input 
-            id="title" 
-            placeholder="Course title" 
-            value={formData.title}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="instructor">Instructor</Label>
-          <Input 
-            id="instructor" 
-            placeholder="Instructor name" 
-            value={formData.instructor}
-            onChange={handleChange}
-            required
-          />
-        </div>
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="description">Description</Label>
-        <Textarea 
-          id="description" 
-          placeholder="Write a description" 
-          value={formData.description}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="price">Price ($)</Label>
-          <Input 
-            id="price" 
-            placeholder="29.99" 
-            type="number" 
-            step="0.01"
-            value={formData.price}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="duration">Duration (hours)</Label>
-          <Input 
-            id="duration" 
-            placeholder="8" 
-            type="number"
-            value={formData.duration}
-            onChange={handleChange}
-            required
-          />
-        </div>
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="image">Image URL</Label>
-        <Input 
-          id="image" 
-          placeholder="https://example.com/image.jpg" 
-          value={formData.image}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      
-      <DialogFooter>
-        <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
-        <Button type="submit">
-          <Save className="mr-2 h-4 w-4" />
-          Save Course
-        </Button>
-      </DialogFooter>
-    </form>
-  );
-};
-
-const UserForm = ({ onClose, onSubmit, initialData = null }) => {
-  const [formData, setFormData] = useState({
-    name: initialData?.name || '',
-    email: initialData?.email || '',
-    role: initialData?.role || 'user',
-  });
-  
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormData(prev => ({ ...prev, [id]: value }));
-  };
-  
-  const handleRoleChange = (e) => {
-    setFormData(prev => ({ ...prev, role: e.target.value }));
-  };
-  
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(formData);
-  };
-
-  return (
-    <form className="space-y-4" onSubmit={handleSubmit}>
-      <div className="space-y-2">
-        <Label htmlFor="name">Name</Label>
-        <Input 
-          id="name" 
-          placeholder="User name" 
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
-        <Input 
-          id="email" 
-          placeholder="user@example.com" 
-          type="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="role">Role</Label>
-        <select
-          id="role"
-          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          value={formData.role}
-          onChange={handleRoleChange}
-          required
-        >
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
-        </select>
-      </div>
-      
-      <DialogFooter>
-        <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
-        <Button type="submit">
-          <Save className="mr-2 h-4 w-4" />
-          Save User
-        </Button>
-      </DialogFooter>
-    </form>
-  );
-};
-
-const SubscriberForm = ({ onClose, onSubmit, initialData = null }) => {
-  const [formData, setFormData] = useState({
-    email: initialData?.email || '',
-    status: initialData?.status || 'active',
-  });
-  
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormData(prev => ({ ...prev, [id]: value }));
-  };
-  
-  const handleStatusChange = (e) => {
-    setFormData(prev => ({ ...prev, status: e.target.value }));
-  };
-  
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(formData);
-  };
-
-  return (
-    <form className="space-y-4" onSubmit={handleSubmit}>
-      <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
-        <Input 
-          id="email" 
-          placeholder="subscriber@example.com" 
-          type="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="status">Status</Label>
-        <select
-          id="status"
-          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          value={formData.status}
-          onChange={handleStatusChange}
-          required
-        >
-          <option value="active">Active</option>
-          <option value="unsubscribed">Unsubscribed</option>
-          <option value="bounced">Bounced</option>
-        </select>
-      </div>
-      
-      <DialogFooter>
-        <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
-        <Button type="submit">
-          <Save className="mr-2 h-4 w-4" />
-          Save Subscriber
-        </Button>
-      </DialogFooter>
-    </form>
-  );
 };
 
 const AdminDashboard = () => {
@@ -892,11 +393,588 @@ const AdminDashboard = () => {
     closeDialog(".subscribers-dialog[data-state='open'] [data-state='closed']");
   };
   
-  // Delete subscriber - completing the incomplete function
+  // Delete subscriber - fixing the incomplete function
   const handleDeleteSubscriber = (id) => {
     const subscriberToDelete = subscribers.find(s => s.id === id);
     
     setSubscribers(subscribers.filter(subscriber => subscriber.id !== id));
     setStats(prev => ({
       ...prev,
-      subscribers:
+      subscribers: {
+        count: prev.subscribers.count - 1,
+        growth: prev.subscribers.growth // In a real app, this would be recalculated
+      }
+    }));
+    
+    toast({
+      title: "Subscriber deleted",
+      description: `${subscriberToDelete?.email} has been deleted successfully.`,
+      variant: "destructive",
+    });
+  };
+
+  return (
+    <SidebarProvider>
+      <div className="flex h-screen overflow-hidden">
+        <AdminSidebar />
+        
+        <div className="flex-1 overflow-auto">
+          <div className="flex items-center justify-between border-b p-4">
+            <div className="flex items-center gap-2">
+              <SidebarTrigger>
+                <Button variant="ghost" size="icon">
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SidebarTrigger>
+              <h1 className="text-xl font-semibold">Admin Dashboard</h1>
+            </div>
+            
+            {user && (
+              <div className="text-sm text-muted-foreground">
+                Logged in as <span className="font-semibold">{user.email}</span>
+              </div>
+            )}
+          </div>
+          
+          <main className="p-4 md:p-6">
+            <Tabs value={activeTab} onValueChange={setActiveTab}>
+              <TabsList className="mb-4 grid w-full grid-cols-2 md:grid-cols-5">
+                <TabsTrigger value="overview">Overview</TabsTrigger>
+                <TabsTrigger value="destinations">Destinations</TabsTrigger>
+                <TabsTrigger value="features">Features</TabsTrigger>
+                <TabsTrigger value="courses">Courses</TabsTrigger>
+                <TabsTrigger value="users">Users</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="overview" className="space-y-6">
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                  <StatCard 
+                    title="Daily Visitors" 
+                    value={stats.visitors.daily} 
+                    description={`${stats.visitors.monthly} this month`}
+                    icon={Users}
+                  />
+                  <StatCard 
+                    title="Subscribers" 
+                    value={stats.subscribers.count} 
+                    description={`${stats.subscribers.growth} growth in the last month`}
+                    icon={Mail}
+                  />
+                  <StatCard 
+                    title="Destinations" 
+                    value={stats.destinations.count} 
+                    description={`${stats.destinations.featured} featured destinations`}
+                    icon={Map}
+                  />
+                  <StatCard 
+                    title="Features" 
+                    value={stats.features.count} 
+                    description={`${stats.features.categories} different categories`}
+                    icon={Compass}
+                  />
+                </div>
+                
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Recent Activity</CardTitle>
+                      <CardDescription>Latest events on the platform</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="space-y-4">
+                        <li className="flex items-start gap-2">
+                          <div className="rounded-full bg-blue-100 p-1">
+                            <Users className="h-4 w-4 text-blue-600" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium">New user registered</p>
+                            <p className="text-xs text-muted-foreground">2 hours ago</p>
+                          </div>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <div className="rounded-full bg-green-100 p-1">
+                            <BookOpen className="h-4 w-4 text-green-600" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium">New course enrollment</p>
+                            <p className="text-xs text-muted-foreground">5 hours ago</p>
+                          </div>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <div className="rounded-full bg-purple-100 p-1">
+                            <Map className="h-4 w-4 text-purple-600" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium">New destination added</p>
+                            <p className="text-xs text-muted-foreground">Yesterday</p>
+                          </div>
+                        </li>
+                      </ul>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Popular Destinations</CardTitle>
+                      <CardDescription>Most visited places this month</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="space-y-2">
+                        {destinations
+                          .sort((a, b) => b.visits - a.visits)
+                          .slice(0, 3)
+                          .map(dest => (
+                            <li key={dest.id} className="flex items-center justify-between">
+                              <span className="text-sm font-medium">{dest.title}</span>
+                              <span className="text-xs text-muted-foreground">{dest.visits} visits</span>
+                            </li>
+                          ))
+                        }
+                      </ul>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>System Notifications</CardTitle>
+                      <CardDescription>Alerts and updates</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Alert className="mb-4">
+                        <AlertCircle className="h-4 w-4" />
+                        <AlertTitle>Information</AlertTitle>
+                        <AlertDescription>
+                          This is a demo admin panel. Data is not persisted.
+                        </AlertDescription>
+                      </Alert>
+                      <p className="text-xs text-muted-foreground">
+                        Last updated: {new Date().toLocaleDateString()}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="destinations">
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-xl font-semibold">Manage Destinations</h2>
+                  <Dialog className="destinations-dialog">
+                    <DialogTrigger asChild>
+                      <Button>
+                        <Plus className="mr-2 h-4 w-4" />
+                        Add Destination
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Add New Destination</DialogTitle>
+                        <DialogDescription>
+                          Add a new travel destination to the platform.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <DestinationForm 
+                        onClose={() => closeDialog(".destinations-dialog[data-state='open'] [data-state='closed']")}
+                        onSubmit={handleAddDestination}
+                      />
+                    </DialogContent>
+                  </Dialog>
+                </div>
+                
+                <div className="rounded-md border">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Title</TableHead>
+                        <TableHead>Location</TableHead>
+                        <TableHead>Featured</TableHead>
+                        <TableHead>Visits</TableHead>
+                        <TableHead className="text-right">Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {destinations.map(dest => (
+                        <TableRow key={dest.id}>
+                          <TableCell className="font-medium">{dest.title}</TableCell>
+                          <TableCell>{dest.location}</TableCell>
+                          <TableCell>{dest.featured ? "Yes" : "No"}</TableCell>
+                          <TableCell>{dest.visits}</TableCell>
+                          <TableCell className="flex justify-end gap-2">
+                            <Dialog className="destinations-dialog">
+                              <DialogTrigger asChild>
+                                <Button variant="ghost" size="icon">
+                                  <Pencil className="h-4 w-4" />
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent>
+                                <DialogHeader>
+                                  <DialogTitle>Edit Destination</DialogTitle>
+                                  <DialogDescription>
+                                    Make changes to the destination.
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <DestinationForm 
+                                  initialData={dest}
+                                  onClose={() => closeDialog(".destinations-dialog[data-state='open'] [data-state='closed']")}
+                                  onSubmit={(data) => handleEditDestination(dest.id, data)}
+                                />
+                              </DialogContent>
+                            </Dialog>
+                            
+                            <Button 
+                              variant="ghost" 
+                              size="icon"
+                              onClick={() => handleDeleteDestination(dest.id)}
+                            >
+                              <Trash2 className="h-4 w-4 text-destructive" />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="features">
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-xl font-semibold">Manage Features</h2>
+                  <Dialog className="features-dialog">
+                    <DialogTrigger asChild>
+                      <Button>
+                        <Plus className="mr-2 h-4 w-4" />
+                        Add Feature
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Add New Feature</DialogTitle>
+                        <DialogDescription>
+                          Add a new travel feature or activity to the platform.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <FeatureForm 
+                        onClose={() => closeDialog(".features-dialog[data-state='open'] [data-state='closed']")}
+                        onSubmit={handleAddFeature}
+                      />
+                    </DialogContent>
+                  </Dialog>
+                </div>
+                
+                <div className="rounded-md border">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Title</TableHead>
+                        <TableHead>Category</TableHead>
+                        <TableHead>Featured</TableHead>
+                        <TableHead className="text-right">Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {features.map(feature => (
+                        <TableRow key={feature.id}>
+                          <TableCell className="font-medium">{feature.title}</TableCell>
+                          <TableCell>{feature.category}</TableCell>
+                          <TableCell>{feature.featured ? "Yes" : "No"}</TableCell>
+                          <TableCell className="flex justify-end gap-2">
+                            <Dialog className="features-dialog">
+                              <DialogTrigger asChild>
+                                <Button variant="ghost" size="icon">
+                                  <Pencil className="h-4 w-4" />
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent>
+                                <DialogHeader>
+                                  <DialogTitle>Edit Feature</DialogTitle>
+                                  <DialogDescription>
+                                    Make changes to the feature.
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <FeatureForm 
+                                  initialData={feature}
+                                  onClose={() => closeDialog(".features-dialog[data-state='open'] [data-state='closed']")}
+                                  onSubmit={(data) => handleEditFeature(feature.id, data)}
+                                />
+                              </DialogContent>
+                            </Dialog>
+                            
+                            <Button 
+                              variant="ghost" 
+                              size="icon"
+                              onClick={() => handleDeleteFeature(feature.id)}
+                            >
+                              <Trash2 className="h-4 w-4 text-destructive" />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="courses">
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-xl font-semibold">Manage Courses</h2>
+                  <Dialog className="courses-dialog">
+                    <DialogTrigger asChild>
+                      <Button>
+                        <Plus className="mr-2 h-4 w-4" />
+                        Add Course
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Add New Course</DialogTitle>
+                        <DialogDescription>
+                          Add a new learning course to the platform.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <CourseForm 
+                        onClose={() => closeDialog(".courses-dialog[data-state='open'] [data-state='closed']")}
+                        onSubmit={handleAddCourse}
+                      />
+                    </DialogContent>
+                  </Dialog>
+                </div>
+                
+                <div className="rounded-md border">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Title</TableHead>
+                        <TableHead>Instructor</TableHead>
+                        <TableHead>Price</TableHead>
+                        <TableHead>Duration</TableHead>
+                        <TableHead>Students</TableHead>
+                        <TableHead className="text-right">Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {courses.map(course => (
+                        <TableRow key={course.id}>
+                          <TableCell className="font-medium">{course.title}</TableCell>
+                          <TableCell>{course.instructor}</TableCell>
+                          <TableCell>${course.price}</TableCell>
+                          <TableCell>{course.duration} hours</TableCell>
+                          <TableCell>{course.students}</TableCell>
+                          <TableCell className="flex justify-end gap-2">
+                            <Dialog className="courses-dialog">
+                              <DialogTrigger asChild>
+                                <Button variant="ghost" size="icon">
+                                  <Pencil className="h-4 w-4" />
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent>
+                                <DialogHeader>
+                                  <DialogTitle>Edit Course</DialogTitle>
+                                  <DialogDescription>
+                                    Make changes to the course.
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <CourseForm 
+                                  initialData={course}
+                                  onClose={() => closeDialog(".courses-dialog[data-state='open'] [data-state='closed']")}
+                                  onSubmit={(data) => handleEditCourse(course.id, data)}
+                                />
+                              </DialogContent>
+                            </Dialog>
+                            
+                            <Button 
+                              variant="ghost" 
+                              size="icon"
+                              onClick={() => handleDeleteCourse(course.id)}
+                            >
+                              <Trash2 className="h-4 w-4 text-destructive" />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="users">
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-xl font-semibold">Manage Users</h2>
+                  <Dialog className="users-dialog">
+                    <DialogTrigger asChild>
+                      <Button>
+                        <Plus className="mr-2 h-4 w-4" />
+                        Add User
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Add New User</DialogTitle>
+                        <DialogDescription>
+                          Add a new user to the platform.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <UserForm 
+                        onClose={() => closeDialog(".users-dialog[data-state='open'] [data-state='closed']")}
+                        onSubmit={handleAddUser}
+                      />
+                    </DialogContent>
+                  </Dialog>
+                </div>
+                
+                <Tabs defaultValue="users" className="mb-4">
+                  <TabsList>
+                    <TabsTrigger value="users">Users</TabsTrigger>
+                    <TabsTrigger value="subscribers">Subscribers</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="users">
+                    <div className="rounded-md border">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Name</TableHead>
+                            <TableHead>Email</TableHead>
+                            <TableHead>Role</TableHead>
+                            <TableHead>Last Login</TableHead>
+                            <TableHead className="text-right">Actions</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {users.map(user => (
+                            <TableRow key={user.id}>
+                              <TableCell className="font-medium">{user.name}</TableCell>
+                              <TableCell>{user.email}</TableCell>
+                              <TableCell>{user.role}</TableCell>
+                              <TableCell>{user.lastLogin}</TableCell>
+                              <TableCell className="flex justify-end gap-2">
+                                <Dialog className="users-dialog">
+                                  <DialogTrigger asChild>
+                                    <Button variant="ghost" size="icon">
+                                      <Pencil className="h-4 w-4" />
+                                    </Button>
+                                  </DialogTrigger>
+                                  <DialogContent>
+                                    <DialogHeader>
+                                      <DialogTitle>Edit User</DialogTitle>
+                                      <DialogDescription>
+                                        Make changes to user information.
+                                      </DialogDescription>
+                                    </DialogHeader>
+                                    <UserForm 
+                                      initialData={user}
+                                      onClose={() => closeDialog(".users-dialog[data-state='open'] [data-state='closed']")}
+                                      onSubmit={(data) => handleEditUser(user.id, data)}
+                                    />
+                                  </DialogContent>
+                                </Dialog>
+                                
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon"
+                                  onClick={() => handleDeleteUser(user.id)}
+                                  disabled={user.email === user?.email}
+                                >
+                                  <Trash2 className="h-4 w-4 text-destructive" />
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  </TabsContent>
+                  <TabsContent value="subscribers">
+                    <div className="mb-4 flex items-center justify-between">
+                      <h2 className="text-xl font-semibold">Email Subscribers</h2>
+                      <Dialog className="subscribers-dialog">
+                        <DialogTrigger asChild>
+                          <Button>
+                            <Plus className="mr-2 h-4 w-4" />
+                            Add Subscriber
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Add New Subscriber</DialogTitle>
+                            <DialogDescription>
+                              Add a new email subscriber to the platform.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <SubscriberForm 
+                            onClose={() => closeDialog(".subscribers-dialog[data-state='open'] [data-state='closed']")}
+                            onSubmit={handleAddSubscriber}
+                          />
+                        </DialogContent>
+                      </Dialog>
+                    </div>
+                    <div className="rounded-md border">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Email</TableHead>
+                            <TableHead>Status</TableHead>
+                            <TableHead>Joined Date</TableHead>
+                            <TableHead className="text-right">Actions</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {subscribers.map(subscriber => (
+                            <TableRow key={subscriber.id}>
+                              <TableCell className="font-medium">{subscriber.email}</TableCell>
+                              <TableCell>
+                                <span className={`inline-block px-2 py-1 text-xs rounded-full ${
+                                  subscriber.status === 'active' 
+                                    ? 'bg-green-100 text-green-800' 
+                                    : subscriber.status === 'unsubscribed'
+                                      ? 'bg-gray-100 text-gray-800'
+                                      : 'bg-red-100 text-red-800'
+                                }`}>
+                                  {subscriber.status}
+                                </span>
+                              </TableCell>
+                              <TableCell>{subscriber.joinedDate}</TableCell>
+                              <TableCell className="flex justify-end gap-2">
+                                <Dialog className="subscribers-dialog">
+                                  <DialogTrigger asChild>
+                                    <Button variant="ghost" size="icon">
+                                      <Pencil className="h-4 w-4" />
+                                    </Button>
+                                  </DialogTrigger>
+                                  <DialogContent>
+                                    <DialogHeader>
+                                      <DialogTitle>Edit Subscriber</DialogTitle>
+                                      <DialogDescription>
+                                        Update subscriber information.
+                                      </DialogDescription>
+                                    </DialogHeader>
+                                    <SubscriberForm 
+                                      initialData={subscriber}
+                                      onClose={() => closeDialog(".subscribers-dialog[data-state='open'] [data-state='closed']")}
+                                      onSubmit={(data) => handleEditSubscriber(subscriber.id, data)}
+                                    />
+                                  </DialogContent>
+                                </Dialog>
+                                
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon"
+                                  onClick={() => handleDeleteSubscriber(subscriber.id)}
+                                >
+                                  <Trash2 className="h-4 w-4 text-destructive" />
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  </TabsContent>
+                </Tabs>
+              </TabsContent>
+            </Tabs>
+          </main>
+        </div>
+      </div>
+    </SidebarProvider>
+  );
+};
+
+export default AdminDashboard;
