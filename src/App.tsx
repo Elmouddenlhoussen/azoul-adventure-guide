@@ -1,4 +1,3 @@
-
 import { Routes, Route } from 'react-router-dom'
 import Index from '@/pages/Index'
 import NotFound from '@/pages/NotFound'
@@ -16,6 +15,13 @@ import DestinationDetail from '@/pages/DestinationDetail'
 import UserProfile from '@/pages/UserProfile'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import AdminDashboard from '@/pages/AdminDashboard'
+import GuidesPage from '@/pages/GuidesPage'
+import CulturalToursPage from '@/pages/CulturalToursPage'
+import AccommodationsPage from '@/pages/AccommodationsPage'
+import GuideDetailPage from '@/pages/GuideDetailPage'
+import TourDetailPage from '@/pages/TourDetailPage'
+import AccommodationDetailPage from '@/pages/AccommodationDetailPage'
+import AdminRoutes from '@/components/admin/AdminRoutes'
 
 function App() {
   return (
@@ -24,7 +30,13 @@ function App() {
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/feature/:featureId" element={<FeatureDetail />} />
+        <Route path="/feature/guides" element={<GuidesPage />} />
+        <Route path="/feature/cultural-tours" element={<CulturalToursPage />} />
+        <Route path="/feature/accommodations" element={<AccommodationsPage />} />
         <Route path="/destination/:destinationId" element={<DestinationDetail />} />
+        <Route path="/guide/:guideId" element={<GuideDetailPage />} />
+        <Route path="/tour/:tourId" element={<TourDetailPage />} />
+        <Route path="/accommodation/:accommodationId" element={<AccommodationDetailPage />} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
@@ -36,9 +48,9 @@ function App() {
             <UserProfile />
           </ProtectedRoute>
         } />
-        <Route path="/admin" element={
+        <Route path="/admin/*" element={
           <ProtectedRoute requireAdmin={true}>
-            <AdminDashboard />
+            <AdminRoutes />
           </ProtectedRoute>
         } />
         <Route path="*" element={<NotFound />} />
