@@ -18,15 +18,7 @@ const accommodations = [
     location: 'Marrakech',
     address: '209 Rue Ank Jemel, Bab Taghzoute, Marrakech 40000',
     description: 'A stunning traditional riad with a famous courtyard pool, located in the heart of the Marrakech medina.',
-    longDescription: `Riad Yasmine is a traditional Moroccan house centrally located in the heart of the Marrakech medina, just a 10-minute walk from the famous Jemaa el-Fnaa square.
-
-This boutique hotel features 8 uniquely decorated rooms surrounding a picturesque central courtyard with its Instagram-famous geometric pool adorned with traditional Moroccan tiles. The riad beautifully combines authentic Moroccan architecture with modern comforts, creating a tranquil oasis in the bustling city.
-
-Each room is elegantly decorated with handcrafted furniture, luxurious fabrics, and traditional Moroccan elements. Guests can enjoy a refreshing dip in the courtyard pool, relax on the rooftop terrace with panoramic views of Marrakech and the Atlas Mountains, or indulge in traditional Moroccan cuisine at the on-site restaurant.
-
-The riad offers a range of services including airport transfers, guided tours, cooking classes, and spa treatments. The attentive staff is dedicated to ensuring a memorable stay, with personalized service that caters to your every need.
-
-Riad Yasmine provides the perfect blend of luxury, authenticity, and tranquility for an unforgettable Moroccan experience.`,
+    longDescription: "Riad Yasmine is a traditional Moroccan house centrally located in the heart of the Marrakech medina, just a 10-minute walk from the famous Jemaa el-Fnaa square.\n\nThis boutique hotel features 8 uniquely decorated rooms surrounding a picturesque central courtyard with its Instagram-famous geometric pool adorned with traditional Moroccan tiles. The riad beautifully combines authentic Moroccan architecture with modern comforts, creating a tranquil oasis in the bustling city.\n\nEach room is elegantly decorated with handcrafted furniture, luxurious fabrics, and traditional Moroccan elements. Guests can enjoy a refreshing dip in the courtyard pool, relax on the rooftop terrace with panoramic views of Marrakech and the Atlas Mountains, or indulge in traditional Moroccan cuisine at the on-site restaurant.\n\nThe riad offers a range of services including airport transfers, guided tours, cooking classes, and spa treatments. The attentive staff is dedicated to ensuring a memorable stay, with personalized service that caters to your every need.\n\nRiad Yasmine provides the perfect blend of luxury, authenticity, and tranquility for an unforgettable Moroccan experience.",
     price: 150,
     rating: 4.9,
     reviews: 218,

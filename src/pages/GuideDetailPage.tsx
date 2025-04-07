@@ -17,13 +17,7 @@ const guides = [
     name: 'Hassan El Ouazzani',
     location: 'Marrakech',
     bio: 'With 15 years of experience guiding visitors through the vibrant souks and hidden gems of Marrakech.',
-    about: `I was born and raised in Marrakech, where my family has lived for generations. After studying tourism and history at university, I decided to share my passion for my hometown with visitors from around the world.
-
-Over the past 15 years, I've guided thousands of travelers through the labyrinthine medina, helping them discover hidden gems that most tourists never see. I specialize in cultural and historical tours, with particular expertise in traditional crafts and Moroccan cuisine.
-
-My goal with every tour is to provide not just sightseeing, but a deeper understanding of Moroccan culture, traditions, and daily life. I speak fluent English, Arabic, French, and Spanish, allowing me to connect with a wide range of travelers.
-
-When I'm not guiding tours, I enjoy photography, cooking traditional Moroccan dishes, and exploring new areas of my country to expand my knowledge.`,
+    about: "I was born and raised in Marrakech, where my family has lived for generations. After studying tourism and history at university, I decided to share my passion for my hometown with visitors from around the world.\n\nOver the past 15 years, I've guided thousands of travelers through the labyrinthine medina, helping them discover hidden gems that most tourists never see. I specialize in cultural and historical tours, with particular expertise in traditional crafts and Moroccan cuisine.\n\nMy goal with every tour is to provide not just sightseeing, but a deeper understanding of Moroccan culture, traditions, and daily life. I speak fluent English, Arabic, French, and Spanish, allowing me to connect with a wide range of travelers.\n\nWhen I'm not guiding tours, I enjoy photography, cooking traditional Moroccan dishes, and exploring new areas of my country to expand my knowledge.",
     specialties: ['Cultural Tours', 'Food Experiences', 'Historical Sites', 'Photography Walks', 'Artisan Workshops'],
     languages: ['English', 'Arabic', 'French', 'Spanish'],
     experience: '15 years',
@@ -77,7 +71,7 @@ When I'm not guiding tours, I enjoy photography, cooking traditional Moroccan di
         country: 'Spain',
         date: 'January 22, 2023',
         rating: 4,
-        text: 'Great experience overall. Hassan's insights into local culture made our visit much more meaningful. The only reason for 4 stars instead of 5 was that the tour ran a bit longer than scheduled.'
+        text: "Great experience overall. Hassan's insights into local culture made our visit much more meaningful. The only reason for 4 stars instead of 5 was that the tour ran a bit longer than scheduled."
       }
     ],
     availability: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
