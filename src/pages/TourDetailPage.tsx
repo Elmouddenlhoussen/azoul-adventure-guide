@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Header from '@/components/Header';
@@ -15,8 +14,8 @@ const tours = [
   {
     id: 'medina-tour',
     name: 'Marrakech Medina Insider Tour',
-    tagline: 'Explore the hidden treasures of Marrakech's historic medina',
-    description: 'Join our expert local guide for an immersive journey through the winding alleys of Marrakech\'s UNESCO-listed medina. Discover hidden architectural gems, visit artisan workshops, and experience the authentic daily life of this ancient walled city.',
+    tagline: "Explore the hidden treasures of Marrakech's historic medina",
+    description: "Join our expert local guide for an immersive journey through the winding alleys of Marrakech's UNESCO-listed medina. Discover hidden architectural gems, visit artisan workshops, and experience the authentic daily life of this ancient walled city.",
     duration: '4 hours',
     price: 65,
     rating: 4.8,
@@ -104,7 +103,7 @@ const tours = [
         country: 'United Kingdom',
         date: 'February 8, 2023',
         rating: 5,
-        text: 'Exceptional tour that goes well beyond the typical tourist experience. Our guide was knowledgeable and personable, and adjusted the pace to our group\'s interests. The artisan workshops were fascinating.'
+        text: "Exceptional tour that goes well beyond the typical tourist experience. Our guide was knowledgeable and personable, and adjusted the pace to our group's interests. The artisan workshops were fascinating."
       },
       {
         id: 3,
