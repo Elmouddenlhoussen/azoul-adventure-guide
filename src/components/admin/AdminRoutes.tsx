@@ -5,6 +5,7 @@ import UsersManagement from '@/pages/admin/UsersManagement';
 import DestinationsManagement from '@/pages/admin/DestinationsManagement';
 import GuidesManagement from '@/pages/admin/GuidesManagement';
 import ToursManagement from '@/pages/admin/ToursManagement';
+import AccommodationsManagement from '@/pages/admin/AccommodationsManagement';
 import { AdminSidebar } from './AdminSidebar';
 
 const AdminRoutes = () => {
@@ -18,6 +19,7 @@ const AdminRoutes = () => {
           <Route path="destinations" element={<DestinationsManagement />} />
           <Route path="guides" element={<GuidesManagement />} />
           <Route path="tours" element={<ToursManagement />} />
+          <Route path="accommodations" element={<AccommodationsManagement />} />
         </Routes>
       </div>
     </div>
