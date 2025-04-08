@@ -6,85 +6,113 @@ import Footer from '@/components/Footer';
 import AnimatedTransition from '@/components/AnimatedTransition';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent } from '@/components/ui/card';
-import { MapPin, Calendar, Star, Wifi, Coffee, Utensils, Users, Bath, ParkingSquare, PhoneCall, Mail, ExternalLink } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Star, MapPin, Wifi, Bath, Users, Utensils, AirVent, Bed, Coffee, Check, X } from 'lucide-react';
 
 // Sample accommodation data
 const accommodations = [
   {
-    id: 'riad-marrakech',
+    id: 'riad-al-andalous',
     name: 'Riad Al Andalous',
-    location: 'Marrakech',
-    description: "Experience authentic Moroccan hospitality at this beautiful riad located in the heart of Marrakech's historic medina.",
-    about: "Nestled within the ancient walls of Marrakech's medina, Riad Al Andalous offers an oasis of tranquility just steps from the bustling souks and Jemaa el-Fnaa square.\n\nThis traditional Moroccan house has been meticulously restored to showcase its original architectural features while providing modern comforts. Built around a central courtyard with a refreshing plunge pool, the riad features hand-crafted zellige tiles, carved cedar wood, and ornate plasterwork throughout.\n\nEach of our seven uniquely decorated rooms combines authentic Moroccan design with contemporary amenities. Guests can enjoy our rooftop terrace with panoramic views of the medina and Atlas Mountains, perfect for breakfast or evening relaxation under the stars.\n\nOur attentive staff provides personalized service to ensure an unforgettable stay, offering local insights and arranging experiences from cooking classes to desert excursions.",
-    features: ['Rooftop Terrace', 'Plunge Pool', 'Free WiFi', 'Breakfast Included', 'Airport Transfer Available', 'Concierge Service'],
-    amenities: ['Air Conditioning', 'En-suite Bathrooms', 'Traditional Hammam', 'Restaurant', 'Room Service', '24-Hour Reception'],
+    tagline: 'Traditional Moroccan luxury in the heart of Marrakech',
+    description: "Experience the charm of a traditional Moroccan riad with modern comforts. Riad Al Andalous offers an authentic stay with ornate architecture, a serene courtyard with plunge pool, and a rooftop terrace overlooking the medina. Just a 10-minute walk from the famous Jemaa el-Fnaa square, it's perfectly located for exploring Marrakech's historic attractions.",
+    location: 'Marrakech, Morocco',
+    address: '27 Derb Moulay Abdelkader, Medina, Marrakech 40000, Morocco',
     price: 120,
     rating: 4.8,
-    reviewCount: 94,
-    image: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=400&h=300&fit=crop',
-    coverImage: 'https://images.unsplash.com/photo-1520904740785-e5199d0b4038?w=1200&h=400&fit=crop',
+    reviewCount: 158,
+    type: 'Riad',
+    features: ['Free WiFi', 'Air conditioning', 'Swimming pool', 'Breakfast included', 'Airport transfers', 'Rooftop terrace', 'Daily housekeeping'],
+    amenities: {
+      roomFeatures: ['Air conditioning', 'Private bathroom', 'Free toiletries', 'Hairdryer', 'Safe', 'Premium bedding'],
+      propertyAmenities: ['Swimming pool', 'Rooftop terrace', 'Restaurant', 'Room service', '24-hour front desk', 'Concierge service'],
+      dining: ['Breakfast included', 'Restaurant on-site', 'Room service', 'Special diet menus on request']
+    },
     rooms: [
       {
-        id: 'standard-room',
         name: 'Standard Room',
         price: 120,
-        size: '25m²',
-        beds: '1 Queen Bed',
-        occupancy: '2 Guests',
-        image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=300&h=200&fit=crop'
+        description: 'Traditional room featuring a queen-sized bed, private bathroom, and authentic Moroccan décor.',
+        occupancy: '2 guests',
+        beds: '1 Queen bed'
       },
       {
-        id: 'deluxe-room',
         name: 'Deluxe Room',
-        price: 160,
-        size: '35m²',
-        beds: '1 King Bed',
-        occupancy: '2 Guests',
-        image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=300&h=200&fit=crop'
+        price: 150,
+        description: 'Spacious room with a king-sized bed, sitting area, private bathroom, and courtyard views.',
+        occupancy: '2 guests',
+        beds: '1 King bed'
       },
       {
-        id: 'suite',
-        name: 'Royal Suite',
+        name: 'Family Suite',
         price: 220,
-        size: '50m²',
-        beds: '1 King Bed',
-        occupancy: '2 Adults + 1 Child',
-        image: 'https://images.unsplash.com/photo-1591088398332-8a7791972843?w=300&h=200&fit=crop'
+        description: 'Two connected rooms perfect for families, featuring a king-sized bed in one room and two twin beds in the other.',
+        occupancy: '4 guests',
+        beds: '1 King bed, 2 Twin beds'
       }
+    ],
+    mainImage: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?w=600&h=400&fit=crop',
+    coverImage: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?w=1200&h=400&fit=crop',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1633847734607-9a2ab8ee3b83?w=300&h=200&fit=crop',
+      'https://images.unsplash.com/photo-1532248339255-617b161a223c?w=300&h=200&fit=crop',
+      'https://images.unsplash.com/photo-1604710063041-95c6e38bf025?w=300&h=200&fit=crop',
+      'https://images.unsplash.com/photo-1584962118157-8629a8e721d7?w=300&h=200&fit=crop',
     ],
     reviews: [
       {
         id: 1,
-        name: "David M.",
-        country: "United Kingdom",
-        date: "April 2, 2023",
+        name: 'Emma W.',
+        country: 'Canada',
+        date: 'April 12, 2023',
         rating: 5,
-        text: "This riad exceeded our expectations. The attention to detail in the decor, the friendly and helpful staff, and the amazing breakfast on the rooftop terrace made our stay in Marrakech truly special."
+        text: "This riad is absolutely stunning! The attention to detail in the decor is amazing, and the staff made us feel like family. Breakfast on the rooftop terrace was a highlight each morning. The location is perfect - quiet but close to all the main attractions."
       },
       {
         id: 2,
-        name: "Sophie L.",
-        country: "France",
-        date: "March 15, 2023",
+        name: 'Miguel S.',
+        country: 'Spain',
+        date: 'March 24, 2023',
         rating: 4,
-        text: "Beautiful traditional riad with comfortable rooms and excellent service. The location is perfect - quiet but just minutes from the main square and souks."
+        text: "Beautiful traditional riad with excellent service. The courtyard with the pool is a peaceful oasis after busy days in the medina. Rooms are comfortable and authentically decorated. Only small issue was occasional noise from the nearby mosque very early in the morning."
       },
       {
         id: 3,
-        name: "Michael T.",
-        country: "United States",
-        date: "February 28, 2023",
+        name: 'Laura P.',
+        country: 'United Kingdom',
+        date: 'February 18, 2023',
         rating: 5,
-        text: "An amazing place to stay! The architecture and design are stunning, and the staff went above and beyond to make our stay memorable. Would definitely return."
+        text: "One of the best places we've stayed in Morocco. The staff arranged a wonderful private dinner for us in the courtyard. The room was spacious, beautifully decorated with local artisan work, and the bed was extremely comfortable. Highly recommend!"
       }
     ],
-    availability: ["April", "May", "June", "September", "October", "November"],
-    contact: {
-      email: "info@riadalandalous.com",
-      phone: "+212 524 378 565",
-      website: "www.riadalandalous.com"
-    }
+    policies: {
+      checkIn: '2:00 PM - 10:00 PM',
+      checkOut: 'Until 12:00 PM',
+      cancellation: 'Free cancellation up to 7 days before arrival. Cancellations within 7 days of arrival are subject to a one-night charge.',
+      children: 'Children of all ages are welcome.',
+      pets: 'Pets are not allowed.',
+      smoking: 'Smoking is not permitted inside the property.',
+      payments: 'Accepts credit cards and cash.'
+    },
+    faqs: [
+      {
+        question: 'Is airport transfer available?',
+        answer: 'Yes, we offer airport transfers for an additional fee of €20 each way. Please contact us in advance to arrange this service.'
+      },
+      {
+        question: 'Can you accommodate special dietary requirements?',
+        answer: 'Yes, our kitchen can accommodate vegetarian, vegan, gluten-free, and other dietary requirements with advance notice.'
+      },
+      {
+        question: 'Is there parking available nearby?',
+        answer: 'As we are located in the medina (car-free zone), there is no direct parking. However, there is a secure parking lot about a 5-minute walk from the riad, priced at €5 per day.'
+      },
+      {
+        question: 'Do you offer excursions or tour services?',
+        answer: 'Yes, our concierge can arrange guided tours, day trips to the Atlas Mountains, desert excursions, and other activities.'
+      }
+    ],
+    nearby: ['Jemaa el-Fnaa square (10-minute walk)', 'Bahia Palace (15-minute walk)', 'Koutoubia Mosque (12-minute walk)', 'Majorelle Garden (30-minute walk or 10-minute taxi ride)']
   }
 ];
 
@@ -123,20 +151,26 @@ const AccommodationDetailPage = () => {
           <div className="relative h-64 md:h-80 overflow-hidden">
             <img 
               src={accommodation.coverImage} 
-              alt={`${accommodation.name} cover`} 
+              alt={`${accommodation.name} cover`}
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-black bg-opacity-30"></div>
+            <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+              <div className="container mx-auto">
+                <h1 className="text-3xl md:text-4xl font-bold mb-2">{accommodation.name}</h1>
+                <p className="text-lg opacity-90">{accommodation.tagline}</p>
+              </div>
+            </div>
           </div>
           
           {/* Accommodation Info Section */}
-          <div className="container mx-auto px-4 -mt-20 relative z-10">
-            <div className="bg-white rounded-lg shadow-lg p-6 md:p-8">
-              <div className="flex flex-col md:flex-row gap-6">
-                <div className="flex-grow">
-                  <h1 className="text-3xl font-bold mb-2">{accommodation.name}</h1>
-                  
-                  <div className="flex flex-wrap items-center gap-4 mb-4">
+          <div className="container mx-auto px-4 py-8">
+            <div className="flex flex-col lg:flex-row gap-8">
+              {/* Left Column - Main Content */}
+              <div className="w-full lg:w-2/3">
+                <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+                  <div className="flex flex-wrap items-center gap-4 mb-6">
+                    <Badge className="bg-morocco-clay hover:bg-morocco-clay/80">{accommodation.type}</Badge>
                     <div className="flex items-center">
                       <MapPin className="h-4 w-4 mr-1 text-morocco-clay" />
                       <span className="text-gray-600">{accommodation.location}</span>
@@ -147,267 +181,365 @@ const AccommodationDetailPage = () => {
                     </div>
                   </div>
                   
-                  <p className="text-gray-700 mb-6">{accommodation.description}</p>
+                  <div className="mb-8">
+                    <div className="flex gap-4 mb-6">
+                      <img 
+                        src={accommodation.mainImage} 
+                        alt={accommodation.name} 
+                        className="w-full rounded-lg"
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                      {accommodation.galleryImages.map((image, index) => (
+                        <img 
+                          key={index} 
+                          src={image} 
+                          alt={`${accommodation.name} gallery ${index + 1}`} 
+                          className="w-full h-24 object-cover rounded-md cursor-pointer hover:opacity-90 transition-opacity"
+                        />
+                      ))}
+                    </div>
+                  </div>
                   
-                  <div className="flex flex-wrap gap-2 mb-6">
+                  <div className="prose max-w-none">
+                    <p className="text-gray-700 text-lg mb-6">{accommodation.description}</p>
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-4 my-6">
                     {accommodation.features.map((feature, index) => (
-                      <span 
-                        key={index} 
-                        className="bg-morocco-sand/20 text-morocco-clay text-xs px-3 py-1 rounded-full"
-                      >
+                      <span key={index} className="flex items-center px-3 py-1 bg-gray-100 rounded-full text-sm">
+                        <Check className="h-3.5 w-3.5 mr-1.5 text-morocco-clay" />
                         {feature}
                       </span>
                     ))}
                   </div>
                 </div>
                 
-                <div className="shrink-0 flex flex-col gap-3 md:w-64">
-                  <div className="bg-gray-50 p-4 rounded-lg text-center">
-                    <p className="text-sm text-gray-500 mb-1">Starting from</p>
-                    <p className="text-3xl font-bold text-morocco-clay mb-1">${accommodation.price}</p>
-                    <p className="text-sm text-gray-500 mb-4">per night</p>
-                    <Button className="w-full mb-2">Book Now</Button>
-                    <Button variant="outline" className="w-full">Check Availability</Button>
-                  </div>
+                {/* Tabs Section */}
+                <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+                  <Tabs defaultValue="rooms" className="w-full">
+                    <TabsList className="grid w-full grid-cols-4 mb-8">
+                      <TabsTrigger value="rooms">Rooms</TabsTrigger>
+                      <TabsTrigger value="amenities">Amenities</TabsTrigger>
+                      <TabsTrigger value="policies">Policies</TabsTrigger>
+                      <TabsTrigger value="reviews">Reviews</TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value="rooms" className="space-y-6">
+                      <h2 className="text-2xl font-bold mb-4">Available Rooms</h2>
+                      
+                      <div className="space-y-6">
+                        {accommodation.rooms.map((room, index) => (
+                          <div key={index} className="border rounded-lg overflow-hidden">
+                            <div className="grid grid-cols-1 md:grid-cols-3">
+                              <div className="md:col-span-2 p-6">
+                                <h3 className="text-xl font-bold mb-2">{room.name}</h3>
+                                <div className="flex items-center gap-4 mb-3 text-sm text-gray-600">
+                                  <div className="flex items-center">
+                                    <Users className="h-4 w-4 mr-1" />
+                                    {room.occupancy}
+                                  </div>
+                                  <div className="flex items-center">
+                                    <Bed className="h-4 w-4 mr-1" />
+                                    {room.beds}
+                                  </div>
+                                </div>
+                                <p className="text-gray-700">{room.description}</p>
+                              </div>
+                              <div className="p-6 bg-gray-50 flex flex-col items-center justify-center border-l">
+                                <p className="text-2xl font-bold text-morocco-clay">${room.price}</p>
+                                <p className="text-gray-500 mb-4">per night</p>
+                                <Button className="w-full">Book Now</Button>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </TabsContent>
+                    
+                    <TabsContent value="amenities">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div>
+                          <h2 className="text-xl font-bold mb-4 flex items-center">
+                            <Bed className="h-5 w-5 mr-2 text-morocco-clay" />
+                            Room Features
+                          </h2>
+                          <ul className="space-y-3">
+                            {accommodation.amenities.roomFeatures.map((feature, index) => (
+                              <li key={index} className="flex items-center">
+                                <Check className="h-4 w-4 mr-2 text-green-600" />
+                                {feature}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        
+                        <div>
+                          <h2 className="text-xl font-bold mb-4 flex items-center">
+                            <Bath className="h-5 w-5 mr-2 text-morocco-clay" />
+                            Property Amenities
+                          </h2>
+                          <ul className="space-y-3">
+                            {accommodation.amenities.propertyAmenities.map((amenity, index) => (
+                              <li key={index} className="flex items-center">
+                                <Check className="h-4 w-4 mr-2 text-green-600" />
+                                {amenity}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        
+                        <div>
+                          <h2 className="text-xl font-bold mb-4 flex items-center">
+                            <Utensils className="h-5 w-5 mr-2 text-morocco-clay" />
+                            Dining
+                          </h2>
+                          <ul className="space-y-3">
+                            {accommodation.amenities.dining.map((item, index) => (
+                              <li key={index} className="flex items-center">
+                                <Check className="h-4 w-4 mr-2 text-green-600" />
+                                {item}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                      
+                      <div className="mt-8 pt-8 border-t">
+                        <h2 className="text-2xl font-bold mb-4">Nearby Attractions</h2>
+                        <ul className="space-y-2">
+                          {accommodation.nearby.map((item, index) => (
+                            <li key={index} className="flex items-center">
+                              <MapPin className="h-4 w-4 mr-3 text-morocco-clay" />
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </TabsContent>
+                    
+                    <TabsContent value="policies">
+                      <h2 className="text-2xl font-bold mb-6">Hotel Policies</h2>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="space-y-6">
+                          <div>
+                            <h3 className="text-lg font-semibold mb-2">Check-in / Check-out</h3>
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <p className="text-sm text-gray-500">Check-in Time</p>
+                                <p>{accommodation.policies.checkIn}</p>
+                              </div>
+                              <div>
+                                <p className="text-sm text-gray-500">Check-out Time</p>
+                                <p>{accommodation.policies.checkOut}</p>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div>
+                            <h3 className="text-lg font-semibold mb-2">Cancellation Policy</h3>
+                            <p>{accommodation.policies.cancellation}</p>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-6">
+                          <div>
+                            <h3 className="text-lg font-semibold mb-2">House Rules</h3>
+                            <ul className="space-y-3">
+                              <li className="flex items-start">
+                                <div className="mt-0.5">
+                                  {accommodation.policies.children.includes("welcome") ? 
+                                    <Check className="h-4 w-4 mr-2 text-green-600" /> : 
+                                    <X className="h-4 w-4 mr-2 text-red-600" />
+                                  }
+                                </div>
+                                <div>
+                                  <span className="font-medium">Children:</span> {accommodation.policies.children}
+                                </div>
+                              </li>
+                              <li className="flex items-start">
+                                <div className="mt-0.5">
+                                  {accommodation.policies.pets.includes("allowed") ? 
+                                    <Check className="h-4 w-4 mr-2 text-green-600" /> : 
+                                    <X className="h-4 w-4 mr-2 text-red-600" />
+                                  }
+                                </div>
+                                <div>
+                                  <span className="font-medium">Pets:</span> {accommodation.policies.pets}
+                                </div>
+                              </li>
+                              <li className="flex items-start">
+                                <div className="mt-0.5">
+                                  {accommodation.policies.smoking.includes("permitted") ? 
+                                    <Check className="h-4 w-4 mr-2 text-green-600" /> : 
+                                    <X className="h-4 w-4 mr-2 text-red-600" />
+                                  }
+                                </div>
+                                <div>
+                                  <span className="font-medium">Smoking:</span> {accommodation.policies.smoking}
+                                </div>
+                              </li>
+                              <li className="flex items-start">
+                                <div className="mt-0.5">
+                                  <Check className="h-4 w-4 mr-2 text-green-600" /> 
+                                </div>
+                                <div>
+                                  <span className="font-medium">Payments:</span> {accommodation.policies.payments}
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </TabsContent>
+                    
+                    <TabsContent value="reviews">
+                      <div className="flex items-center justify-between mb-6">
+                        <h2 className="text-2xl font-bold">Guest Reviews</h2>
+                        <div className="flex items-center">
+                          <Star className="h-5 w-5 text-yellow-500 fill-current mr-2" />
+                          <span className="text-xl font-bold">{accommodation.rating}</span>
+                          <span className="text-gray-500 ml-2">({accommodation.reviewCount} reviews)</span>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-6">
+                        {accommodation.reviews.map((review) => (
+                          <div key={review.id} className="border-b pb-6">
+                            <div className="flex justify-between items-start mb-2">
+                              <div>
+                                <p className="font-medium">{review.name}</p>
+                                <p className="text-sm text-gray-500">{review.country}</p>
+                              </div>
+                              <div className="flex">
+                                {Array(5).fill(0).map((_, i) => (
+                                  <Star 
+                                    key={i} 
+                                    className={`h-4 w-4 ${i < review.rating ? 'text-yellow-500 fill-current' : 'text-gray-300'}`} 
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                            <p className="text-sm text-gray-500 mb-2">{review.date}</p>
+                            <p className="text-gray-700">{review.text}</p>
+                          </div>
+                        ))}
+                      </div>
+                      
+                      <Button className="mt-6" variant="outline">
+                        Show All Reviews
+                      </Button>
+                    </TabsContent>
+                  </Tabs>
                 </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Main Content */}
-          <div className="container mx-auto px-4 py-12">
-            <Tabs defaultValue="about" className="w-full">
-              <TabsList className="grid w-full grid-cols-4 mb-8">
-                <TabsTrigger value="about">About</TabsTrigger>
-                <TabsTrigger value="rooms">Rooms</TabsTrigger>
-                <TabsTrigger value="reviews">Reviews</TabsTrigger>
-                <TabsTrigger value="location">Location</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="about" className="space-y-6">
-                <h2 className="text-2xl font-bold mb-4">About {accommodation.name}</h2>
-                {accommodation.about.split("\n\n").map((paragraph, index) => (
-                  <p key={index} className="text-gray-700">{paragraph}</p>
-                ))}
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                  <div className="bg-morocco-sand/10 rounded-lg p-6">
-                    <h3 className="text-xl font-bold mb-4">Amenities</h3>
-                    <ul className="space-y-2 grid grid-cols-1 sm:grid-cols-2 gap-x-4">
-                      {accommodation.amenities.map((amenity, index) => (
-                        <li key={index} className="flex items-center">
-                          {amenity.includes("WiFi") && <Wifi className="h-4 w-4 mr-2 text-morocco-clay" />}
-                          {amenity.includes("Breakfast") && <Coffee className="h-4 w-4 mr-2 text-morocco-clay" />}
-                          {amenity.includes("Restaurant") && <Utensils className="h-4 w-4 mr-2 text-morocco-clay" />}
-                          {amenity.includes("Bathroom") && <Bath className="h-4 w-4 mr-2 text-morocco-clay" />}
-                          {amenity.includes("Parking") && <ParkingSquare className="h-4 w-4 mr-2 text-morocco-clay" />}
-                          {!amenity.includes("WiFi") && 
-                           !amenity.includes("Breakfast") && 
-                           !amenity.includes("Restaurant") && 
-                           !amenity.includes("Bathroom") && 
-                           !amenity.includes("Parking") && 
-                           <span className="h-2 w-2 bg-morocco-clay rounded-full mr-2"></span>}
-                          {amenity}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  
-                  <div className="bg-morocco-sand/10 rounded-lg p-6">
-                    <h3 className="text-xl font-bold mb-4">Contact Information</h3>
-                    <ul className="space-y-4">
-                      <li className="flex items-start">
-                        <PhoneCall className="h-5 w-5 mr-3 text-morocco-clay shrink-0 mt-0.5" />
-                        <span>{accommodation.contact.phone}</span>
-                      </li>
-                      <li className="flex items-start">
-                        <Mail className="h-5 w-5 mr-3 text-morocco-clay shrink-0 mt-0.5" />
-                        <span>{accommodation.contact.email}</span>
-                      </li>
-                      <li className="flex items-start">
-                        <ExternalLink className="h-5 w-5 mr-3 text-morocco-clay shrink-0 mt-0.5" />
-                        <a href={`https://${accommodation.contact.website}`} target="_blank" rel="noopener noreferrer" className="text-morocco-clay hover:underline">
-                          {accommodation.contact.website}
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                
-                <div className="mt-8">
-                  <h3 className="text-xl font-bold mb-4">Availability</h3>
-                  <p className="mb-4">The accommodation is available during these months:</p>
-                  <div className="flex flex-wrap gap-2">
-                    {["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].map((month) => (
-                      <span
-                        key={month}
-                        className={`px-3 py-1 rounded-full text-sm ${
-                          accommodation.availability.includes(month)
-                            ? "bg-green-100 text-green-800"
-                            : "bg-gray-100 text-gray-800"
-                        }`}
-                      >
-                        {month}
-                      </span>
+                {/* FAQ Section */}
+                <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+                  <h2 className="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
+                  <div className="space-y-4">
+                    {accommodation.faqs.map((faq, index) => (
+                      <div key={index} className="border-b pb-4">
+                        <h3 className="text-lg font-semibold mb-2">{faq.question}</h3>
+                        <p className="text-gray-700">{faq.answer}</p>
+                      </div>
                     ))}
                   </div>
                 </div>
-              </TabsContent>
+              </div>
               
-              <TabsContent value="rooms">
-                <h2 className="text-2xl font-bold mb-6">Rooms at {accommodation.name}</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {accommodation.rooms.map((room) => (
-                    <Card key={room.id} className="overflow-hidden">
-                      <div className="relative">
-                        <img 
-                          src={room.image} 
-                          alt={room.name}
-                          className="w-full h-48 object-cover"
-                        />
-                      </div>
-                      <CardContent className="pt-4">
-                        <h3 className="text-xl font-bold mb-2">{room.name}</h3>
-                        <div className="space-y-2 mb-4">
-                          <div className="flex items-center text-gray-600">
-                            <Users className="h-4 w-4 mr-2" />
-                            {room.occupancy}
-                          </div>
-                          <div className="flex items-center text-gray-600">
-                            <span className="inline-block w-4 mr-2">🛏️</span>
-                            {room.beds}
-                          </div>
-                          <div className="flex items-center text-gray-600">
-                            <span className="inline-block w-4 mr-2">📏</span>
-                            {room.size}
-                          </div>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-morocco-clay text-xl font-bold">${room.price}/night</span>
-                          <Button>Book Now</Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="reviews">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold">Guest Reviews</h2>
-                  <div className="flex items-center">
-                    <Star className="h-5 w-5 text-yellow-500 fill-current mr-2" />
-                    <span className="text-xl font-bold">{accommodation.rating}</span>
-                    <span className="text-gray-500 ml-2">({accommodation.reviewCount} reviews)</span>
-                  </div>
-                </div>
-                
-                <div className="space-y-6">
-                  {accommodation.reviews.map((review) => (
-                    <div key={review.id} className="border-b pb-6">
-                      <div className="flex justify-between items-start mb-2">
-                        <div>
-                          <p className="font-medium">{review.name}</p>
-                          <p className="text-sm text-gray-500">{review.country}</p>
-                        </div>
-                        <div className="flex">
-                          {Array(5).fill(0).map((_, i) => (
-                            <Star 
-                              key={i} 
-                              className={`h-4 w-4 ${i < review.rating ? "text-yellow-500 fill-current" : "text-gray-300"}`} 
-                            />
-                          ))}
-                        </div>
-                      </div>
-                      <p className="text-sm text-gray-500 mb-2">{review.date}</p>
-                      <p className="text-gray-700">{review.text}</p>
-                    </div>
-                  ))}
-                </div>
-                
-                <Button className="mt-6" variant="outline">Show All Reviews</Button>
-              </TabsContent>
-              
-              <TabsContent value="location">
-                <h2 className="text-2xl font-bold mb-6">Location</h2>
-                <div className="bg-gray-100 rounded-lg overflow-hidden h-96 mb-8">
-                  {/* Map placeholder - in real project would use Google Maps or similar */}
-                  <div className="w-full h-full flex items-center justify-center bg-gray-200">
-                    <p className="text-gray-500">Interactive map would be displayed here</p>
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div>
-                    <h3 className="text-xl font-bold mb-4">Address</h3>
-                    <p className="text-gray-700 mb-6">
-                      123 Derb El Cadi, Rue Riad Zitoun El Kdim<br />
-                      Medina, Marrakech 40000<br />
-                      Morocco
-                    </p>
-                    
-                    <h3 className="text-xl font-bold mb-4">Nearby Attractions</h3>
-                    <ul className="space-y-2">
-                      <li className="flex items-start">
-                        <span className="h-2 w-2 bg-morocco-clay rounded-full mr-2 mt-2"></span>
-                        <span>Jemaa el-Fnaa Square (5-minute walk)</span>
-                      </li>
-                      <li className="flex items-start">
-                        <span className="h-2 w-2 bg-morocco-clay rounded-full mr-2 mt-2"></span>
-                        <span>Bahia Palace (10-minute walk)</span>
-                      </li>
-                      <li className="flex items-start">
-                        <span className="h-2 w-2 bg-morocco-clay rounded-full mr-2 mt-2"></span>
-                        <span>Souks (8-minute walk)</span>
-                      </li>
-                      <li className="flex items-start">
-                        <span className="h-2 w-2 bg-morocco-clay rounded-full mr-2 mt-2"></span>
-                        <span>Koutoubia Mosque (15-minute walk)</span>
-                      </li>
-                    </ul>
+              {/* Right Column - Booking Widget */}
+              <div className="w-full lg:w-1/3">
+                <div className="bg-white rounded-lg shadow-lg p-6 sticky top-24">
+                  <div className="mb-4 pb-4 border-b">
+                    <h3 className="text-2xl font-bold text-morocco-clay">${accommodation.price}</h3>
+                    <p className="text-gray-500">per night</p>
                   </div>
                   
-                  <div>
-                    <h3 className="text-xl font-bold mb-4">Getting There</h3>
-                    <ul className="space-y-4">
-                      <li>
-                        <p className="font-medium mb-1">From Marrakech Menara Airport (RAK)</p>
-                        <p className="text-gray-700">20-minute drive (7.5 km). Airport transfers available for an additional fee.</p>
-                      </li>
-                      <li>
-                        <p className="font-medium mb-1">From Marrakech Train Station</p>
-                        <p className="text-gray-700">15-minute drive (3.5 km). Taxis readily available.</p>
-                      </li>
-                      <li>
-                        <p className="font-medium mb-1">Parking</p>
-                        <p className="text-gray-700">No on-site parking. Public parking available at Jemaa el-Fnaa (7-minute walk).</p>
-                      </li>
-                    </ul>
+                  <div className="space-y-4 mb-6">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label htmlFor="check-in" className="block text-sm font-medium text-gray-700 mb-1">
+                          Check In
+                        </label>
+                        <input 
+                          type="date"
+                          id="check-in"
+                          className="w-full border rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-morocco-clay"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="check-out" className="block text-sm font-medium text-gray-700 mb-1">
+                          Check Out
+                        </label>
+                        <input 
+                          type="date"
+                          id="check-out"
+                          className="w-full border rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-morocco-clay"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label htmlFor="guests" className="block text-sm font-medium text-gray-700 mb-1">
+                        Guests
+                      </label>
+                      <select 
+                        id="guests"
+                        className="w-full border rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-morocco-clay"
+                      >
+                        <option value="1">1 Guest</option>
+                        <option value="2">2 Guests</option>
+                        <option value="3">3 Guests</option>
+                        <option value="4">4 Guests</option>
+                      </select>
+                    </div>
+                    
+                    <div>
+                      <label htmlFor="room-type" className="block text-sm font-medium text-gray-700 mb-1">
+                        Room Type
+                      </label>
+                      <select 
+                        id="room-type"
+                        className="w-full border rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-morocco-clay"
+                      >
+                        {accommodation.rooms.map((room, index) => (
+                          <option key={index} value={room.name.toLowerCase().replace(' ', '-')}>
+                            {room.name} (${room.price}/night)
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
-                </div>
-              </TabsContent>
-            </Tabs>
-          </div>
-          
-          {/* CTA Section */}
-          <section className="bg-morocco-clay text-white py-16">
-            <div className="container mx-auto px-4">
-              <div className="max-w-3xl mx-auto text-center">
-                <h2 className="text-3xl font-bold mb-6">Ready to Experience {accommodation.name}?</h2>
-                <p className="text-lg mb-8">
-                  Book your stay now and immerse yourself in authentic Moroccan hospitality at this beautiful {accommodation.location} accommodation.
-                </p>
-                <div className="flex flex-col sm:flex-row justify-center gap-4">
-                  <Button variant="outline" className="text-white border-white hover:bg-white hover:text-morocco-clay">
-                    View All Rooms
-                  </Button>
-                  <Button className="bg-white text-morocco-clay hover:bg-gray-100">
-                    Book Now
-                  </Button>
+                  
+                  <Button className="w-full mb-4">Check Availability</Button>
+                  <Button variant="outline" className="w-full">Contact Property</Button>
+                  
+                  <div className="mt-6 pt-6 border-t">
+                    <h3 className="text-lg font-semibold mb-3">Property Highlights</h3>
+                    <div className="grid grid-cols-2 gap-y-2">
+                      <div className="flex items-center">
+                        <Wifi className="h-4 w-4 mr-2 text-morocco-clay" />
+                        <span className="text-sm">Free WiFi</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Coffee className="h-4 w-4 mr-2 text-morocco-clay" />
+                        <span className="text-sm">Breakfast included</span>
+                      </div>
+                      <div className="flex items-center">
+                        <AirVent className="h-4 w-4 mr-2 text-morocco-clay" />
+                        <span className="text-sm">Air conditioning</span>
+                      </div>
+                      <div className="flex items-center">
+                        <MapPin className="h-4 w-4 mr-2 text-morocco-clay" />
+                        <span className="text-sm">Central location</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </section>
+          </div>
         </main>
         
         <Footer />

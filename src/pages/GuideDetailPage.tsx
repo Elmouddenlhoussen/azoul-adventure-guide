@@ -22,7 +22,7 @@ const guides = [
     languages: ['English', 'Arabic', 'French', 'Spanish'],
     experience: '15 years',
     rating: 4.9,
-    reviews: 127,
+    reviewCount: 127,
     image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
     coverImage: 'https://images.unsplash.com/photo-1539721972319-f0e80a00d424?w=1200&h=400&fit=crop',
     tours: [
@@ -152,7 +152,7 @@ const GuideDetailPage = () => {
                     </div>
                     <div className="flex items-center">
                       <Star className="h-4 w-4 mr-1 text-yellow-500 fill-current" />
-                      <span className="text-gray-600">{guide.rating} ({guide.reviews.length} reviews)</span>
+                      <span className="text-gray-600">{guide.rating} ({guide.reviewCount} reviews)</span>
                     </div>
                   </div>
                   
@@ -277,7 +277,7 @@ const GuideDetailPage = () => {
                   <div className="flex items-center">
                     <Star className="h-5 w-5 text-yellow-500 fill-current mr-2" />
                     <span className="text-xl font-bold">{guide.rating}</span>
-                    <span className="text-gray-500 ml-2">({guide.reviews.length} reviews)</span>
+                    <span className="text-gray-500 ml-2">({guide.reviewCount} reviews)</span>
                   </div>
                 </div>
                 

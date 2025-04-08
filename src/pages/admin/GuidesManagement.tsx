@@ -4,15 +4,14 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { Edit, Trash2, Plus, Search, Eye } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 // Sample data for guides
 const guides = [
-  { id: 1, name: 'Hassan El Ouazzani', location: 'Marrakech', languages: ['English', 'Arabic', 'French'], rating: 4.9, verified: true },
-  { id: 2, name: 'Fatima Zahra', location: 'Fes', languages: ['English', 'Arabic', 'Spanish'], rating: 4.7, verified: true },
-  { id: 3, name: 'Mohammed Alami', location: 'Chefchaouen', languages: ['English', 'Arabic', 'German'], rating: 4.8, verified: true },
-  { id: 4, name: 'Amina Tazi', location: 'Essaouira', languages: ['English', 'Arabic', 'French'], rating: 4.5, verified: false },
-  { id: 5, name: 'Youssef Benjelloun', location: 'Tangier', languages: ['English', 'Arabic', 'Italian'], rating: 4.6, verified: true },
+  { id: 1, name: 'Hassan El Ouazzani', location: 'Marrakech', languages: 'English, Arabic, French, Spanish', specialties: 'Cultural Tours, Food Experiences', rating: 4.8, featured: true },
+  { id: 2, name: 'Fatima Zahra', location: 'Fes', languages: 'English, Arabic, French', specialties: 'Historical Sites, Craft Workshops', rating: 4.9, featured: true },
+  { id: 3, name: 'Ibrahim Amrani', location: 'Chefchaouen', languages: 'English, Arabic, Spanish', specialties: 'Photography, Hiking', rating: 4.7, featured: false },
+  { id: 4, name: 'Yasmine Alaoui', location: 'Essaouira', languages: 'English, Arabic, French, German', specialties: 'Coastal Tours, Culinary', rating: 4.6, featured: true },
+  { id: 5, name: 'Ahmed Bakkali', location: 'Tangier', languages: 'English, Arabic, Spanish, Portuguese', specialties: 'Historical Tours, Cultural Experiences', rating: 4.5, featured: false },
 ];
 
 const GuidesManagement = () => {
@@ -44,33 +43,28 @@ const GuidesManagement = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Guide</TableHead>
+              <TableHead>Name</TableHead>
               <TableHead>Location</TableHead>
               <TableHead>Languages</TableHead>
+              <TableHead>Specialties</TableHead>
               <TableHead>Rating</TableHead>
-              <TableHead>Verified</TableHead>
+              <TableHead>Featured</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {guides.map((guide) => (
               <TableRow key={guide.id}>
-                <TableCell>
-                  <div className="flex items-center gap-3">
-                    <Avatar>
-                      <AvatarFallback>{guide.name.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                    <span className="font-medium">{guide.name}</span>
-                  </div>
-                </TableCell>
+                <TableCell className="font-medium">{guide.name}</TableCell>
                 <TableCell>{guide.location}</TableCell>
-                <TableCell>{guide.languages.join(', ')}</TableCell>
+                <TableCell>{guide.languages}</TableCell>
+                <TableCell>{guide.specialties}</TableCell>
                 <TableCell>{guide.rating} / 5</TableCell>
                 <TableCell>
                   <span className={`px-2 py-1 text-xs rounded-full ${
-                    guide.verified ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                    guide.featured ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
                   }`}>
-                    {guide.verified ? 'Verified' : 'Pending'}
+                    {guide.featured ? 'Yes' : 'No'}
                   </span>
                 </TableCell>
                 <TableCell className="text-right">
