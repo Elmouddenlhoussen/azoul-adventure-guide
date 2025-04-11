@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { MapPin, Clock, Calendar, Star, Users, Check, Info, Map } from 'lucide-react';
+import { MapPin, Clock, Calendar, Star, Users, Check, Info, Map, Globe } from 'lucide-react';
 
 // Sample tour data
 const tours = [
@@ -387,7 +387,7 @@ const TourDetailPage = () => {
                       <h3 className="text-xl font-bold mb-2">{tour.guide.name}</h3>
                       <p className="text-gray-700 mb-3">{tour.guide.bio}</p>
                       <div className="flex items-center">
-                        <Languages className="h-4 w-4 mr-1 text-morocco-clay" />
+                        <Globe className="h-4 w-4 mr-1 text-morocco-clay" />
                         <span className="text-gray-600">{tour.guide.languages.join(', ')}</span>
                       </div>
                       <Button className="mt-4" variant="outline" asChild>
