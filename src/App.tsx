@@ -1,3 +1,4 @@
+
 import { Routes, Route } from 'react-router-dom'
 import Index from '@/pages/Index'
 import NotFound from '@/pages/NotFound'
@@ -22,39 +23,45 @@ import GuideDetailPage from '@/pages/GuideDetailPage'
 import TourDetailPage from '@/pages/TourDetailPage'
 import AccommodationDetailPage from '@/pages/AccommodationDetailPage'
 import AdminRoutes from '@/components/admin/AdminRoutes'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 
 function App() {
   return (
     <>
       <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/feature/:featureId" element={<FeatureDetail />} />
-        <Route path="/feature/guides" element={<GuidesPage />} />
-        <Route path="/feature/cultural-tours" element={<CulturalToursPage />} />
-        <Route path="/feature/accommodations" element={<AccommodationsPage />} />
-        <Route path="/destination/:destinationId" element={<DestinationDetail />} />
-        <Route path="/guide/:guideId" element={<GuideDetailPage />} />
-        <Route path="/tour/:tourId" element={<TourDetailPage />} />
-        <Route path="/accommodation/:accommodationId" element={<AccommodationDetailPage />} />
-        <Route path="/search" element={<SearchResults />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/terms" element={<Terms />} />
-        <Route path="/privacy" element={<Privacy />} />
-        <Route path="/profile" element={
-          <ProtectedRoute>
-            <UserProfile />
-          </ProtectedRoute>
-        } />
-        <Route path="/admin/*" element={
-          <ProtectedRoute requireAdmin={true}>
-            <AdminRoutes />
-          </ProtectedRoute>
-        } />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <Header />
+      <div className="min-h-screen pt-20">
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/feature/:featureId" element={<FeatureDetail />} />
+          <Route path="/feature/guides" element={<GuidesPage />} />
+          <Route path="/feature/cultural-tours" element={<CulturalToursPage />} />
+          <Route path="/feature/accommodations" element={<AccommodationsPage />} />
+          <Route path="/destination/:destinationId" element={<DestinationDetail />} />
+          <Route path="/guide/:guideId" element={<GuideDetailPage />} />
+          <Route path="/tour/:tourId" element={<TourDetailPage />} />
+          <Route path="/accommodation/:accommodationId" element={<AccommodationDetailPage />} />
+          <Route path="/search" element={<SearchResults />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <UserProfile />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/*" element={
+            <ProtectedRoute requireAdmin={true}>
+              <AdminRoutes />
+            </ProtectedRoute>
+          } />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
+      <Footer />
       <ChatAssistant />
       <Toaster />
     </>
