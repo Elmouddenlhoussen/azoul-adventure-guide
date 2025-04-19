@@ -25,6 +25,8 @@ import AccommodationDetailPage from '@/pages/AccommodationDetailPage'
 import AdminRoutes from '@/components/admin/AdminRoutes'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import DiscoverPage from '@/pages/DiscoverPage'
+import NewsPage from '@/pages/NewsPage'
 
 function App() {
   return (
@@ -48,6 +50,8 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<Privacy />} />
+          <Route path="/discover" element={<DiscoverPage />} />
+          <Route path="/news" element={<NewsPage />} />
           <Route path="/profile" element={
             <ProtectedRoute>
               <UserProfile />

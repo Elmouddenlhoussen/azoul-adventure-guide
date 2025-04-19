@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
@@ -37,11 +36,11 @@ const Header = () => {
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
-  // Enhanced nav links with better descriptions
+  // Updated nav links with correct routes
   const navLinks = [
     { 
       name: 'Discover', 
-      href: '/feature/guides', 
+      href: '/discover', 
       icon: <Compass className="h-4 w-4 mr-1" />,
       description: 'Explore travel guides and authentic Moroccan experiences'
     },
@@ -59,7 +58,7 @@ const Header = () => {
     },
     { 
       name: 'News', 
-      href: '/feature/guides', 
+      href: '/news', 
       icon: <Newspaper className="h-4 w-4 mr-1" />,
       description: 'Latest news, insights and updates from Morocco'
     },
