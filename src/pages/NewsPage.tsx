@@ -51,7 +51,7 @@ const newsItems = [
     image: 'https://images.unsplash.com/photo-1541518763669-27fef04b14ea?w=800&h=400&fit=crop',
     date: 'March 8, 2025',
     category: 'Culinary',
-    excerpt: 'Traditional Moroccan dishes and cooking techniques have received international recognition at this year's World Culinary Awards.',
+    excerpt: "Traditional Moroccan dishes and cooking techniques have received international recognition at this year's World Culinary Awards.",
   },
   {
     id: 'archaeological-discovery',
