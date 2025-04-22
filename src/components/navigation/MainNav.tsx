@@ -1,4 +1,3 @@
-
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Compass, Globe, Calendar, Newspaper, MessageCircle, MapPin } from 'lucide-react';
@@ -47,7 +46,7 @@ export const navLinks = [
 export function MainNav() {
   const location = useLocation();
   
-  export const isActive = (path: string) => {
+  const isActive = (path: string) => {
     if (path === '/') return location.pathname === '/';
     return location.pathname.startsWith(path);
   };
