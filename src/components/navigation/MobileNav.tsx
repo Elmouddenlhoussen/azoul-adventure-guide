@@ -1,6 +1,6 @@
 
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { Link, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import AuthButtons from '@/components/AuthButtons';
@@ -11,6 +11,13 @@ interface MobileNavProps {
 }
 
 export function MobileNav({ isOpen }: MobileNavProps) {
+  const location = useLocation();
+  
+  const isActive = (path: string) => {
+    if (path === '/') return location.pathname === '/';
+    return location.pathname.startsWith(path);
+  };
+  
   return (
     <AnimatePresence>
       {isOpen && (

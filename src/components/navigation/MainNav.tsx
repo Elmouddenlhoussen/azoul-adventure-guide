@@ -1,10 +1,11 @@
 
 import { Link, useLocation } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { Compass, Globe, Calendar, Newspaper, MessageCircle, MapPin } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { NavigationMenu, NavigationMenuList, NavigationMenuItem } from "@/components/ui/navigation-menu";
 
-const navLinks = [
+export const navLinks = [
   { 
     name: 'Discover', 
     href: '/discover', 
@@ -46,7 +47,7 @@ const navLinks = [
 export function MainNav() {
   const location = useLocation();
   
-  const isActive = (path: string) => {
+  export const isActive = (path: string) => {
     if (path === '/') return location.pathname === '/';
     return location.pathname.startsWith(path);
   };
