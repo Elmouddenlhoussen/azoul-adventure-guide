@@ -1,20 +1,15 @@
+
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Compass, Globe, Calendar, Newspaper, MessageCircle, MapPin } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Logo from './Logo';
 import LanguageSwitcher from './LanguageSwitcher';
 import SearchBar from './SearchBar';
 import AuthButtons from './AuthButtons';
-import { 
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger
-} from "@/components/ui/navigation-menu";
+import { MainNav } from './navigation/MainNav';
+import { MobileNav } from './navigation/MobileNav';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -34,53 +29,6 @@ const Header = () => {
     setIsMobileMenuOpen(false);
   }, [location]);
 
-  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
-
-  // Updated nav links with correct routes
-  const navLinks = [
-    { 
-      name: 'Discover', 
-      href: '/discover', 
-      icon: <Compass className="h-4 w-4 mr-1" />,
-      description: 'Explore travel guides and authentic Moroccan experiences'
-    },
-    { 
-      name: 'Experiences', 
-      href: '/feature/suggestions', 
-      icon: <Globe className="h-4 w-4 mr-1" />,
-      description: 'Find unique activities and local cultural experiences'
-    },
-    { 
-      name: 'Events', 
-      href: '/feature/events', 
-      icon: <Calendar className="h-4 w-4 mr-1" />,
-      description: 'Browse upcoming festivals, celebrations and cultural events'
-    },
-    { 
-      name: 'News', 
-      href: '/news', 
-      icon: <Newspaper className="h-4 w-4 mr-1" />,
-      description: 'Latest news, insights and updates from Morocco'
-    },
-    { 
-      name: 'Destinations', 
-      href: '/destination/marrakech', 
-      icon: <MapPin className="h-4 w-4 mr-1" />,
-      description: 'Explore popular cities, hidden gems and natural wonders'
-    },
-    { 
-      name: 'Chat', 
-      href: '/feature/chat', 
-      icon: <MessageCircle className="h-4 w-4 mr-1" />,
-      description: 'Get personalized travel recommendations from our AI'
-    },
-  ];
-
-  const isActive = (path: string) => {
-    if (path === '/') return location.pathname === '/';
-    return location.pathname.startsWith(path);
-  };
-
   return (
     <header 
       className={cn(
@@ -92,7 +40,6 @@ const Header = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
-          {/* Logo */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -101,39 +48,8 @@ const Header = () => {
             <Logo variant={isScrolled ? 'default' : 'default'} />
           </motion.div>
 
-          {/* Desktop Navigation with Moroccan styling */}
           <div className="hidden md:flex items-center space-x-1">
-            <NavigationMenu>
-              <NavigationMenuList>
-                {navLinks.map((link) => (
-                  <NavigationMenuItem key={link.name}>
-                    <Link 
-                      to={link.href}
-                      className={cn(
-                        "flex items-center text-sm font-medium px-4 py-2 rounded-full transition-all relative group",
-                        isActive(link.href)
-                          ? "bg-morocco-sand/30 text-morocco-clay" 
-                          : isScrolled 
-                            ? "text-gray-800 hover:bg-morocco-sand/20" 
-                            : "text-gray-800 hover:bg-white/20"
-                      )}
-                    >
-                      {link.icon}
-                      <span>{link.name}</span>
-                      
-                      {isActive(link.href) && (
-                        <motion.span 
-                          className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-morocco-gold to-morocco-clay"
-                          layoutId="navbar-indicator"
-                          transition={{ type: 'spring', duration: 0.6 }}
-                        />
-                      )}
-                    </Link>
-                  </NavigationMenuItem>
-                ))}
-              </NavigationMenuList>
-            </NavigationMenu>
-            
+            <MainNav />
             <div className="flex items-center space-x-2">
               <SearchBar />
               <LanguageSwitcher />
@@ -141,13 +57,12 @@ const Header = () => {
             </div>
           </div>
           
-          {/* Mobile menu button with Moroccan styling */}
           <div className="md:hidden flex items-center">
             <SearchBar />
             <LanguageSwitcher />
             
             <motion.button
-              onClick={toggleMobileMenu}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="ml-2 inline-flex items-center justify-center rounded-full p-2 text-morocco-clay bg-morocco-sand/20 hover:bg-morocco-sand/30 transition-colors"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -180,60 +95,7 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Mobile menu with Moroccan styling */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            className="md:hidden"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="bg-white shadow-lg rounded-b-2xl px-4 pt-2 pb-4 space-y-1 mt-2 border border-morocco-sand/10">
-              {navLinks.map((link, index) => (
-                <motion.div
-                  key={link.name}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  <Link
-                    to={link.href}
-                    className={cn(
-                      "flex items-center px-3 py-3 text-base font-medium rounded-xl",
-                      isActive(link.href)
-                        ? "bg-morocco-sand/20 text-morocco-clay"
-                        : "text-gray-900 hover:bg-morocco-sand/10 hover:text-morocco-clay"
-                    )}
-                  >
-                    {link.icon}
-                    <span className="ml-2">{link.name}</span>
-                  </Link>
-                </motion.div>
-              ))}
-
-              <motion.div
-                className="pt-2 mt-2 border-t border-morocco-sand/20"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-              >
-                <div className="flex flex-col space-y-2">
-                  <AuthButtons />
-                  <Link 
-                    to="/feature/chat"
-                    className="flex items-center justify-center px-4 py-2 rounded-full bg-morocco-clay text-white text-sm font-medium"
-                  >
-                    <MessageCircle className="h-4 w-4 mr-1" />
-                    Chat with Azoul
-                  </Link>
-                </div>
-              </motion.div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <MobileNav isOpen={isMobileMenuOpen} />
     </header>
   );
 };
