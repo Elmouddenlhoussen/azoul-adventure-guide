@@ -27,6 +27,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import DiscoverPage from '@/pages/DiscoverPage'
 import NewsPage from '@/pages/NewsPage'
+import BookingPage from '@/pages/BookingPage'
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/discover" element={<DiscoverPage />} />
           <Route path="/news" element={<NewsPage />} />
+          <Route path="/booking" element={<BookingPage />} />
           <Route path="/profile" element={
             <ProtectedRoute>
               <UserProfile />
