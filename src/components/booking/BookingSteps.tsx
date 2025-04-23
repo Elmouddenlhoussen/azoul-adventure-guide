@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import SelectExperience from '@/components/booking/steps/SelectExperience';
@@ -10,12 +11,15 @@ import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/use-auth-context';
 import { bookingService } from '@/services/bookingService';
+import PaymentForm from '@/components/booking/payment/PaymentForm';
+import { supabase } from '@/integrations/supabase/client';
 
 export const bookingSteps = [
   { id: 'experience', label: 'Experience' },
   { id: 'dates', label: 'Dates' },
   { id: 'travelers', label: 'Travelers' },
   { id: 'summary', label: 'Summary' },
+  { id: 'payment', label: 'Payment' },
   { id: 'confirmation', label: 'Confirmation' }
 ];
 
@@ -51,6 +55,7 @@ export type BookingData = {
   travelers: TravelerDetails;
   totalPrice: number;
   bookingReference?: string;
+  paymentIntentClientSecret?: string;
 };
 
 const initialBookingData: BookingData = {
@@ -75,6 +80,7 @@ const initialBookingData: BookingData = {
 const BookingSteps = () => {
   const [currentStep, setCurrentStep] = useState('experience');
   const [bookingData, setBookingData] = useState<BookingData>(initialBookingData);
+  const [isLoading, setIsLoading] = useState(false);
   const { isLoggedIn } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -96,11 +102,10 @@ const BookingSteps = () => {
     return basePrice * duration * travelers;
   };
 
-  const nextStep = () => {
+  const nextStep = async () => {
     const currentIndex = bookingSteps.findIndex(step => step.id === currentStep);
     if (currentIndex < bookingSteps.length - 1) {
       const nextStepId = bookingSteps[currentIndex + 1].id;
-      setCurrentStep(nextStepId);
       
       // Update total price before moving to summary
       if (nextStepId === 'summary') {
@@ -108,10 +113,12 @@ const BookingSteps = () => {
         updateBookingData('totalPrice', totalPrice);
       }
       
-      // Generate booking reference on confirmation
-      if (nextStepId === 'confirmation') {
-        handleBookingSubmit();
+      // Create booking and initialize payment before moving to payment step
+      if (nextStepId === 'payment') {
+        await handleBookingSubmit();
       }
+      
+      setCurrentStep(nextStepId);
     }
   };
 
@@ -137,6 +144,8 @@ const BookingSteps = () => {
       return;
     }
 
+    setIsLoading(true);
+
     try {
       const booking = await bookingService.createBooking({
         experience_id: bookingData.experience.id,
@@ -149,30 +158,57 @@ const BookingSteps = () => {
       });
 
       updateBookingData('bookingReference', booking.id);
-      setCurrentStep('confirmation');
 
-      toast({
-        title: "Booking Created",
-        description: "Your booking has been successfully created",
+      // Create a payment intent
+      const response = await fetch('/functions/v1/create-payment-intent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount: bookingData.totalPrice,
+          booking_id: booking.id
+        }),
       });
+
+      const data = await response.json();
+      if (data.clientSecret) {
+        updateBookingData('paymentIntentClientSecret', data.clientSecret);
+        toast({
+          title: "Booking Created",
+          description: "Please complete your payment to confirm",
+        });
+      } else {
+        throw new Error("Could not initialize payment");
+      }
     } catch (error) {
       toast({
         title: "Error Creating Booking",
         description: "There was an error creating your booking. Please try again.",
         variant: "destructive",
       });
+      console.error(error);
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const handlePaymentSuccess = () => {
+    setCurrentStep('confirmation');
   };
 
   return (
     <div className="max-w-4xl mx-auto">
       <Tabs value={currentStep} onValueChange={setCurrentStep} className="w-full">
-        <TabsList className="grid grid-cols-5 mb-8">
+        <TabsList className="grid grid-cols-6 mb-8">
           {bookingSteps.map((step) => (
             <TabsTrigger 
               key={step.id} 
               value={step.id}
-              disabled={step.id === 'confirmation' && !bookingData.bookingReference}
+              disabled={
+                (step.id === 'payment' && !bookingData.bookingReference) ||
+                (step.id === 'confirmation' && !bookingData.bookingReference)
+              }
               className="data-[state=active]:bg-morocco-clay data-[state=active]:text-white"
             >
               {step.label}
@@ -211,7 +247,31 @@ const BookingSteps = () => {
             bookingData={bookingData}
             onNext={nextStep}
             onPrev={prevStep}
+            isLoading={isLoading}
           />
+        </TabsContent>
+        
+        <TabsContent value="payment">
+          {bookingData.paymentIntentClientSecret && bookingData.bookingReference ? (
+            <div className="space-y-8">
+              <div>
+                <h2 className="text-2xl font-bold mb-4">Complete Your Payment</h2>
+                <p className="text-gray-600 mb-6">
+                  Please provide your payment details to finalize your booking
+                </p>
+              </div>
+              
+              <PaymentForm 
+                clientSecret={bookingData.paymentIntentClientSecret}
+                bookingId={bookingData.bookingReference}
+                onPaymentSuccess={handlePaymentSuccess}
+              />
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p>Loading payment information...</p>
+            </div>
+          )}
         </TabsContent>
         
         <TabsContent value="confirmation">

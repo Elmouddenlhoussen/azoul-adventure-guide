@@ -4,7 +4,7 @@ import * as React from "react"
 import { useEffect, useState } from "react"
 
 const TOAST_LIMIT = 1
-const TOAST_REMOVE_DELAY = 1000000
+const TOAST_REMOVE_DELAY = 5000 // Changed this to 5 seconds for better UX
 
 type ToasterToast = {
   id: string
