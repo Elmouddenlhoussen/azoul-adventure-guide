@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import SelectExperience from '@/components/booking/steps/SelectExperience';
@@ -8,6 +7,9 @@ import BookingSummary from '@/components/booking/steps/BookingSummary';
 import Confirmation from '@/components/booking/steps/Confirmation';
 import { z } from 'zod';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/hooks/use-auth-context';
+import { bookingService } from '@/services/bookingService';
 
 export const bookingSteps = [
   { id: 'experience', label: 'Experience' },
@@ -73,7 +75,9 @@ const initialBookingData: BookingData = {
 const BookingSteps = () => {
   const [currentStep, setCurrentStep] = useState('experience');
   const [bookingData, setBookingData] = useState<BookingData>(initialBookingData);
+  const { isLoggedIn } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const updateBookingData = (key: keyof BookingData, value: any) => {
     setBookingData(prev => ({
@@ -106,14 +110,7 @@ const BookingSteps = () => {
       
       // Generate booking reference on confirmation
       if (nextStepId === 'confirmation') {
-        // In a real app, this would come from the backend
-        const reference = `AZL-${Math.floor(100000 + Math.random() * 900000)}`;
-        updateBookingData('bookingReference', reference);
-        
-        toast({
-          title: "Booking Successful!",
-          description: `Your booking reference is ${reference}. A confirmation email has been sent.`,
-        });
+        handleBookingSubmit();
       }
     }
   };
@@ -122,6 +119,48 @@ const BookingSteps = () => {
     const currentIndex = bookingSteps.findIndex(step => step.id === currentStep);
     if (currentIndex > 0) {
       setCurrentStep(bookingSteps[currentIndex - 1].id);
+    }
+  };
+
+  const handleBookingSubmit = async () => {
+    if (!isLoggedIn) {
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in to complete your booking",
+        variant: "destructive",
+      });
+      navigate('/signin');
+      return;
+    }
+
+    if (!bookingData.experience || !bookingData.dates.startDate || !bookingData.dates.endDate) {
+      return;
+    }
+
+    try {
+      const booking = await bookingService.createBooking({
+        experience_id: bookingData.experience.id,
+        start_date: bookingData.dates.startDate.toISOString(),
+        end_date: bookingData.dates.endDate.toISOString(),
+        adults: bookingData.travelers.adults,
+        children: bookingData.travelers.children,
+        total_price: bookingData.totalPrice,
+        special_requests: bookingData.travelers.specialRequests
+      });
+
+      updateBookingData('bookingReference', booking.id);
+      setCurrentStep('confirmation');
+
+      toast({
+        title: "Booking Created",
+        description: "Your booking has been successfully created",
+      });
+    } catch (error) {
+      toast({
+        title: "Error Creating Booking",
+        description: "There was an error creating your booking. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
