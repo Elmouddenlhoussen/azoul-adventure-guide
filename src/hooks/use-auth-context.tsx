@@ -69,7 +69,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           
           toast({
             title: "Welcome back, Admin!",
-            description: "You've successfully logged in to your admin account.",
+            description: "You've successfully logged in to your admin account."
           });
           
           resolve(true);
@@ -87,7 +87,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           
           toast({
             title: "Welcome back!",
-            description: "You've successfully logged in to your account.",
+            description: "You've successfully logged in to your account."
           });
           
           resolve(true);
@@ -95,7 +95,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           toast({
             title: "Login failed",
             description: "Please check your credentials and try again.",
-            variant: "destructive",
+            variant: "destructive"
           });
           
           resolve(false);
@@ -109,7 +109,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     localStorage.removeItem('azoul_user');
     toast({
       title: "Logged out",
-      description: "You've been successfully logged out.",
+      description: "You've been successfully logged out."
     });
   };
 
