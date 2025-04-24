@@ -3,7 +3,7 @@ import React from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { DateSelection } from '@/components/booking/BookingSteps';
+import { DateSelection } from '@/types/booking';
 import { addDays, differenceInDays } from 'date-fns';
 
 interface SelectDatesProps {

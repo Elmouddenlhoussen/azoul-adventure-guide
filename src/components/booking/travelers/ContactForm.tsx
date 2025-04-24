@@ -13,7 +13,7 @@ import {
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { TravelerDetails } from '@/components/booking/BookingSteps';
+import { TravelerDetails } from '@/types/booking';
 
 const travelerFormSchema = z.object({
   firstName: z.string().min(2, 'First name must be at least 2 characters'),

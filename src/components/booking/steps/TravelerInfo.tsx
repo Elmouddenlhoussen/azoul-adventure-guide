@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { TravelerDetails } from '@/components/booking/BookingSteps';
+import { TravelerDetails } from '@/types/booking';
 import { TravelerCounter } from '../travelers/TravelerCounter';
 import { ContactForm } from '../travelers/ContactForm';
 

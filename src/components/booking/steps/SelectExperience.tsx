@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ExperienceSelection } from '@/components/booking/BookingSteps';
+import { ExperienceSelection } from '@/types/booking';
 import { experienceService, Experience } from '@/services/experienceService';
 import { useToast } from '@/hooks/use-toast';
 

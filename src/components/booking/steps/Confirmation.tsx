@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { BookingData } from '@/components/booking/BookingSteps';
+import { BookingData } from '@/types/booking';
 import { format } from 'date-fns';
 import { Check, Calendar, Mail, Download, Share } from 'lucide-react';
 import { Link } from 'react-router-dom';
