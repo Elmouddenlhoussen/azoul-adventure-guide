@@ -1,119 +1,43 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import SelectExperience from '@/components/booking/steps/SelectExperience';
 import SelectDates from '@/components/booking/steps/SelectDates';
 import TravelerInfo from '@/components/booking/steps/TravelerInfo';
 import BookingSummary from '@/components/booking/steps/BookingSummary';
 import Confirmation from '@/components/booking/steps/Confirmation';
-import { z } from 'zod';
+import PaymentForm from '@/components/booking/payment/PaymentForm';
+import { useBookingState } from '@/hooks/use-booking-state';
+import { bookingSteps } from '@/types/booking';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/use-auth-context';
 import { bookingService } from '@/services/bookingService';
-import PaymentForm from '@/components/booking/payment/PaymentForm';
-import { supabase } from '@/integrations/supabase/client';
-
-export const bookingSteps = [
-  { id: 'experience', label: 'Experience' },
-  { id: 'dates', label: 'Dates' },
-  { id: 'travelers', label: 'Travelers' },
-  { id: 'summary', label: 'Summary' },
-  { id: 'payment', label: 'Payment' },
-  { id: 'confirmation', label: 'Confirmation' }
-];
-
-export type BookingType = 'tour' | 'accommodation' | 'guide';
-
-export type ExperienceSelection = {
-  type: BookingType;
-  id: string;
-  title: string;
-  price: number;
-  image: string;
-};
-
-export type DateSelection = {
-  startDate: Date | null;
-  endDate: Date | null;
-  duration: number;
-};
-
-export type TravelerDetails = {
-  adults: number;
-  children: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  specialRequests: string;
-};
-
-export type BookingData = {
-  experience: ExperienceSelection | null;
-  dates: DateSelection;
-  travelers: TravelerDetails;
-  totalPrice: number;
-  bookingReference?: string;
-  paymentIntentClientSecret?: string;
-};
-
-const initialBookingData: BookingData = {
-  experience: null,
-  dates: {
-    startDate: null,
-    endDate: null,
-    duration: 1
-  },
-  travelers: {
-    adults: 1,
-    children: 0,
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    specialRequests: ''
-  },
-  totalPrice: 0
-};
 
 const BookingSteps = () => {
-  const [currentStep, setCurrentStep] = useState('experience');
-  const [bookingData, setBookingData] = useState<BookingData>(initialBookingData);
-  const [isLoading, setIsLoading] = useState(false);
   const { isLoggedIn } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
-
-  const updateBookingData = (key: keyof BookingData, value: any) => {
-    setBookingData(prev => ({
-      ...prev,
-      [key]: value
-    }));
-  };
-
-  const calculateTotalPrice = () => {
-    if (!bookingData.experience) return 0;
-    
-    const basePrice = bookingData.experience.price;
-    const duration = bookingData.dates.duration || 1;
-    const travelers = bookingData.travelers.adults + bookingData.travelers.children * 0.5;
-    
-    return basePrice * duration * travelers;
-  };
+  const {
+    currentStep,
+    setCurrentStep,
+    bookingData,
+    updateBookingData,
+    isLoading,
+    setIsLoading,
+    calculateTotalPrice
+  } = useBookingState();
 
   const nextStep = async () => {
     const currentIndex = bookingSteps.findIndex(step => step.id === currentStep);
     if (currentIndex < bookingSteps.length - 1) {
       const nextStepId = bookingSteps[currentIndex + 1].id;
       
-      // Update total price before moving to summary
       if (nextStepId === 'summary') {
         const totalPrice = calculateTotalPrice();
         updateBookingData('totalPrice', totalPrice);
       }
       
-      // Create booking and initialize payment before moving to payment step
       if (nextStepId === 'payment') {
         await handleBookingSubmit();
       }
@@ -159,7 +83,6 @@ const BookingSteps = () => {
 
       updateBookingData('bookingReference', booking.id);
 
-      // Create a payment intent
       const response = await fetch('/functions/v1/create-payment-intent', {
         method: 'POST',
         headers: {
