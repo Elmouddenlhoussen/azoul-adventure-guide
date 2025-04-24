@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
@@ -106,11 +105,7 @@ const CheckoutForm = ({ bookingId, onPaymentSuccess }: { bookingId: string; onPa
 
 const PaymentForm = ({ clientSecret, bookingId, onPaymentSuccess }: PaymentFormProps) => {
   const options: StripeElementsOptions = {
-    mode: 'payment',
-    amount: 1000, // Example amount in cents
-    currency: 'usd',
-    paymentMethodTypes: ['card'],
-    clientSecret: clientSecret,
+    clientSecret,
     appearance: {
       theme: 'stripe',
     },
