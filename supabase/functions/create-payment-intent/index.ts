@@ -19,7 +19,9 @@ serve(async (req) => {
   }
 
   try {
+    console.log('Starting create payment intent');
     const { amount, booking_id } = await req.json();
+    console.log('Received request:', { amount, booking_id });
 
     // Create a payment intent with the specified amount
     const paymentIntent = await stripe.paymentIntents.create({
@@ -32,6 +34,8 @@ serve(async (req) => {
         booking_id,
       },
     });
+
+    console.log('Payment intent created:', paymentIntent.id);
 
     // Return the client secret to the client to complete the payment
     return new Response(

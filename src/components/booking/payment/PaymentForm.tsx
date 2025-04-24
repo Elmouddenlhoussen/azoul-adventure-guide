@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
@@ -25,24 +26,28 @@ const CheckoutForm = ({ bookingId, onPaymentSuccess }: { bookingId: string; onPa
     event.preventDefault();
 
     if (!stripe || !elements) {
+      console.error('Stripe.js has not loaded');
       return;
     }
 
     setIsProcessing(true);
 
     try {
+      console.log('Starting payment confirmation');
       const result = await stripe.confirmPayment({
         elements,
         redirect: 'if_required',
       });
 
       if (result.error) {
+        console.error('Payment failed:', result.error);
         toast({
           title: "Payment failed",
           description: result.error.message || "An error occurred during payment processing",
           variant: "destructive",
         });
       } else {
+        console.log('Payment succeeded:', result.paymentIntent);
         // Payment succeeded, verify with our backend
         const verifyResponse = await fetch('/functions/v1/verify-payment', {
           method: 'POST',
@@ -55,6 +60,7 @@ const CheckoutForm = ({ bookingId, onPaymentSuccess }: { bookingId: string; onPa
         const verifyData = await verifyResponse.json();
         
         if (verifyData.success) {
+          console.log('Payment verified successfully');
           // Send booking confirmation email
           await fetch('/functions/v1/send-booking-confirmation', {
             method: 'POST',
@@ -68,6 +74,13 @@ const CheckoutForm = ({ bookingId, onPaymentSuccess }: { bookingId: string; onPa
           });
           
           onPaymentSuccess();
+        } else {
+          console.error('Payment verification failed:', verifyData);
+          toast({
+            title: "Payment verification failed",
+            description: "Please contact support",
+            variant: "destructive",
+          });
         }
       }
     } catch (error) {
