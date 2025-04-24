@@ -5,9 +5,10 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Loader } from 'lucide-react';
+import { StripeElementsOptions } from '@stripe/stripe-js';
 
 // Initialize Stripe
-const stripePromise = loadStripe('pk_test_51O3OE8HtR1j5Wbf99yEpcgKzVjDjgssEhP1auz0gVhUfr3OeB51Kxupj9XxfYnNilpfvoaZSa7xNDgzH9RF8mvCT00KdUcvcYA');
+const stripePromise = loadStripe('pk_test_51RHDgvFYoEMXLl0sMEnFKRvodtx8aQh0ZS7x7ewl2CGES2N9pMRxsH9SaybaUFUxbrk7LgxQ2VuMdyp2L5d7ogeu00zy08LSb6');
 
 interface PaymentFormProps {
   clientSecret: string;
@@ -104,13 +105,14 @@ const CheckoutForm = ({ bookingId, onPaymentSuccess }: { bookingId: string; onPa
 };
 
 const PaymentForm = ({ clientSecret, bookingId, onPaymentSuccess }: PaymentFormProps) => {
-  const options = {
-    clientSecret,
+  const options: StripeElementsOptions = {
+    mode: 'payment',
+    amount: 1000, // Example amount in cents
+    currency: 'usd',
+    paymentMethodTypes: ['card'],
+    clientSecret: clientSecret,
     appearance: {
       theme: 'stripe',
-      variables: {
-        colorPrimary: '#b45309',
-      },
     },
   };
 
