@@ -28,6 +28,14 @@ const TravelerInfo: React.FC<TravelerInfoProps> = ({
     });
   };
 
+  const handleContactSubmit = (details: Partial<TravelerDetails>) => {
+    onUpdate({
+      ...travelerDetails,
+      ...details
+    });
+    onNext();
+  };
+
   return (
     <div className="space-y-8">
       <div>
@@ -61,10 +69,7 @@ const TravelerInfo: React.FC<TravelerInfoProps> = ({
         
         <ContactForm
           initialData={travelerDetails}
-          onSubmit={(details) => {
-            onUpdate(details);
-            onNext();
-          }}
+          onSubmit={handleContactSubmit}
           onPrev={onPrev}
         />
       </div>

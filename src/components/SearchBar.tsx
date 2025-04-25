@@ -15,8 +15,9 @@ const SearchBar = () => {
     e.preventDefault();
     if (searchQuery.trim()) {
       // Navigate to search results page with query
-      navigate(`/feature/search?q=${encodeURIComponent(searchQuery)}`);
+      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
       setSearchQuery('');
+      setIsExpanded(false);
     }
   };
 
@@ -58,8 +59,8 @@ const SearchBar = () => {
       </motion.form>
 
       <Button
-        type={isExpanded ? "submit" : "button"}
-        onClick={toggleSearch}
+        type={isExpanded && searchQuery.trim() ? "submit" : "button"}
+        onClick={isExpanded && searchQuery.trim() ? handleSearch : toggleSearch}
         variant="ghost"
         size="icon"
         className={`rounded-full p-2 ${
