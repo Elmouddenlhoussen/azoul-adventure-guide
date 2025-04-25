@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { User, Key, Info } from 'lucide-react';
@@ -58,6 +57,12 @@ const SignIn = () => {
         } else {
           navigate('/', { replace: true });
         }
+      } else {
+        toast({
+          title: "Login failed",
+          description: "Please check your credentials and try again.",
+          variant: "destructive"
+        });
       }
     } catch (error) {
       console.error("Login error:", error);

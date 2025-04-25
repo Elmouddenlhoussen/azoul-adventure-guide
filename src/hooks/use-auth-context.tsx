@@ -43,6 +43,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (storedUser) {
       try {
         setUser(JSON.parse(storedUser));
+        console.log("User restored from storage:", JSON.parse(storedUser));
       } catch (error) {
         console.error('Failed to parse stored user data:', error);
         localStorage.removeItem('azoul_user');
