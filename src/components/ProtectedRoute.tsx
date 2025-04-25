@@ -14,7 +14,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children, 
   requireAdmin = false 
 }) => {
-  const { isLoggedIn, isAdmin } = useAuth();
+  const { isLoggedIn, isAdmin, user } = useAuth();
   const location = useLocation();
   const { toast } = useToast();
 
@@ -26,6 +26,17 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       document.body.classList.remove('page-transition');
     };
   }, [location.pathname]);
+
+  // Debug logging
+  useEffect(() => {
+    console.log("Protected Route Debug:", { 
+      isLoggedIn, 
+      isAdmin, 
+      requireAdmin,
+      user,
+      path: location.pathname
+    });
+  }, [isLoggedIn, isAdmin, requireAdmin, user, location.pathname]);
 
   if (!isLoggedIn) {
     toast({
