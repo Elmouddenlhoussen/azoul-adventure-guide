@@ -16,7 +16,7 @@ interface AuthContextType {
   isLoggedIn: boolean;
   isAdmin: boolean;
   login: (email: string, password: string) => Promise<boolean>;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -41,7 +41,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const storedUser = localStorage.getItem('azoul_user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (error) {
+        console.error('Failed to parse stored user data:', error);
+        localStorage.removeItem('azoul_user');
+      }
     }
   }, []);
 
@@ -55,61 +60,58 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     // For demo purposes, we'll simulate a network request
     return new Promise((resolve) => {
       setTimeout(() => {
-        // Check if it's admin login
-        if (email === adminCredentials.email && password === adminCredentials.password) {
-          const adminUser = {
-            id: '1',
-            name: 'Admin',
-            email: adminCredentials.email,
-            role: 'admin' as UserRole,
-          };
-          
-          setUser(adminUser);
-          localStorage.setItem('azoul_user', JSON.stringify(adminUser));
-          
-          toast({
-            title: "Welcome back, Admin!",
-            description: "You've successfully logged in to your admin account."
-          });
-          
-          resolve(true);
-        } else if (email && password) {
-          // Regular user login simulation
-          const regularUser = {
-            id: `user-${Math.random().toString(36).substr(2, 9)}`,
-            name: email.split('@')[0],
-            email,
-            role: 'user' as UserRole,
-          };
-          
-          setUser(regularUser);
-          localStorage.setItem('azoul_user', JSON.stringify(regularUser));
-          
-          toast({
-            title: "Welcome back!",
-            description: "You've successfully logged in to your account."
-          });
-          
-          resolve(true);
-        } else {
-          toast({
-            title: "Login failed",
-            description: "Please check your credentials and try again.",
-            variant: "destructive"
-          });
-          
+        try {
+          // Check if it's admin login
+          if (email === adminCredentials.email && password === adminCredentials.password) {
+            const adminUser = {
+              id: '1',
+              name: 'Admin',
+              email: adminCredentials.email,
+              role: 'admin' as UserRole,
+            };
+            
+            setUser(adminUser);
+            localStorage.setItem('azoul_user', JSON.stringify(adminUser));
+            
+            console.log("Admin login successful:", adminUser);
+            resolve(true);
+          } else if (email && password) {
+            // Regular user login simulation
+            const regularUser = {
+              id: `user-${Math.random().toString(36).substr(2, 9)}`,
+              name: email.split('@')[0],
+              email,
+              role: 'user' as UserRole,
+            };
+            
+            setUser(regularUser);
+            localStorage.setItem('azoul_user', JSON.stringify(regularUser));
+            
+            console.log("User login successful:", regularUser);
+            resolve(true);
+          } else {
+            console.error("Login failed: Invalid credentials");
+            resolve(false);
+          }
+        } catch (error) {
+          console.error("Login process error:", error);
           resolve(false);
         }
       }, 1000);
     });
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('azoul_user');
-    toast({
-      title: "Logged out",
-      description: "You've been successfully logged out."
+  const logout = async (): Promise<void> => {
+    return new Promise((resolve) => {
+      try {
+        setUser(null);
+        localStorage.removeItem('azoul_user');
+        console.log("Logout successful");
+        resolve();
+      } catch (error) {
+        console.error("Logout error:", error);
+        resolve();
+      }
     });
   };
 

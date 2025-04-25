@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/use-auth-context';
-import { toast } from '@/hooks/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
 
 interface ProtectedRouteProps {
@@ -16,6 +16,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 }) => {
   const { isLoggedIn, isAdmin } = useAuth();
   const location = useLocation();
+  const { toast } = useToast();
 
   useEffect(() => {
     // Add page transition class to body
@@ -32,7 +33,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       description: "Please sign in to access this page.",
       variant: "destructive",
     });
-    return <Navigate to="/signin" replace />;
+    return <Navigate to="/signin" state={{ from: location.pathname }} replace />;
   }
 
   if (requireAdmin && !isAdmin) {

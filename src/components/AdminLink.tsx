@@ -9,6 +9,7 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/h
 const AdminLink: React.FC = () => {
   const { isAdmin } = useAuth();
   
+  // Only render the admin link if user is an admin
   if (!isAdmin) return null;
   
   return (

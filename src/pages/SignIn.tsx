@@ -1,6 +1,6 @@
 
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { User, Key, Info } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Header from '@/components/Header';
@@ -10,8 +10,6 @@ import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Checkbox } from '@/components/ui/checkbox';
 import SocialLoginButtons from '@/components/SocialLoginButtons';
@@ -24,7 +22,18 @@ const SignIn = () => {
   const [showAdminHint, setShowAdminHint] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const location = useLocation();
+  const { login, isLoggedIn } = useAuth();
+  
+  // Get the intended destination from location state, or default to "/"
+  const from = location.state?.from || '/';
+  
+  // If already logged in, redirect to the appropriate page
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate(from, { replace: true });
+    }
+  }, [isLoggedIn, navigate, from]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,13 +42,30 @@ const SignIn = () => {
     try {
       const success = await login(email, password);
       if (success) {
-        // Navigate based on where they should go
+        // Toast success message
+        toast({
+          title: "Login successful",
+          description: email === 'admin@azoul.com' 
+            ? "Welcome to the admin dashboard." 
+            : "Welcome back to your account.",
+        });
+        
+        // Navigate based on user type and intended destination
         if (email === 'admin@azoul.com') {
-          navigate('/admin');
+          navigate('/admin', { replace: true });
+        } else if (from !== '/') {
+          navigate(from, { replace: true });
         } else {
-          navigate('/');
+          navigate('/', { replace: true });
         }
       }
+    } catch (error) {
+      console.error("Login error:", error);
+      toast({
+        title: "Login failed",
+        description: "Please check your credentials and try again.",
+        variant: "destructive"
+      });
     } finally {
       setIsLoading(false);
     }
@@ -101,6 +127,7 @@ const SignIn = () => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="pl-10"
+                        required
                       />
                     </div>
                   </div>
@@ -123,6 +150,7 @@ const SignIn = () => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="pl-10"
+                        required
                       />
                     </div>
                   </div>
