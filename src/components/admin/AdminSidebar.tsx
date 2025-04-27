@@ -25,8 +25,8 @@ export const AdminSidebar = () => {
   // Determine active item based on current route
   const getActiveItem = () => {
     const path = location.pathname.split('/admin/')[1] || '';
-    if (!path) return "Dashboard";
-    return path.charAt(0).toUpperCase() + path.slice(1);
+    if (!path) return "dashboard";
+    return path;
   };
   
   const [activeItem, setActiveItem] = useState(getActiveItem());
@@ -36,21 +36,21 @@ export const AdminSidebar = () => {
   };
   
   const handleNavigation = (path: string) => {
-    const route = path === "Dashboard" ? "/admin" : `/admin/${path.toLowerCase()}`;
-    navigate(route);
+    navigate(`/admin/${path === "dashboard" ? "" : path}`);
     setActiveItem(path);
   };
   
+  // Updated menu items with all sections
   const menuItems = [
-    { label: "Dashboard", icon: LayoutDashboard, path: "/admin" },
-    { label: "Destinations", icon: Map, path: "/admin/destinations" },
-    { label: "Features", icon: Compass, path: "/admin/features" },
-    { label: "Courses", icon: BookOpen, path: "/admin/courses" },
-    { label: "Users", icon: Users, path: "/admin/users" },
-    { label: "Subscribers", icon: Mail, path: "/admin/subscribers" },
-    { label: "Media", icon: Image, path: "/admin/media" },
-    { label: "Analytics", icon: BarChart, path: "/admin/analytics" },
-    { label: "Settings", icon: Settings, path: "/admin/settings" },
+    { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { id: "destinations", label: "Destinations", icon: Map },
+    { id: "features", label: "Features", icon: Compass },
+    { id: "courses", label: "Courses", icon: BookOpen },
+    { id: "users", label: "Users", icon: Users },
+    { id: "subscribers", label: "Subscribers", icon: Mail },
+    { id: "media", label: "Media", icon: Image },
+    { id: "analytics", label: "Analytics", icon: BarChart },
+    { id: "settings", label: "Settings", icon: Settings },
   ];
 
   return (
@@ -66,16 +66,16 @@ export const AdminSidebar = () => {
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
-                <SidebarMenuItem key={item.label}>
+                <SidebarMenuItem key={item.id}>
                   <SidebarMenuButton 
-                    onClick={() => handleNavigation(item.label)}
+                    onClick={() => handleNavigation(item.id)}
                     className={`transition-all duration-200 ease-in-out hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-700 dark:hover:text-purple-300 ${
-                      activeItem === item.label 
+                      activeItem === item.id 
                         ? "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border-l-4 border-purple-500" 
                         : ""
                     }`}
                   >
-                    <item.icon className={`h-5 w-5 transition-transform duration-200 ${activeItem === item.label ? "text-purple-600 dark:text-purple-400" : ""}`} />
+                    <item.icon className={`h-5 w-5 transition-transform duration-200 ${activeItem === item.id ? "text-purple-600 dark:text-purple-400" : ""}`} />
                     <span>{item.label}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

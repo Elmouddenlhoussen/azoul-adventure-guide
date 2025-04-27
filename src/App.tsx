@@ -33,41 +33,50 @@ function App() {
   return (
     <>
       <ScrollToTop />
-      <Header />
-      <div className="min-h-screen pt-20">
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/feature/:featureId" element={<FeatureDetail />} />
-          <Route path="/feature/guides" element={<GuidesPage />} />
-          <Route path="/feature/cultural-tours" element={<CulturalToursPage />} />
-          <Route path="/feature/accommodations" element={<AccommodationsPage />} />
-          <Route path="/destination/:destinationId" element={<DestinationDetail />} />
-          <Route path="/guide/:guideId" element={<GuideDetailPage />} />
-          <Route path="/tour/:tourId" element={<TourDetailPage />} />
-          <Route path="/accommodation/:accommodationId" element={<AccommodationDetailPage />} />
-          <Route path="/search" element={<SearchResults />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/discover" element={<DiscoverPage />} />
-          <Route path="/news" element={<NewsPage />} />
-          <Route path="/booking" element={<BookingPage />} />
-          <Route path="/profile" element={
-            <ProtectedRoute>
-              <UserProfile />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/*" element={
-            <ProtectedRoute requireAdmin={true}>
-              <AdminRoutes />
-            </ProtectedRoute>
-          } />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </div>
-      <Footer />
+      <Routes>
+        {/* Admin routes - no header/footer */}
+        <Route path="/admin/*" element={
+          <ProtectedRoute requireAdmin={true}>
+            <AdminRoutes />
+          </ProtectedRoute>
+        } />
+        
+        {/* All other routes with header and footer */}
+        <Route path="*" element={
+          <>
+            <Header />
+            <div className="min-h-screen pt-20">
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/feature/:featureId" element={<FeatureDetail />} />
+                <Route path="/feature/guides" element={<GuidesPage />} />
+                <Route path="/feature/cultural-tours" element={<CulturalToursPage />} />
+                <Route path="/feature/accommodations" element={<AccommodationsPage />} />
+                <Route path="/destination/:destinationId" element={<DestinationDetail />} />
+                <Route path="/guide/:guideId" element={<GuideDetailPage />} />
+                <Route path="/tour/:tourId" element={<TourDetailPage />} />
+                <Route path="/accommodation/:accommodationId" element={<AccommodationDetailPage />} />
+                <Route path="/search" element={<SearchResults />} />
+                <Route path="/signin" element={<SignIn />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="/discover" element={<DiscoverPage />} />
+                <Route path="/news" element={<NewsPage />} />
+                <Route path="/booking" element={<BookingPage />} />
+                <Route path="/profile" element={
+                  <ProtectedRoute>
+                    <UserProfile />
+                  </ProtectedRoute>
+                } />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </div>
+            <Footer />
+          </>
+        } />
+      </Routes>
       <ChatAssistant />
       <Toaster />
     </>
