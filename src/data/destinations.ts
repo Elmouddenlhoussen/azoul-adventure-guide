@@ -1,4 +1,6 @@
 
+import { supabase } from "@/integrations/supabase/client";
+
 export interface Destination {
   id: string;
   title: string;
@@ -38,3 +40,10 @@ export const destinations: Destination[] = [
     featured: true
   }
 ];
+
+export const updateDestinationImage = async (id: string, imageUrl: string) => {
+  const destinationToUpdate = destinations.find(d => d.id === id);
+  if (destinationToUpdate) {
+    destinationToUpdate.image = imageUrl;
+  }
+};

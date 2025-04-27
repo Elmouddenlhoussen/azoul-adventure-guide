@@ -1,12 +1,27 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { Edit, Trash2, Plus, Search, Eye } from 'lucide-react';
+import { Edit, Trash2, Plus, Search, Eye, Image } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { destinations } from '@/data/destinations';
+import { destinations, updateDestinationImage } from '@/data/destinations';
+import { MediaSelector } from '@/components/admin/MediaSelector';
+import { useToast } from '@/hooks/use-toast';
 
 const DestinationsManagement = () => {
+  const { toast } = useToast();
+  const [isMediaSelectorOpen, setIsMediaSelectorOpen] = useState(false);
+  const [selectedDestinationId, setSelectedDestinationId] = useState<string | null>(null);
+
+  const handleUpdateImage = async (imageUrl: string) => {
+    if (selectedDestinationId) {
+      await updateDestinationImage(selectedDestinationId, imageUrl);
+      toast({
+        title: "Image updated",
+        description: "The destination image has been updated successfully.",
+      });
+    }
+  };
+
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
@@ -35,6 +50,7 @@ const DestinationsManagement = () => {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>Image</TableHead>
               <TableHead>Destination</TableHead>
               <TableHead>Location</TableHead>
               <TableHead>Rating</TableHead>
@@ -45,6 +61,13 @@ const DestinationsManagement = () => {
           <TableBody>
             {destinations.map((destination) => (
               <TableRow key={destination.id}>
+                <TableCell>
+                  <img 
+                    src={destination.image} 
+                    alt={destination.title}
+                    className="w-16 h-16 object-cover rounded"
+                  />
+                </TableCell>
                 <TableCell className="font-medium">{destination.title}</TableCell>
                 <TableCell>{destination.location}</TableCell>
                 <TableCell>{destination.rating} / 5</TableCell>
@@ -56,8 +79,15 @@ const DestinationsManagement = () => {
                   </span>
                 </TableCell>
                 <TableCell className="text-right">
-                  <Button variant="ghost" size="sm">
-                    <Eye className="h-4 w-4" />
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={() => {
+                      setSelectedDestinationId(destination.id);
+                      setIsMediaSelectorOpen(true);
+                    }}
+                  >
+                    <Image className="h-4 w-4" />
                   </Button>
                   <Button variant="ghost" size="sm">
                     <Edit className="h-4 w-4" />
@@ -71,6 +101,15 @@ const DestinationsManagement = () => {
           </TableBody>
         </Table>
       </div>
+
+      <MediaSelector
+        open={isMediaSelectorOpen}
+        onClose={() => {
+          setIsMediaSelectorOpen(false);
+          setSelectedDestinationId(null);
+        }}
+        onSelect={handleUpdateImage}
+      />
     </div>
   );
 };
