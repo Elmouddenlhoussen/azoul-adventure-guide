@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Grid2x2, ListView, UploadCloud, Trash2, Pencil } from 'lucide-react';
+import { Grid2x2, ListVideo, UploadCloud, Trash2, Pencil } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -27,7 +26,7 @@ const MediaManagement = () => {
   const { toast } = useToast();
   const [media, setMedia] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [view, setView] = useState<'grid' | 'list'>('grid');
+  const [view, setView<'grid' | 'list'>>('grid');
   const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState<any | null>(null);
   const [newName, setNewName] = useState('');
@@ -128,7 +127,7 @@ const MediaManagement = () => {
               size="icon"
               onClick={() => setView('list')}
             >
-              <ListView className="h-4 w-4" />
+              <ListVideo className="h-4 w-4" />
             </Button>
           </div>
           <div>
