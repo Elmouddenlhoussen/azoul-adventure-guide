@@ -180,6 +180,13 @@ const MediaManagement = () => {
     }
   };
 
+  // Add the missing openRenameDialog function
+  const openRenameDialog = (item: MediaFile) => {
+    setSelectedMedia(item);
+    setNewName(item.name.split('.')[0]); // Set initial name without extension
+    setIsRenameDialogOpen(true);
+  };
+
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
@@ -235,7 +242,7 @@ const MediaManagement = () => {
                   {media.map((item) => (
                     <div key={item.id} className="relative group">
                       <div className="aspect-square rounded-md bg-gray-100 flex items-center justify-center overflow-hidden">
-                        {item.type === 'image' ? (
+                        {item.type.startsWith('image/') ? (
                           <img src={item.url} alt={item.name} className="w-full h-full object-cover" />
                         ) : (
                           <div className="flex flex-col items-center justify-center p-4">
@@ -257,7 +264,7 @@ const MediaManagement = () => {
                           variant="destructive" 
                           size="icon" 
                           className="h-8 w-8"
-                          onClick={() => handleDeleteMedia(item.id)}
+                          onClick={() => handleDeleteMedia(item.name)}
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -303,7 +310,7 @@ const MediaManagement = () => {
                               <Button 
                                 variant="ghost" 
                                 size="icon"
-                                onClick={() => handleDeleteMedia(item.id)}
+                                onClick={() => handleDeleteMedia(item.name)}
                               >
                                 <Trash2 className="h-4 w-4 text-destructive" />
                               </Button>
