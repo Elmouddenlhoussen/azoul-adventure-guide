@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -26,7 +27,7 @@ const MediaManagement = () => {
   const { toast } = useToast();
   const [media, setMedia] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [view, setView<'grid' | 'list'>>('grid');
+  const [view, setView] = useState<'grid' | 'list'>('grid');
   const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState<any | null>(null);
   const [newName, setNewName] = useState('');
