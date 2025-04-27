@@ -7,107 +7,177 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from "@/integrations/supabase/client";
 
-// Mock API functions
-const fetchMedia = (): Promise<Array<any>> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve([
-        { id: 1, name: "marrakech-plaza.jpg", url: "https://images.unsplash.com/photo-1597212720452-0576ff58b32c", type: "image", size: "1.2 MB", uploadedAt: "2023-05-10" },
-        { id: 2, name: "desert-tour.jpg", url: "https://images.unsplash.com/photo-1536077295113-9bd404bdbfc1", type: "image", size: "0.8 MB", uploadedAt: "2023-05-15" },
-        { id: 3, name: "chefchaouen-streets.jpg", url: "https://images.unsplash.com/photo-1548018560-c7196548ed6d", type: "image", size: "1.5 MB", uploadedAt: "2023-05-18" },
-        { id: 4, name: "morocco-guide.pdf", url: "", type: "document", size: "2.4 MB", uploadedAt: "2023-05-20" },
-        { id: 5, name: "fes-market.jpg", url: "https://images.unsplash.com/photo-1570193825602-b86d19101838", type: "image", size: "1.1 MB", uploadedAt: "2023-05-22" },
-      ]);
-    }, 800);
-  });
-};
+interface MediaFile {
+  id: number;
+  name: string;
+  url: string;
+  type: string;
+  size: string;
+  uploadedAt: string;
+}
 
 const MediaManagement = () => {
   const { toast } = useToast();
-  const [media, setMedia] = useState<any[]>([]);
+  const [media, setMedia] = useState<MediaFile[]>([]);
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<'grid' | 'list'>('grid');
   const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
-  const [selectedMedia, setSelectedMedia] = useState<any | null>(null);
+  const [selectedMedia, setSelectedMedia] = useState<MediaFile | null>(null);
   const [newName, setNewName] = useState('');
 
   useEffect(() => {
-    fetchMedia()
-      .then(data => {
-        setMedia(data);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error("Failed to fetch media:", error);
-        toast({
-          title: "Error",
-          description: "Failed to load media files",
-          variant: "destructive",
-        });
-        setLoading(false);
-      });
-  }, [toast]);
+    fetchMediaFiles();
+  }, []);
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const fetchMediaFiles = async () => {
+    try {
+      const { data: filesData, error } = await supabase
+        .storage
+        .from('media')
+        .list();
+
+      if (error) throw error;
+
+      const mediaFiles: MediaFile[] = await Promise.all(
+        (filesData || []).map(async (file) => {
+          const { data: { publicUrl } } = supabase
+            .storage
+            .from('media')
+            .getPublicUrl(file.name);
+
+          return {
+            id: Date.now(), // Using timestamp as id since storage objects don't have unique ids
+            name: file.name,
+            url: publicUrl,
+            type: file.metadata?.mimetype || 'unknown',
+            size: `${(file.metadata?.size / (1024 * 1024)).toFixed(1)} MB`,
+            uploadedAt: new Date(file.created_at || '').toISOString().split('T')[0],
+          };
+        })
+      );
+
+      setMedia(mediaFiles);
+      setLoading(false);
+    } catch (error) {
+      console.error("Failed to fetch media:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load media files",
+        variant: "destructive",
+      });
+      setLoading(false);
+    }
+  };
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (!files || files.length === 0) return;
     
-    // In a real implementation, you would upload the file to your server/cloud storage
-    // For this demo, we'll simulate adding the file to the list
-    const newMedia = Array.from(files).map((file, index) => {
-      const id = media.length > 0 ? Math.max(...media.map(m => m.id)) + index + 1 : index + 1;
-      return {
-        id,
-        name: file.name,
-        type: file.type.startsWith('image/') ? 'image' : 'document',
-        size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
-        uploadedAt: new Date().toISOString().split('T')[0],
-        url: file.type.startsWith('image/') ? URL.createObjectURL(file) : '',
-      };
-    });
-    
-    setMedia([...media, ...newMedia]);
-    
-    toast({
-      title: "Upload successful",
-      description: `${newMedia.length} file(s) uploaded successfully.`,
-    });
-  };
-  
-  const handleDeleteMedia = (id: number) => {
-    if (window.confirm("Are you sure you want to delete this file?")) {
-      setMedia(media.filter(item => item.id !== id));
+    try {
+      const uploadPromises = Array.from(files).map(async (file) => {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
+        
+        const { error: uploadError } = await supabase
+          .storage
+          .from('media')
+          .upload(fileName, file);
+
+        if (uploadError) throw uploadError;
+      });
+
+      await Promise.all(uploadPromises);
       
       toast({
-        title: "File deleted",
-        description: "File has been deleted successfully.",
+        title: "Upload successful",
+        description: `${files.length} file(s) uploaded successfully.`,
+      });
+
+      // Refresh the media list
+      fetchMediaFiles();
+    } catch (error) {
+      console.error("Upload error:", error);
+      toast({
+        title: "Upload failed",
+        description: "Failed to upload one or more files",
         variant: "destructive",
       });
     }
   };
   
-  const openRenameDialog = (mediaItem: any) => {
-    setSelectedMedia(mediaItem);
-    setNewName(mediaItem.name);
-    setIsRenameDialogOpen(true);
+  const handleDeleteMedia = async (name: string) => {
+    if (window.confirm("Are you sure you want to delete this file?")) {
+      try {
+        const { error } = await supabase
+          .storage
+          .from('media')
+          .remove([name]);
+
+        if (error) throw error;
+        
+        setMedia(media.filter(item => item.name !== name));
+        
+        toast({
+          title: "File deleted",
+          description: "File has been deleted successfully.",
+          variant: "destructive",
+        });
+      } catch (error) {
+        console.error("Delete error:", error);
+        toast({
+          title: "Delete failed",
+          description: "Failed to delete the file",
+          variant: "destructive",
+        });
+      }
+    }
   };
   
-  const handleRenameMedia = () => {
+  const handleRenameMedia = async () => {
     if (!selectedMedia || !newName.trim()) return;
     
-    setMedia(media.map(item => 
-      item.id === selectedMedia.id ? { ...item, name: newName.trim() } : item
-    ));
-    
-    setIsRenameDialogOpen(false);
-    setSelectedMedia(null);
-    setNewName('');
-    
-    toast({
-      title: "File renamed",
-      description: "File has been renamed successfully.",
-    });
+    try {
+      const oldPath = selectedMedia.name;
+      const fileExt = oldPath.split('.').pop();
+      const newPath = `${newName.trim()}.${fileExt}`;
+      
+      // Copy the file with new name
+      const { error: copyError } = await supabase
+        .storage
+        .from('media')
+        .copy(oldPath, newPath);
+
+      if (copyError) throw copyError;
+
+      // Delete the old file
+      const { error: deleteError } = await supabase
+        .storage
+        .from('media')
+        .remove([oldPath]);
+
+      if (deleteError) throw deleteError;
+      
+      setIsRenameDialogOpen(false);
+      setSelectedMedia(null);
+      setNewName('');
+      
+      toast({
+        title: "File renamed",
+        description: "File has been renamed successfully.",
+      });
+
+      // Refresh the media list
+      fetchMediaFiles();
+    } catch (error) {
+      console.error("Rename error:", error);
+      toast({
+        title: "Rename failed",
+        description: "Failed to rename the file",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
