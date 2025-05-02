@@ -9,6 +9,48 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      accommodations: {
+        Row: {
+          amenities: string[]
+          created_at: string | null
+          description: string
+          featured: boolean | null
+          id: string
+          image: string
+          location: string
+          name: string
+          price_per_night: number
+          rating: number
+          updated_at: string | null
+        }
+        Insert: {
+          amenities: string[]
+          created_at?: string | null
+          description: string
+          featured?: boolean | null
+          id?: string
+          image: string
+          location: string
+          name: string
+          price_per_night: number
+          rating: number
+          updated_at?: string | null
+        }
+        Update: {
+          amenities?: string[]
+          created_at?: string | null
+          description?: string
+          featured?: boolean | null
+          id?: string
+          image?: string
+          location?: string
+          name?: string
+          price_per_night?: number
+          rating?: number
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       bookings: {
         Row: {
           adults: number
@@ -65,6 +107,81 @@ export type Database = {
           },
         ]
       }
+      courses: {
+        Row: {
+          created_at: string | null
+          description: string
+          duration_hours: number
+          featured: boolean | null
+          id: string
+          image: string
+          instructor: string
+          price: number
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description: string
+          duration_hours: number
+          featured?: boolean | null
+          id?: string
+          image: string
+          instructor: string
+          price: number
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string
+          duration_hours?: number
+          featured?: boolean | null
+          id?: string
+          image?: string
+          instructor?: string
+          price?: number
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      destinations: {
+        Row: {
+          created_at: string | null
+          description: string
+          featured: boolean | null
+          id: string
+          image: string
+          location: string
+          rating: number
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description: string
+          featured?: boolean | null
+          id?: string
+          image: string
+          location: string
+          rating: number
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string
+          featured?: boolean | null
+          id?: string
+          image?: string
+          location?: string
+          rating?: number
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       experiences: {
         Row: {
           created_at: string | null
@@ -101,6 +218,117 @@ export type Database = {
         }
         Relationships: []
       }
+      features: {
+        Row: {
+          created_at: string | null
+          description: string
+          featured: boolean | null
+          icon: string
+          id: string
+          image: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description: string
+          featured?: boolean | null
+          icon: string
+          id?: string
+          image: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string
+          featured?: boolean | null
+          icon?: string
+          id?: string
+          image?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      guides: {
+        Row: {
+          bio: string
+          created_at: string | null
+          featured: boolean | null
+          id: string
+          image: string
+          name: string
+          specialty: string
+          updated_at: string | null
+          years_experience: number
+        }
+        Insert: {
+          bio: string
+          created_at?: string | null
+          featured?: boolean | null
+          id?: string
+          image: string
+          name: string
+          specialty: string
+          updated_at?: string | null
+          years_experience: number
+        }
+        Update: {
+          bio?: string
+          created_at?: string | null
+          featured?: boolean | null
+          id?: string
+          image?: string
+          name?: string
+          specialty?: string
+          updated_at?: string | null
+          years_experience?: number
+        }
+        Relationships: []
+      }
+      news: {
+        Row: {
+          author: string
+          category: string
+          content: string
+          created_at: string | null
+          featured: boolean | null
+          id: string
+          image: string
+          published_at: string | null
+          tags: string[]
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          author: string
+          category: string
+          content: string
+          created_at?: string | null
+          featured?: boolean | null
+          id?: string
+          image: string
+          published_at?: string | null
+          tags: string[]
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          author?: string
+          category?: string
+          content?: string
+          created_at?: string | null
+          featured?: boolean | null
+          id?: string
+          image?: string
+          published_at?: string | null
+          tags?: string[]
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -127,6 +355,77 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      subscribers: {
+        Row: {
+          email: string
+          first_name: string | null
+          id: string
+          last_name: string | null
+          subscribed_at: string | null
+        }
+        Insert: {
+          email: string
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          subscribed_at?: string | null
+        }
+        Update: {
+          email?: string
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          subscribed_at?: string | null
+        }
+        Relationships: []
+      }
+      tours: {
+        Row: {
+          created_at: string | null
+          description: string
+          destination_id: string | null
+          duration_days: number
+          featured: boolean | null
+          id: string
+          image: string
+          price: number
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description: string
+          destination_id?: string | null
+          duration_days: number
+          featured?: boolean | null
+          id?: string
+          image: string
+          price: number
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string
+          destination_id?: string | null
+          duration_days?: number
+          featured?: boolean | null
+          id?: string
+          image?: string
+          price?: number
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tours_destination_id_fkey"
+            columns: ["destination_id"]
+            isOneToOne: false
+            referencedRelation: "destinations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

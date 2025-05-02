@@ -1,4 +1,5 @@
 
+import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom'
 import Index from '@/pages/Index'
 import NotFound from '@/pages/NotFound'
@@ -28,8 +29,14 @@ import Footer from '@/components/Footer'
 import DiscoverPage from '@/pages/DiscoverPage'
 import NewsPage from '@/pages/NewsPage'
 import BookingPage from '@/pages/BookingPage'
+import { initializeApp } from '@/services/initApp'
 
 function App() {
+  useEffect(() => {
+    // Initialize app services
+    initializeApp().catch(console.error);
+  }, []);
+
   return (
     <>
       <ScrollToTop />

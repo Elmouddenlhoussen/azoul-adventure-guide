@@ -1,12 +1,12 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { Edit, Trash2, Plus, Search, Eye, Image } from 'lucide-react';
+import { Edit, Trash2, Plus, Search, Image } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { 
-  destinations, 
+  getDestinations,
   Destination, 
   updateDestinationImage, 
   createDestination, 
@@ -19,11 +19,24 @@ import { DestinationForm } from '@/components/admin/forms/DestinationForm';
 
 const DestinationsManagement = () => {
   const { toast } = useToast();
+  const [destinations, setDestinations] = useState<Destination[]>([]);
   const [isMediaSelectorOpen, setIsMediaSelectorOpen] = useState(false);
   const [selectedDestinationId, setSelectedDestinationId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
   const [editingDestination, setEditingDestination] = useState<Destination | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadDestinations();
+  }, []);
+
+  const loadDestinations = async () => {
+    setLoading(true);
+    const data = await getDestinations();
+    setDestinations(data);
+    setLoading(false);
+  };
 
   const handleUpdateImage = async (imageUrl: string) => {
     if (selectedDestinationId) {
@@ -34,6 +47,7 @@ const DestinationsManagement = () => {
           title: "Image updated",
           description: "The destination image has been updated successfully.",
         });
+        loadDestinations();
       } else {
         toast({
           title: "Update failed",
@@ -58,6 +72,7 @@ const DestinationsManagement = () => {
           title: "Destination deleted",
           description: "The destination has been deleted successfully.",
         });
+        loadDestinations();
       } else {
         toast({
           title: "Deletion failed",
@@ -91,7 +106,7 @@ const DestinationsManagement = () => {
       // Create new destination
       const newDestination = await createDestination({
         ...formData,
-        rating: 4.5, // Default rating
+        rating: formData.rating || 4.5, // Default rating
       });
       
       if (newDestination) {
@@ -112,6 +127,7 @@ const DestinationsManagement = () => {
     if (success) {
       setIsFormDialogOpen(false);
       setEditingDestination(null);
+      loadDestinations();
     }
   };
 
@@ -120,6 +136,14 @@ const DestinationsManagement = () => {
       destination.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       destination.location.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  if (loading) {
+    return (
+      <div className="p-6 flex justify-center items-center h-96">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-800"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6">
@@ -163,60 +187,61 @@ const DestinationsManagement = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredDestinations.map((destination) => (
-              <TableRow key={destination.id}>
-                <TableCell>
-                  <img 
-                    src={destination.image} 
-                    alt={destination.title}
-                    className="w-16 h-16 object-cover rounded"
-                  />
-                </TableCell>
-                <TableCell className="font-medium">{destination.title}</TableCell>
-                <TableCell>{destination.location}</TableCell>
-                <TableCell>{destination.rating} / 5</TableCell>
-                <TableCell>
-                  <span className={`px-2 py-1 text-xs rounded-full ${
-                    destination.featured ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                  }`}>
-                    {destination.featured ? 'Yes' : 'No'}
-                  </span>
-                </TableCell>
-                <TableCell className="text-right">
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    onClick={() => {
-                      setSelectedDestinationId(destination.id);
-                      setIsMediaSelectorOpen(true);
-                    }}
-                    title="Change Image"
-                  >
-                    <Image className="h-4 w-4" />
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    onClick={() => handleOpenEditDialog(destination)}
-                    title="Edit Destination"
-                  >
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    onClick={() => handleDeleteDestination(destination.id)}
-                    title="Delete Destination"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-            {filteredDestinations.length === 0 && (
+            {filteredDestinations.length > 0 ? (
+              filteredDestinations.map((destination) => (
+                <TableRow key={destination.id}>
+                  <TableCell>
+                    <img 
+                      src={destination.image} 
+                      alt={destination.title}
+                      className="w-16 h-16 object-cover rounded"
+                    />
+                  </TableCell>
+                  <TableCell className="font-medium">{destination.title}</TableCell>
+                  <TableCell>{destination.location}</TableCell>
+                  <TableCell>{destination.rating} / 5</TableCell>
+                  <TableCell>
+                    <span className={`px-2 py-1 text-xs rounded-full ${
+                      destination.featured ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                    }`}>
+                      {destination.featured ? 'Yes' : 'No'}
+                    </span>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => {
+                        setSelectedDestinationId(destination.id);
+                        setIsMediaSelectorOpen(true);
+                      }}
+                      title="Change Image"
+                    >
+                      <Image className="h-4 w-4" />
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => handleOpenEditDialog(destination)}
+                      title="Edit Destination"
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => handleDeleteDestination(destination.id)}
+                      title="Delete Destination"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
               <TableRow>
                 <TableCell colSpan={6} className="text-center py-10 text-muted-foreground">
-                  No destinations found matching your search.
+                  {destinations.length === 0 ? 'No destinations found. Add your first destination!' : 'No destinations found matching your search.'}
                 </TableCell>
               </TableRow>
             )}

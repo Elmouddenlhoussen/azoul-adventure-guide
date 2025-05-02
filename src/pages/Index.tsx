@@ -1,12 +1,12 @@
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Hero from '@/components/Hero';
 import FeatureCard from '@/components/FeatureCard';
 import DestinationCard from '@/components/DestinationCard';
 import MapPreview from '@/components/MapPreview';
 import ScrollReveal from '@/components/ScrollReveal';
 import { features } from '@/data/features';
-import { destinations } from '@/data/destinations';
+import { getFeaturedDestinations, Destination } from '@/data/destinations';
 import { Users, Compass, Home } from 'lucide-react';
 
 const iconMap = {
@@ -16,8 +16,22 @@ const iconMap = {
 };
 
 const Index = () => {
+  const [destinations, setDestinations] = useState<Destination[]>([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     document.title = 'Azoul - Experience Morocco';
+  }, []);
+
+  useEffect(() => {
+    const loadDestinations = async () => {
+      setLoading(true);
+      const data = await getFeaturedDestinations();
+      setDestinations(data);
+      setLoading(false);
+    };
+    
+    loadDestinations();
   }, []);
 
   return (
@@ -63,19 +77,30 @@ const Index = () => {
             </div>
           </ScrollReveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {destinations.map((destination, index) => (
-              <DestinationCard
-                key={destination.id}
-                title={destination.title}
-                description={destination.description}
-                image={destination.image}
-                location={destination.location}
-                href={`/destination/${destination.id}`}
-                index={index}
-              />
-            ))}
-          </div>
+          {loading ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {destinations.map((destination, index) => (
+                <DestinationCard
+                  key={destination.id}
+                  title={destination.title}
+                  description={destination.description}
+                  image={destination.image}
+                  location={destination.location}
+                  href={`/destination/${destination.id}`}
+                  index={index}
+                />
+              ))}
+              {destinations.length === 0 && (
+                <div className="col-span-3 text-center py-10">
+                  <p className="text-muted-foreground">No featured destinations found.</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </section>
 

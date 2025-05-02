@@ -3,9 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Image, Search, UploadCloud } from 'lucide-react';
-import { supabase } from "@/integrations/supabase/client";
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
+import { uploadFile, listFiles } from '@/services/storageService';
 
 interface MediaSelectorProps {
   open: boolean;
@@ -33,6 +33,7 @@ export const MediaSelector = ({
   const [media, setMedia] = useState<MediaFile[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -42,12 +43,8 @@ export const MediaSelector = ({
 
   const fetchMediaFiles = async () => {
     try {
-      const { data: filesData, error } = await supabase
-        .storage
-        .from('media')
-        .list();
-
-      if (error) throw error;
+      setLoading(true);
+      const filesData = await listFiles();
 
       const mediaFiles: MediaFile[] = await Promise.all(
         (filesData || []).map(async (file) => {
@@ -68,7 +65,6 @@ export const MediaSelector = ({
       );
 
       setMedia(mediaFiles);
-      setLoading(false);
     } catch (error) {
       console.error("Failed to fetch media:", error);
       toast({
@@ -76,6 +72,7 @@ export const MediaSelector = ({
         description: "Failed to load media files",
         variant: "destructive",
       });
+    } finally {
       setLoading(false);
     }
   };
@@ -85,17 +82,9 @@ export const MediaSelector = ({
     if (!files || files.length === 0) return;
     
     try {
-      setLoading(true);
+      setUploading(true);
       const uploadPromises = Array.from(files).map(async (file) => {
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
-        
-        const { error: uploadError } = await supabase
-          .storage
-          .from('media')
-          .upload(fileName, file);
-
-        if (uploadError) throw uploadError;
+        await uploadFile(file);
       });
 
       await Promise.all(uploadPromises);
@@ -114,7 +103,8 @@ export const MediaSelector = ({
         description: "Failed to upload one or more files",
         variant: "destructive",
       });
-      setLoading(false);
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -151,11 +141,12 @@ export const MediaSelector = ({
                 accept="image/*"
                 multiple
                 onChange={handleFileUpload} 
+                disabled={uploading}
               />
-              <Button variant="outline" asChild>
+              <Button variant="outline" asChild disabled={uploading}>
                 <label htmlFor="media-upload" className="cursor-pointer">
                   <UploadCloud className="mr-2 h-4 w-4" />
-                  Upload
+                  {uploading ? 'Uploading...' : 'Upload'}
                 </label>
               </Button>
             </div>

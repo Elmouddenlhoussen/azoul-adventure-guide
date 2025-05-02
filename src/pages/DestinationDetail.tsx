@@ -1,5 +1,4 @@
-
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Clock, Calendar, Users, MapPin, Star, ExternalLink } from 'lucide-react';
@@ -7,9 +6,11 @@ import AnimatedTransition from '@/components/AnimatedTransition';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useLanguage } from '@/hooks/use-language';
+import { getDestinationById, Destination } from '@/data/destinations';
+import { useToast } from '@/hooks/use-toast';
 
-interface DestinationData {
-  id: string;
+// This data is temporary until we implement the multilingual content in Supabase
+interface MultilingualDestinationInfo {
   title: {
     en: string;
     fr: string;
@@ -28,15 +29,12 @@ interface DestinationData {
     ar: string;
     ber: string;
   };
-  image: string;
-  gallery: string[];
   location: {
     en: string;
     fr: string;
     ar: string;
     ber: string;
   };
-  rating: number;
   duration: {
     en: string;
     fr: string;
@@ -69,9 +67,9 @@ interface DestinationData {
   };
 }
 
-const destinations: Record<string, DestinationData> = {
+// Temporary multilingual info by destination ID
+const multilingualInfo: Record<string, MultilingualDestinationInfo> = {
   "marrakech": {
-    id: "marrakech",
     title: {
       en: "Marrakech",
       fr: "Marrakech",
@@ -90,19 +88,12 @@ const destinations: Record<string, DestinationData> = {
       ar: "تُعرف باسم 'المدينة الحمراء' لجدرانها ذات اللون الأوكر، مراكش هي مركز ثقافي يقدم مزيجًا مثاليًا من التاريخ والهندسة المعمارية والحياة النابضة بالحيوية في الشوارع. قلب المدينة هو ساحة جامع الفنا، التي تتحول من مركز للتسوق خلال النهار إلى مسرح في الهواء الطلق للفنانين ورواة القصص وأكشاك الطعام في الليل. استكشف الأزقة المتعرجة في المدينة القديمة، وزر قصر الباهية الرائع، واعثر على السلام في حديقة ماجوريل، وهي حديقة نباتية صممها الرسام الفرنسي جاك ماجوريل وامتلكها لاحقًا إيف سان لوران.",
       ber: "ⵜⵜⵡⴰⵙⵙⴰⵏ ⵙ 'ⵜⵖⵔⵎⵜ ⵜⴰⵣⴳⴳⵯⴰⵖⵜ' ⴼ ⵉⵖⵔⴱⴰⵏ ⵏⵏⵙ ⵓⴽⵡⵔⴰⵏⵉⵏ, ⵎⵕⵕⴰⴽⵛ ⵉⴳⴰ ⵜⵜ ⴰⵎⵎⴰⵙ ⴰⴷⵍⵙⴰⵏ ⵉⵙⴽⴰⵔⵏ ⴰⵛⵕⴰⴹ ⵉⴷⵍⵙⴰⵏ ⵏ ⵓⵎⵣⵔⵓⵢ, ⵜⴰⵖⴰⵡⵙⴰ ⴷ ⵜⵓⴷⵔⵜ ⵜⴰⵢⵎⴰⵜⵜ ⵜⴰⵎⵔⴰⵔⵜ. ⵓⵍ ⵏ ⵜⵖⵔⵎⵜ ⵉⴳⴰ ⵜⵜ ⴰⵙⴰⵢⵔⴰⵔ ⵏ ⵊⴰⵎⵄ ⵍⴼⵏⴰ, ⵉⵜⵜⴱⴷⴷⴰⵍⵏ ⵙⴳ ⴰⵎⵎⴰⵙ ⵏ ⵜⵣⵏⵣⴰ ⴳ ⵡⴰⵙⵙ ⵖⵔ ⴰⵎⵔⴰⵔ ⵉⵥⵥⵏⵥⵕⵏ ⴳ ⵉⵢⴹ. ⵙⴽⵙⵓ ⵉⴱⵔⵉⴷⵏ ⵉⵥⵡⴰⵢⵏⵉⵏ ⵏ ⵓⵎⴷⴰⵏ, ⵥⵕ ⵉⴳⵍⴷⴰⵏ ⵉⵛⵡⴰⵏ ⵏ ⵍⴱⴰⵀⵢⴰ ⴷ ⵓⵔⵜⵉ ⵏ ⵎⴰⵊⵓⵔⵉⵍ, ⵓⵔⵜⵉ ⵉⵙⴽⵔ ⵊⴰⴽ ⵎⴰⵊⵓⵔⵉⵍ, ⵢⴰⵙⵙⵜⵔ ⵢⴰⵏ ⵙⴰⵏ ⵍⵓⵔⴰⵏ."
     },
-    image: "/images/marrakech.jpg",
-    gallery: [
-      "/images/marrakech-1.jpg",
-      "/images/marrakech-2.jpg",
-      "/images/marrakech-3.jpg"
-    ],
     location: {
       en: "Central Morocco",
       fr: "Maroc Central",
       ar: "وسط المغرب",
       ber: "ⴰⵎⵎⴰⵙ ⵏ ⵍⵎⵖⵔⵉⴱ"
     },
-    rating: 4.8,
     duration: {
       en: "3-4 days",
       fr: "3-4 jours",
@@ -135,7 +126,6 @@ const destinations: Record<string, DestinationData> = {
     }
   },
   "chefchaouen": {
-    id: "chefchaouen",
     title: {
       en: "Chefchaouen",
       fr: "Chefchaouen",
@@ -154,19 +144,12 @@ const destinations: Record<string, DestinationData> = {
       ar: "تقع شفشاون في جبال الريف وتشتهر بمبانيها المطلية باللون الأزرق والتي تخلق جوًا يشبه الحلم. توفر هذه المدينة الساحرة وتيرة مريحة مقارنة بمدن المغرب الصاخبة. تخلق الشوارع والمباني المطلية باللون الأزرق بيئة فريدة وساحرة تجذب الفنانين والمصورين من جميع أنحاء العالم. استكشف المدينة القديمة المتعرجة أو تنزه في الجبال المحيطة أو ببساطة استمتع بثقافة المقاهي المريحة. تقدم المدينة أيضًا تسوقًا ممتازًا للحرف اليدوية المحلية ، لا سيما الملابس الصوفية والبطانيات المنسوجة ، حيث تشتهر المنطقة بصناعة النسيج.",
       ber: "ⵜⵍⵍⴰ ⴳ ⵉⴷⵔⴰⵔ ⵏ ⴰⵔⵉⴼ, ⵛⴼⵛⴰⵡⵏ ⵜⵜⵡⴰⵙⵙⴰⵏ ⵙ ⵜⵉⵎⵉⴽⵉⵡⵉⵏ ⵏⵏⵙ ⵜⵜⵡⴰⵙⵓⵖⴰⵏⵉⵏ ⵙ ⵡⵓⵏⴳⵍⵓ ⵉⵙⴽⴰⵔⵏ ⴰⵡⴰⵏ ⵉⵎⵍⴰⵏ. ⵜⴰⵎⴷⵉⵏⵜ ⴰⴷ ⵜⴰⵇⴱⵓⵔ ⵜⵜⴰⴽⴰ ⵜⴰⵣⴷⴷⴰⵔⵜ ⵉⵔⵓⵔⴰⵏ ⴰⵎ ⵜⵎⴷⵉⵏⵉⵏ ⵜⵉⵎⵔⴰⵔⵓⵜⵉⵏ ⵏ ⵍⵎⵖⵔⵉⴱ. ⵉⴱⵔⵉⴷⵏ ⴷ ⵜⵉⵎⵉⴽⵉⵡⵉⵏ ⵜⵜⵡⴰⵙⵓⵖⴰⵏⵉⵏ ⵙ ⵡⵓⵏⴳⵍⵓ ⵙⴽⴰⵔⵏ ⴰⵡⴰⵏ ⵓⵙⵙⴰⵏ ⴷ ⵉⵛⵡⴰⵏ ⵉⵜⵜⴰⵔⵉⵏ ⵉⴼⵍⵍⴰⵀⵏ ⴷ ⵉⵎⵙⵓⵔⴰⵔ ⵙⴳ ⴰⵎⴰⴹⴰⵍ ⴰⴽⴽⵯ. ⴰⵔⵎ ⴰⵎⴷⴰⵏ ⵉⵥⵡⴰⵢⵏⵉⵏ, ⵜⴰⴷⴷⴰⴳ ⴳ ⵉⴷⵔⴰⵔ ⵉⵡⵔⴰⵏⵉⵏ ⵏⵖ ⵙⵙⵓⴼⵖ ⵜⴰⵢⵢⵓⵜ ⵙ ⵜⴷⵍⵙⴰ ⵏ ⵉⵇⴰⵀⵡⵉⵜⵏ ⵉⵔⵓⵔⴰⵏⵉⵏ. ⵜⴰⵎⴷⵉⵏⵜ ⵜⵜⴰⴽⴰ ⴰⵡⴷ ⵜⴰⵣⵏⵣⴰ ⵉⵛⵡⴰⵏ ⵏ ⵜⵉⵏⴰⵡⵉⵏ ⵜⵉⴷⵖⴰⵔⴰⵏⵉⵏ, ⴰⵙⵙⴰⵖ ⵉⴳⵍⴰⵢⵏ ⵉⵡⵍⵍⵓⴼⵏ ⴷ ⵉⵛⵕⴰⵕⵏ ⵉⵜⵜⵡⴰⵙⵡⵡⵓⵜⵏ, ⴰⵎ ⵜⴰⵎⵏⴰⴹⵜ ⵜⵜⵡⴰⵙⵙⴰⵏ ⵙ ⵜⴰⴳⴳⵓⵔⵜ ⵏ ⵜⴰⵙⵙⴰ."
     },
-    image: "/images/chefchaouen.jpg",
-    gallery: [
-      "/images/chefchaouen-1.jpg",
-      "/images/chefchaouen-2.jpg",
-      "/images/chefchaouen-3.jpg"
-    ],
     location: {
       en: "Northern Morocco",
       fr: "Nord du Maroc",
       ar: "شمال المغرب",
       ber: "ⴰⴳⴰⴼⴰ ⵏ ⵍⵎⵖⵔⵉⴱ"
     },
-    rating: 4.7,
     duration: {
       en: "2-3 days",
       fr: "2-3 jours",
@@ -199,7 +182,6 @@ const destinations: Record<string, DestinationData> = {
     }
   },
   "sahara": {
-    id: "sahara",
     title: {
       en: "Sahara Desert",
       fr: "Désert du Sahara",
@@ -218,19 +200,12 @@ const destinations: Record<string, DestinationData> = {
       ar: "تقدم الصحراء المغربية واحدة من أكثر المناظر الطبيعية إثارة على وجه الأرض ، مع كثبان ذهبية لا نهاية لها تتغير لونها على مدار اليوم. تبدأ معظم الرحلات الصحراوية من بلدتي مرزوقة أو امحاميد ، وهما بوابتان إلى نظامي الكثبان الرملية الشهيرين عرق الشبي وعرق شقاقة. تتضمن التجربة الصحراوية النموذجية رحلة جمل عبر الكثبان الرملية ، ومشاهدة غروب الشمس يغير المناظر الطبيعية ، والعزف على الطبول والرقص حول نار المخيم ، وقضاء الليلة في خيمة بربرية تقليدية تحت غطاء من النجوم. يخلق صمت واتساع الصحراء تجربة لا تُنسى تربط الزوار بالطبيعة والثقافة البدوية التقليدية.",
       ber: "ⵜⴰⵏⵥⵕⵓⴼⵜ ⵜⴰⵎⵔⵔⵓⴽⵉⵜ ⵜⵜⴰⴽⴰ ⵢⴰⵏ ⵙⴳ ⵉⴷⵎⴰⵡⵏ ⴰⴽⴽⵯ ⵉⵅⵛⵛⵏ ⴳ ⵡⴰⴽⴰⵍ, ⵙ ⵉⴷⵓⵔⴰⵔ ⵉⵡⵔⴰⵖⵏ ⵓⵔ ⵉⵜⵜⵎⵜⵜⴰⵏ ⴱⴷⴷⴰ ⵙⵏⴼⴰⵍⵏ ⴰⴽⵍⵓ ⴰⴽⴽⵯ ⴰⵙⵙ. ⵜⴰⵎⵓⵢⴰⵜ ⴰⴽⴽⵯ ⴳ ⵜⵏⵥⵕⵓⴼⵜ ⴱⴷⴷⵓⵏ ⵙⴳ ⵜⵎⴷⵉⵏⵉⵏ ⵏ ⵎⵔⵣⵓⴳⴰ ⵏⵖ ⵎⵀⴰⵎⵉⴷ, ⵜⴰⵡⵡⵓⵔⵜ ⵖⵔ ⵉⵙⵓⵜⴰ ⵏ ⵉⴷⵓⵔⴰⵔ ⵏ ⵄⵕⴳ ⵛⴻⴱⴱⵉ ⴷ ⵄⵕⴳ ⵛⵉⴳⴰⴳⴰ. ⵜⴰⵔⵎⵜ ⵜⴰⵏⴰⵎⵎⴰⵙⵜ ⵏ ⵜⵏⵥⵕⵓⴼⵜ ⵜⵍⵍⴰ ⵜⵉⴽⴽⵉ ⵏ ⵓⵍⵖⵎⵏ ⴳ ⵉⴷⵓⵔⴰⵔ, ⴰⵔⴰⵢ ⵏ ⵜⴼⵓⴽⵜ ⵜⵙⵏⴼⴰⵍ ⴰⴷⵎⴰⵡⵏ, ⵜⴰⴳⴳⵓⵔⵜ ⴷ ⵓⵔⴰⵢ ⴷⴳⴳⵓ ⵜⴰⵎⵙⵙⵓⵜⵍⵜ, ⴷ ⴰⵣⴷⴷⴰⵢ ⴳ ⵜⴰⵇⵉⵎⵜ ⵜⴰⴱⵉⵔⴱⵉⵔⵉⵜ ⴷⴷⴰⵡ ⵜⴰⴼⵍⵡⵉⵜ ⵏ ⵉⵜⵔⴰⵏ. ⵜⴰⵙⵓⵙⵎⵉ ⴷ ⵜⴰⵏⴼⴰⵜ ⵏ ⵜⵏⵥⵕⵓⴼⵜ ⵙⴽⴰⵔⵏ ⵜⴰⵔⵎⵜ ⵓⵔ ⵉⵜⵜⵓⵏⵜⵜⵓⵏ ⵉⵙⵎⵓⵏⵏ ⵉⵎⴰⵔⴰⵡⵏ ⴷ ⵜⴰﺒⴷⴰⴷⵜ ⴷ ⵜⴷⵍⵙⴰ ⵜⴰⵏⴰⵎⵎⴰⵙⵜ."
     },
-    image: "/images/sahara.jpg",
-    gallery: [
-      "/images/sahara-1.jpg",
-      "/images/sahara-2.jpg",
-      "/images/sahara-3.jpg"
-    ],
     location: {
       en: "Southern Morocco",
       fr: "Sud du Maroc",
       ar: "جنوب المغرب",
       ber: "ⴰⵏⵥⵓⵍ ⵏ ⵍⵎⵖⵔⵉⴱ"
     },
-    rating: 4.9,
     duration: {
       en: "2-3 days",
       fr: "2-3 jours",
@@ -263,7 +238,6 @@ const destinations: Record<string, DestinationData> = {
     }
   },
   "fes": {
-    id: "fes",
     title: {
       en: "Fes",
       fr: "Fès",
@@ -282,19 +256,12 @@ const destinations: Record<string, DestinationData> = {
       ar: "تعتبر فاس العاصمة الثقافية والروحية للمغرب ، حيث أن المدينة القديمة المحمية من قبل اليونسكو هي أكبر منطقة حضرية خالية من السيارات في العالم. تأسست المدينة في القرن التاسع وبلغت ذروتها كمركز للتعلم والتجارة في القرنين الثالث عشر والرابع عشر. اليوم ، تحافظ فاس على الكثير من طابعها التاريخي ، لا سيما في فاس البالي ، أقدم جزء مسور من المدينة بشوارعها المتاهة. يمكن للزوار استكشاف المدابغ التقليدية حيث لا تزال تتم معالجة الجلود باستخدام طرق لم تتغير منذ قرون ، وزيارة المدارس الدينية ذات الهندسة المعمارية الإسلامية المذهلة ، وتجربة مدينة يواصل فيها الحرفيون ممارسة الحرف اليدوية كما فعلوا لأجيال.",
       ber: "ⴼⴰⵙ ⵜⵜⵡⴰⵇⵇⵏ ⴰⵎ ⵜⴰⵎⴰⵥⵓⵏⵜ ⵜⴰⴷⵍⵙⴰⵏⵜ ⴷ ⵜⴰⵔⵓⵊⴰⵏⵜ ⵏ ⵍⵎⵖⵔⵉⴱ, ⵙ ⵓⵎⴷⴰⵏ ⵏⵏⵙ ⵉⵜⵜⵓⵃⵔⴰⵙⵏ ⵙ ⵓⵏⵉⵙⴽⵓ ⵉⴳⴰ ⵜⵜ ⴰⴳⵯⵔⵓ ⴰⴷⵖⵔⴰⵏ ⵓⵔ ⵉⵍⵍⵉ ⴳⵉⵙ ⵜⴰⵎⵓⵟⵟⵓ ⴳ ⴰⵎⴰⴹⴰⵍ. ⵜⵜⵓⵙⵙⵉⵙⵍⴷ ⴳ ⵜⴰⵙⵓⵜ ⵜⵉⵙⵙ 9, ⵜⴰⵎⴷⵉⵏⵜ ⵜⵍⴽⵎ ⴰⵙⵙⴰⵖ ⵏⵏⵙ ⴰⵎ ⴰⵎⵎⴰⵙ ⵏ ⵜⵍⵎⵓⴷⵉ ⴷ ⵜⴰⵣⵏⵣⴰ ⴳ ⵜⴰⵙⵓⵜ ⵜⵉⵙⵙ 13 ⴷ 14. ⴰⵙⵙⴰ, ⴼⴰⵙ ⵜⵙⵙⵔⴰⵢ ⵎⴰⵙ ⴰⴷⵖⴰⵔ ⴰⵎⵣⵔⵓⵢ, ⴳ ⴼⴰⵙ ⵍⴱⴰⵍⵉ, ⴰⴳⵣⵣⵓⵎ ⴰⵇⴱⵓⵔ ⵏ ⵜⴰⵎⴷⵉⵏⵜ ⵙ ⵉⴱⵔⵉⴷⵏ ⵏⵏⵙ ⵉⵎⵙⵜⴰⴳⴳⴰⵔⵏ. ⵉⵎⴰⵔⴰⵡⵏ ⵎⵎⴽⵉⵏ ⴰⵔⵎ ⵜⵉⵏⴰⵡⵉⵏ ⵜⵉⵇⴱⵓⵔⵉⵏ ⵎⴰⵏⵉ ⴰⵔ ⵜⵜⵓⵙⴽⴰⵔ ⵉⴳⵍⵉⵎⵏ ⵙ ⵜⵉⵍⴰⵡⵉⵏ ⵓⵔ ⵉⵜⵜⵓⵙⵏⴼⴰⵍⵏ ⵙⴳ ⵜⴰⵙⵓⵜⵉⵏ, ⵣⵔⵢ ⵉⵙⵉⵏⴰⵏ ⵉⵔⵓⵊⴰⵏⵏ ⵙ ⵜⴰⵖⴰⵡⵙⴰ ⵜⴰⵏⵙⵍⴰⵎⵜ ⵉⵛⵡⴰⵏ, ⴷ ⴰⵔⵎ ⵜⴰⵎⴷⵉⵏⵜ ⵎⴰⵏⵉ ⵉⵎⵙⵏﻌⴰⵜⵉⵏ ⴱⴷⴷⴰ ⵙⴽⴰⵔⵏ ⵜⵉⵏⴰⵡⵉⵏ ⴰⵎ ⵎⴰ ⵙⴽⴰⵔⵏ ⵙⴳ ⵜⴰⵔⵡⴰ."
     },
-    image: "/images/fes.jpg",
-    gallery: [
-      "/images/fes-1.jpg",
-      "/images/fes-2.jpg",
-      "/images/fes-3.jpg"
-    ],
     location: {
       en: "Northern Morocco",
       fr: "Nord du Maroc",
       ar: "شمال المغرب",
       ber: "ⴰⴳⴰⴼⴰ ⵏ ⵍⵎⵖⵔⵉⴱ"
     },
-    rating: 4.6,
     duration: {
       en: "2-3 days",
       fr: "2-3 jours",
@@ -331,192 +298,9 @@ const destinations: Record<string, DestinationData> = {
 const DestinationDetail = () => {
   const { destinationId } = useParams<{ destinationId: string }>();
   const { language } = useLanguage();
-  
-  const destination = destinations[destinationId || ''] || null;
+  const { toast } = useToast();
+  const [destination, setDestination] = useState<Destination | null>(null);
+  const [loading, setLoading] = useState(true);
   
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [destinationId]);
-  
-  if (!destination) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <Header />
-        <div className="flex-1 flex items-center justify-center">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold mb-2">Destination not found</h2>
-            <p className="mb-4">The destination you're looking for doesn't exist.</p>
-            <Link to="/" className="text-primary hover:underline flex items-center justify-center gap-2">
-              <ArrowLeft size={16} />
-              Return to homepage
-            </Link>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-  
-  return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      
-      <main className="flex-1">
-        <div className="w-full h-[40vh] relative">
-          <img 
-            src={destination.image} 
-            alt={destination.title[language]} 
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-            <AnimatedTransition variant="slideUp">
-              <h1 className="text-white text-4xl md:text-5xl lg:text-6xl font-bold text-center">
-                {destination.title[language]}
-              </h1>
-            </AnimatedTransition>
-          </div>
-        </div>
-        
-        <div className="container mx-auto px-4 py-8">
-          <AnimatedTransition variant="fade">
-            <Link to="/" className="inline-flex items-center text-primary hover:underline mb-6">
-              <ArrowLeft size={16} className="mr-2" />
-              Back to destinations
-            </Link>
-          </AnimatedTransition>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2">
-              <AnimatedTransition variant="slideUp" delay={0.1}>
-                <p className="text-lg mb-6">
-                  {destination.description[language]}
-                </p>
-                
-                <h2 className="text-2xl font-semibold mb-4">About {destination.title[language]}</h2>
-                <p className="mb-6">
-                  {destination.fullDescription[language]}
-                </p>
-                
-                <h2 className="text-2xl font-semibold mb-4">Highlights</h2>
-                <ul className="list-disc pl-5 mb-6 space-y-1">
-                  {destination.highlights[language].map((highlight, idx) => (
-                    <motion.li 
-                      key={idx}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.1 + (idx * 0.05) }}
-                    >
-                      {highlight}
-                    </motion.li>
-                  ))}
-                </ul>
-                
-                <h2 className="text-2xl font-semibold mb-4">Activities</h2>
-                <ul className="list-disc pl-5 mb-6 space-y-1">
-                  {destination.activities[language].map((activity, idx) => (
-                    <motion.li 
-                      key={idx}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.1 + (idx * 0.05) }}
-                    >
-                      {activity}
-                    </motion.li>
-                  ))}
-                </ul>
-              </AnimatedTransition>
-            </div>
-            
-            <div>
-              <AnimatedTransition variant="slideLeft" delay={0.2}>
-                <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-                  <h3 className="text-xl font-semibold mb-4">Travel Information</h3>
-                  
-                  <div className="space-y-4">
-                    <div className="flex items-start">
-                      <MapPin className="text-primary w-5 h-5 mt-0.5 mr-3" />
-                      <div>
-                        <h4 className="font-medium">Location</h4>
-                        <p>{destination.location[language]}</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start">
-                      <Star className="text-primary w-5 h-5 mt-0.5 mr-3" />
-                      <div>
-                        <h4 className="font-medium">Rating</h4>
-                        <p>{destination.rating}/5</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start">
-                      <Clock className="text-primary w-5 h-5 mt-0.5 mr-3" />
-                      <div>
-                        <h4 className="font-medium">Duration</h4>
-                        <p>{destination.duration[language]}</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start">
-                      <Calendar className="text-primary w-5 h-5 mt-0.5 mr-3" />
-                      <div>
-                        <h4 className="font-medium">Best Time to Visit</h4>
-                        <p>{destination.bestTime[language]}</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start">
-                      <Users className="text-primary w-5 h-5 mt-0.5 mr-3" />
-                      <div>
-                        <h4 className="font-medium">Group Size</h4>
-                        <p>{destination.groupSize[language]}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="bg-white rounded-lg shadow-md p-6">
-                  <h3 className="text-xl font-semibold mb-4">Gallery</h3>
-                  <div className="grid grid-cols-1 gap-4">
-                    {destination.gallery.map((img, idx) => (
-                      <motion.div 
-                        key={idx} 
-                        className="aspect-video rounded-md overflow-hidden"
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.2 + (idx * 0.1) }}
-                      >
-                        <img 
-                          src={img} 
-                          alt={`${destination.title[language]} ${idx + 1}`} 
-                          className="w-full h-full object-cover transition-transform hover:scale-105 duration-300"
-                        />
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-              </AnimatedTransition>
-            </div>
-          </div>
-          
-          <AnimatedTransition variant="slideUp" delay={0.3}>
-            <div className="mt-12 text-center">
-              <h2 className="text-2xl font-semibold mb-4">Ready to Explore {destination.title[language]}?</h2>
-              <a 
-                href="#" 
-                className="inline-flex items-center bg-primary text-white px-6 py-3 rounded-md hover:bg-primary/90 transition-colors"
-              >
-                Book your adventure
-                <ExternalLink className="ml-2 w-4 h-4" />
-              </a>
-            </div>
-          </AnimatedTransition>
-        </div>
-      </main>
-      
-      <Footer />
-    </div>
-  );
-};
-
-export default DestinationDetail;
