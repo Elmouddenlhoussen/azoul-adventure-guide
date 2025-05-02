@@ -6,6 +6,7 @@ import { Image, Search, UploadCloud } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { uploadFile, listFiles } from '@/services/storageService';
+import { supabase } from '@/integrations/supabase/client';
 
 interface MediaSelectorProps {
   open: boolean;
