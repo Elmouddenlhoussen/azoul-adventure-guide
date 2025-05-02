@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -304,3 +305,195 @@ const DestinationDetail = () => {
   
   useEffect(() => {
     window.scrollTo(0, 0);
+    
+    const fetchDestination = async () => {
+      if (!destinationId) {
+        setLoading(false);
+        return;
+      }
+      
+      try {
+        const data = await getDestinationById(destinationId);
+        setDestination(data);
+      } catch (error) {
+        console.error('Error fetching destination:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load destination details. Please try again later.",
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchDestination();
+  }, [destinationId, toast]);
+  
+  if (loading) {
+    return (
+      <AnimatedTransition>
+        <div className="container max-w-6xl mx-auto py-20 px-4">
+          <div className="w-full h-64 bg-gray-200 animate-pulse rounded-lg"></div>
+          <div className="mt-6 h-10 bg-gray-200 animate-pulse rounded w-1/3"></div>
+          <div className="mt-4 h-6 bg-gray-200 animate-pulse rounded w-1/2"></div>
+        </div>
+      </AnimatedTransition>
+    );
+  }
+  
+  if (!destination) {
+    return (
+      <AnimatedTransition>
+        <div className="container max-w-6xl mx-auto py-20 px-4 text-center">
+          <h1 className="text-3xl font-bold text-gray-800">Destination Not Found</h1>
+          <p className="mt-4 text-gray-600">The destination you're looking for doesn't exist or has been removed.</p>
+          <Link to="/" className="mt-6 inline-flex items-center text-blue-600 hover:underline">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Return to Home
+          </Link>
+        </div>
+      </AnimatedTransition>
+    );
+  }
+  
+  const id = destinationId || '';
+  const multiLangInfo = multilingualInfo[id.toLowerCase()];
+  
+  return (
+    <AnimatedTransition>
+      <div className="bg-white">
+        <div className="relative h-[50vh] md:h-[60vh]">
+          <div className="absolute inset-0 bg-black/30 z-10"></div>
+          <img 
+            src={destination.image} 
+            alt={destination.title}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 z-20 bg-gradient-to-t from-black/80 to-transparent">
+            <div className="container max-w-6xl mx-auto">
+              <Link to="/" className="inline-flex items-center text-white mb-4 hover:text-blue-100 transition-colors">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Destinations
+              </Link>
+              <h1 className="text-4xl md:text-5xl font-bold text-white">
+                {multiLangInfo?.title?.[language] || destination.title}
+              </h1>
+              <div className="flex items-center mt-2 text-white/90">
+                <MapPin className="h-4 w-4 mr-1" />
+                <span>{multiLangInfo?.location?.[language] || destination.location}</span>
+                <div className="mx-3 h-1 w-1 rounded-full bg-white/80"></div>
+                <Star className="h-4 w-4 mr-1" />
+                <span>{destination.rating}/5</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="container max-w-6xl mx-auto py-10 px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+                {multiLangInfo?.description?.[language] || destination.description}
+              </h2>
+              
+              <div className="prose max-w-none">
+                <p className="text-gray-700 mb-6">
+                  {multiLangInfo?.fullDescription?.[language] || destination.description}
+                </p>
+                
+                {multiLangInfo?.highlights && (
+                  <div className="mt-8">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-3">Highlights</h3>
+                    <ul className="list-disc pl-6 space-y-2 text-gray-700">
+                      {multiLangInfo.highlights[language]?.map((highlight, i) => (
+                        <li key={i}>{highlight}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                
+                {multiLangInfo?.activities && (
+                  <div className="mt-8">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-3">Activities</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {multiLangInfo.activities[language]?.map((activity, i) => (
+                        <span key={i} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                          {activity}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            <div className="bg-gray-50 p-6 rounded-lg h-fit">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Travel Information</h3>
+              
+              <div className="space-y-4">
+                {multiLangInfo?.duration && (
+                  <div className="flex items-start">
+                    <Clock className="h-5 w-5 mr-3 text-blue-600 mt-1" />
+                    <div>
+                      <p className="font-medium text-gray-900">Recommended Duration</p>
+                      <p className="text-gray-600">{multiLangInfo.duration[language]}</p>
+                    </div>
+                  </div>
+                )}
+                
+                {multiLangInfo?.bestTime && (
+                  <div className="flex items-start">
+                    <Calendar className="h-5 w-5 mr-3 text-blue-600 mt-1" />
+                    <div>
+                      <p className="font-medium text-gray-900">Best Time to Visit</p>
+                      <p className="text-gray-600">{multiLangInfo.bestTime[language]}</p>
+                    </div>
+                  </div>
+                )}
+                
+                {multiLangInfo?.groupSize && (
+                  <div className="flex items-start">
+                    <Users className="h-5 w-5 mr-3 text-blue-600 mt-1" />
+                    <div>
+                      <p className="font-medium text-gray-900">Group Size</p>
+                      <p className="text-gray-600">{multiLangInfo.groupSize[language]}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              <div className="border-t border-gray-200 mt-6 pt-6">
+                <a 
+                  href="#" 
+                  className="bg-blue-600 text-white rounded-lg px-4 py-2 flex items-center justify-center hover:bg-blue-700 transition-colors w-full"
+                >
+                  <span>Plan Your Visit</span>
+                  <ExternalLink className="ml-2 h-4 w-4" />
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          <div className="mt-12">
+            <h3 className="text-2xl font-semibold text-gray-900 mb-6">Similar Destinations</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* This would be replaced with actual recommended destinations */}
+              <div className="bg-gray-100 h-64 rounded-lg flex items-center justify-center">
+                <p className="text-gray-500">Coming soon...</p>
+              </div>
+              <div className="bg-gray-100 h-64 rounded-lg flex items-center justify-center">
+                <p className="text-gray-500">Coming soon...</p>
+              </div>
+              <div className="bg-gray-100 h-64 rounded-lg flex items-center justify-center">
+                <p className="text-gray-500">Coming soon...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </AnimatedTransition>
+  );
+};
+
+export default DestinationDetail;
