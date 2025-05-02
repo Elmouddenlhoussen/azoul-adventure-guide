@@ -1,32 +1,134 @@
+
 import React, { useState } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Edit, Trash2, Plus, Search, Eye, Image } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { destinations, updateDestinationImage } from '@/data/destinations';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { 
+  destinations, 
+  Destination, 
+  updateDestinationImage, 
+  createDestination, 
+  updateDestination,
+  deleteDestination 
+} from '@/data/destinations';
 import { MediaSelector } from '@/components/admin/MediaSelector';
 import { useToast } from '@/hooks/use-toast';
+import { DestinationForm } from '@/components/admin/forms/DestinationForm';
 
 const DestinationsManagement = () => {
   const { toast } = useToast();
   const [isMediaSelectorOpen, setIsMediaSelectorOpen] = useState(false);
   const [selectedDestinationId, setSelectedDestinationId] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
+  const [editingDestination, setEditingDestination] = useState<Destination | null>(null);
 
   const handleUpdateImage = async (imageUrl: string) => {
     if (selectedDestinationId) {
-      await updateDestinationImage(selectedDestinationId, imageUrl);
-      toast({
-        title: "Image updated",
-        description: "The destination image has been updated successfully.",
-      });
+      const success = await updateDestinationImage(selectedDestinationId, imageUrl);
+      
+      if (success) {
+        toast({
+          title: "Image updated",
+          description: "The destination image has been updated successfully.",
+        });
+      } else {
+        toast({
+          title: "Update failed",
+          description: "Failed to update the destination image.",
+          variant: "destructive",
+        });
+      }
     }
   };
+
+  const handleOpenEditDialog = (destination: Destination) => {
+    setEditingDestination(destination);
+    setIsFormDialogOpen(true);
+  };
+
+  const handleDeleteDestination = async (id: string) => {
+    if (window.confirm("Are you sure you want to delete this destination?")) {
+      const success = await deleteDestination(id);
+      
+      if (success) {
+        toast({
+          title: "Destination deleted",
+          description: "The destination has been deleted successfully.",
+        });
+      } else {
+        toast({
+          title: "Deletion failed",
+          description: "Failed to delete the destination.",
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
+  const handleFormSubmit = async (formData: any) => {
+    let success = false;
+    
+    if (editingDestination) {
+      // Update existing destination
+      success = await updateDestination(editingDestination.id, formData);
+      
+      if (success) {
+        toast({
+          title: "Destination updated",
+          description: "The destination has been updated successfully.",
+        });
+      } else {
+        toast({
+          title: "Update failed",
+          description: "Failed to update the destination.",
+          variant: "destructive",
+        });
+      }
+    } else {
+      // Create new destination
+      const newDestination = await createDestination({
+        ...formData,
+        rating: 4.5, // Default rating
+      });
+      
+      if (newDestination) {
+        toast({
+          title: "Destination created",
+          description: "The new destination has been created successfully.",
+        });
+        success = true;
+      } else {
+        toast({
+          title: "Creation failed",
+          description: "Failed to create the new destination.",
+          variant: "destructive",
+        });
+      }
+    }
+    
+    if (success) {
+      setIsFormDialogOpen(false);
+      setEditingDestination(null);
+    }
+  };
+
+  const filteredDestinations = destinations.filter(
+    destination => 
+      destination.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      destination.location.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Destination Management</h1>
-        <Button>
+        <Button onClick={() => {
+          setEditingDestination(null);
+          setIsFormDialogOpen(true);
+        }}>
           <Plus className="mr-2 h-4 w-4" />
           Add Destination
         </Button>
@@ -41,6 +143,8 @@ const DestinationsManagement = () => {
                 type="search"
                 placeholder="Search destinations..."
                 className="w-full pl-8"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <Button variant="outline">Filter</Button>
@@ -59,7 +163,7 @@ const DestinationsManagement = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {destinations.map((destination) => (
+            {filteredDestinations.map((destination) => (
               <TableRow key={destination.id}>
                 <TableCell>
                   <img 
@@ -86,22 +190,41 @@ const DestinationsManagement = () => {
                       setSelectedDestinationId(destination.id);
                       setIsMediaSelectorOpen(true);
                     }}
+                    title="Change Image"
                   >
                     <Image className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="sm">
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={() => handleOpenEditDialog(destination)}
+                    title="Edit Destination"
+                  >
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="sm">
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={() => handleDeleteDestination(destination.id)}
+                    title="Delete Destination"
+                  >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </TableCell>
               </TableRow>
             ))}
+            {filteredDestinations.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={6} className="text-center py-10 text-muted-foreground">
+                  No destinations found matching your search.
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>
 
+      {/* Media Selector Dialog */}
       <MediaSelector
         open={isMediaSelectorOpen}
         onClose={() => {
@@ -109,7 +232,20 @@ const DestinationsManagement = () => {
           setSelectedDestinationId(null);
         }}
         onSelect={handleUpdateImage}
+        title="Select Destination Image"
+        allowUpload={true}
       />
+
+      {/* Destination Form Dialog */}
+      <Dialog open={isFormDialogOpen} onOpenChange={setIsFormDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DestinationForm
+            onClose={() => setIsFormDialogOpen(false)}
+            onSubmit={handleFormSubmit}
+            initialData={editingDestination}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
