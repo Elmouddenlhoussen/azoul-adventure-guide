@@ -1,7 +1,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { MessageCircle, X, Send, User, MessageSquare, Palmtree, Sparkles } from 'lucide-react';
+import { MessageCircle, X, Send, User, MessageSquare, Sparkles } from 'lucide-react';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { Avatar } from './ui/avatar';
@@ -263,38 +263,32 @@ const ChatAssistant = () => {
     }
   };
 
-  // Enhanced Moroccan-inspired color palette
-  const primaryBg = "bg-gradient-to-r from-morocco-terracotta to-morocco-clay";
-  const secondaryBg = "bg-morocco-gold";
-  const chatBubbleUser = "bg-morocco-clay text-white";
-  const chatBubbleAssistant = "bg-white border border-morocco-sand/30 text-gray-800";
-
   return (
     <AnimatePresence>
       {isOpen && (
         <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
-          {/* Chat window */}
+          {/* Modernized chat window with glassmorphism */}
           <AnimatePresence mode="wait">
             {!isMinimized && (
               <AnimatedTransition variant="scale">
                 <motion.div 
-                  className="mb-4 w-[350px] h-[500px] bg-white rounded-lg shadow-xl overflow-hidden border border-morocco-sand/30 backdrop-blur-sm"
+                  className="mb-4 w-[380px] h-[520px] bg-white/95 backdrop-blur-lg rounded-2xl shadow-xl overflow-hidden border border-gray-100"
                   initial={{ opacity: 0, y: 20, scale: 0.9 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 20, scale: 0.9 }}
                   transition={{ type: "spring", damping: 25, stiffness: 350 }}
                 >
-                  {/* Header with enhanced Moroccan styling */}
-                  <div className={`${primaryBg} p-4 border-b flex justify-between items-center`}>
+                  {/* Modern header with subtle gradient */}
+                  <div className="p-4 border-b border-gray-100 bg-gradient-to-r from-morocco-green/90 to-morocco-teal/90 flex justify-between items-center">
                     <div className="flex items-center">
-                      <div className="mr-2 flex items-center justify-center w-8 h-8 rounded-full bg-white/20">
-                        <Palmtree className="h-4 w-4 text-white" />
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white/20 shadow-inner">
+                        <MessageCircle className="h-5 w-5 text-white" />
                       </div>
-                      <div>
-                        <span className="font-semibold text-white">Morocco Travel Assistant</span>
-                        <div className="flex items-center text-white/70 text-xs">
-                          <span className="inline-block w-2 h-2 bg-green-400 rounded-full mr-1"></span>
-                          Ready to help
+                      <div className="ml-3">
+                        <span className="font-bold text-white">Morocco Guide</span>
+                        <div className="flex items-center text-white/80 text-xs">
+                          <span className="inline-block w-2 h-2 bg-green-300 rounded-full mr-1"></span>
+                          Ready to assist you
                         </div>
                       </div>
                     </div>
@@ -302,91 +296,106 @@ const ChatAssistant = () => {
                       variant="ghost" 
                       size="icon" 
                       onClick={toggleChat}
-                      className="h-8 w-8 rounded-full hover:bg-white/20 text-white"
+                      className="h-8 w-8 rounded-full hover:bg-white/30 text-white"
                     >
                       <X className="h-4 w-4" />
                     </Button>
                   </div>
                   
-                  {/* Messages with enhanced styling */}
-                  <ScrollArea className="flex-1 p-4 bg-morocco-sand/5">
-                    <div className="space-y-4">
+                  {/* Elegant message container with improved styling */}
+                  <ScrollArea className="flex-1 p-4 bg-white/50 backdrop-blur-sm">
+                    <div className="space-y-6">
                       {messages.map((message) => (
                         <div
                           key={message.id}
                           className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                         >
-                          <div className={`flex ${message.sender === 'user' ? 'flex-row-reverse' : 'flex-row'} gap-2 max-w-[80%]`}>
-                            <Avatar className={`h-8 w-8 ${message.sender === 'assistant' ? primaryBg : secondaryBg}`}>
+                          <div className={`flex ${message.sender === 'user' ? 'flex-row-reverse' : 'flex-row'} items-start gap-3 max-w-[80%] group`}>
+                            <Avatar className={`h-9 w-9 shrink-0 ${
+                              message.sender === 'assistant' 
+                                ? 'bg-gradient-to-br from-morocco-green to-morocco-teal' 
+                                : 'bg-gradient-to-br from-morocco-gold to-morocco-clay'
+                            }`}>
                               {message.sender === 'assistant' ? 
-                                <Palmtree className="h-4 w-4 text-white" /> : 
+                                <MessageSquare className="h-4 w-4 text-white" /> : 
                                 <User className="h-4 w-4 text-white" />
                               }
                             </Avatar>
                             <div 
-                              className={`p-3 rounded-lg shadow-sm ${
+                              className={`p-3 rounded-2xl ${
                                 message.sender === 'user' 
-                                  ? `${chatBubbleUser} rounded-tr-none` 
-                                  : `${chatBubbleAssistant} rounded-tl-none`
+                                  ? 'bg-gradient-to-br from-morocco-clay to-morocco-terracotta text-white rounded-tr-none' 
+                                  : 'bg-white border border-gray-100 shadow-sm text-gray-800 rounded-tl-none'
                               }`}
                             >
-                              <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                              <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
+                              <div className={`text-[10px] mt-1 opacity-0 group-hover:opacity-70 transition-opacity ${
+                                message.sender === 'user' ? 'text-white/70' : 'text-gray-400'
+                              }`}>
+                                {message.timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                              </div>
                             </div>
                           </div>
                         </div>
                       ))}
                       
-                      {/* Typing indicator */}
+                      {/* Modern typing indicator */}
                       {isTyping && (
                         <div className="flex justify-start">
-                          <div className="flex flex-row gap-2 max-w-[80%]">
-                            <Avatar className={`h-8 w-8 ${primaryBg}`}>
-                              <Palmtree className="h-4 w-4 text-white" />
+                          <div className="flex flex-row gap-3 max-w-[80%]">
+                            <Avatar className="h-9 w-9 bg-gradient-to-br from-morocco-green to-morocco-teal">
+                              <MessageSquare className="h-4 w-4 text-white" />
                             </Avatar>
-                            <div className="p-3 rounded-lg bg-white border border-morocco-sand/30 text-gray-800 rounded-tl-none shadow-sm">
-                              <div className="flex space-x-1">
-                                <div className={`h-2 w-2 ${primaryBg} rounded-full animate-bounce`}></div>
-                                <div className={`h-2 w-2 ${primaryBg} rounded-full animate-bounce`} style={{ animationDelay: '0.2s' }}></div>
-                                <div className={`h-2 w-2 ${primaryBg} rounded-full animate-bounce`} style={{ animationDelay: '0.4s' }}></div>
+                            <div className="p-4 rounded-2xl bg-white border border-gray-100 shadow-sm text-gray-800 rounded-tl-none">
+                              <div className="flex space-x-2">
+                                <div className="h-2 w-2 bg-morocco-green rounded-full animate-bounce"></div>
+                                <div className="h-2 w-2 bg-morocco-teal rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                                <div className="h-2 w-2 bg-morocco-green rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
                               </div>
                             </div>
                           </div>
                         </div>
                       )}
                       
-                      {/* Suggested questions */}
+                      {/* Redesigned suggestion chips */}
                       {!isTyping && messages.length > 0 && messages[messages.length - 1].sender === 'assistant' && (
-                        <div className="flex flex-wrap gap-2 mt-2 justify-center">
+                        <motion.div 
+                          className="flex flex-wrap gap-2 mt-4 justify-start"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.3 }}
+                        >
                           {suggestedQuestions.map((question, index) => (
                             <button 
                               key={index}
                               onClick={() => handleSuggestionClick(question)}
-                              className="text-xs bg-white border border-morocco-sand/30 hover:bg-morocco-sand/10 rounded-full px-3 py-1 transition-colors"
+                              className="text-xs bg-white border border-gray-200 hover:border-morocco-teal/50 hover:bg-morocco-sand/10 rounded-full px-3 py-1.5 transition-all duration-200 shadow-sm hover:shadow flex items-center"
                             >
+                              <Sparkles className="h-3 w-3 mr-1.5 text-morocco-teal" />
                               {question}
                             </button>
                           ))}
-                        </div>
+                        </motion.div>
                       )}
                       
                       <div ref={messagesEndRef} />
                     </div>
                   </ScrollArea>
                   
-                  {/* Input with enhanced Moroccan styling */}
-                  <div className="p-3 border-t border-morocco-sand/30 flex gap-2 bg-white">
+                  {/* Modern input area with subtle shadow */}
+                  <div className="p-4 border-t border-gray-100 bg-white flex gap-2 items-end">
                     <Textarea
                       ref={inputRef}
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
                       onKeyDown={handleKeyDown}
                       placeholder="Ask me about Morocco..."
-                      className="resize-none min-h-[44px] max-h-[120px] border-morocco-sand/30 focus-visible:ring-morocco-terracotta"
+                      className="resize-none min-h-[44px] max-h-[120px] border-gray-200 rounded-xl focus-visible:ring-morocco-teal/50 focus-visible:border-morocco-teal/50 text-sm"
                       rows={1}
                     />
                     <Button 
                       onClick={() => handleSend()}
-                      className={`h-9 w-9 p-0 ${primaryBg} hover:opacity-90 transition-opacity`}
+                      className={`h-10 w-10 rounded-xl p-0 bg-gradient-to-br from-morocco-green to-morocco-teal hover:opacity-90 transition-opacity shadow-md hover:shadow-lg`}
                       disabled={isTyping || !input.trim()}
                     >
                       <Send className="h-4 w-4 text-white" />
@@ -397,15 +406,15 @@ const ChatAssistant = () => {
             )}
           </AnimatePresence>
 
-          {/* Enhanced chat button with Moroccan-inspired design */}
+          {/* Modern floating action button */}
           <motion.button
             onClick={toggleChat}
-            className={`flex items-center justify-center rounded-xl shadow-lg ${
+            className={`flex items-center justify-center rounded-full shadow-lg ${
               isMinimized 
-                ? primaryBg
-                : 'bg-gray-200 hover:bg-gray-300'
-            } text-white p-4 transition-all duration-300 relative overflow-hidden border border-white/10`}
-            whileHover={{ scale: 1.05 }}
+                ? 'bg-gradient-to-br from-morocco-green to-morocco-teal p-4'
+                : 'bg-gray-100 hover:bg-gray-200 p-3'
+            } text-white transition-all duration-300`}
+            whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(0, 98, 51, 0.4)" }}
             whileTap={{ scale: 0.95 }}
             initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -413,45 +422,17 @@ const ChatAssistant = () => {
           >
             {isMinimized ? (
               <>
-                {/* Visual elements for the chat button */}
-                <div className="absolute inset-0 opacity-20 bg-pattern" style={{ 
-                  backgroundImage: "url('/images/pattern.svg')",
-                  backgroundSize: "cover",
-                }}></div>
-                
-                {/* Chat icon with animation */}
-                <div className="relative">
-                  <MessageSquare className="h-6 w-6 text-white" />
-                  <motion.div 
-                    className="absolute -top-2 -right-2 h-4 w-4"
-                    animate={{ 
-                      scale: [1, 1.2, 1],
-                      rotate: [0, 15, 0],
-                      opacity: [0.7, 1, 0.7]
-                    }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
-                    <Sparkles className="h-4 w-4 text-yellow-300" />
-                  </motion.div>
-                </div>
-                
+                <MessageCircle className="h-6 w-6 text-white" />
                 {/* Notification badge */}
-                <span className="absolute -top-2 -right-2 h-6 w-6 bg-morocco-gold rounded-full flex items-center justify-center text-[10px] font-bold text-white">
+                <span className="absolute -top-1 -right-1 h-5 w-5 bg-morocco-clay rounded-full flex items-center justify-center text-[10px] font-bold text-white shadow-sm">
                   1
                 </span>
                 
-                {/* Animated glow effect */}
-                <motion.div 
-                  className="absolute inset-0 bg-white rounded-xl"
-                  animate={{ 
-                    opacity: [0, 0.2, 0],
-                    scale: [1, 1.2, 1],
-                  }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                ></motion.div>
+                {/* Animated pulse effect */}
+                <span className="absolute inset-0 rounded-full bg-white opacity-30 animate-ping"></span>
               </>
             ) : (
-              <X className="h-6 w-6 text-gray-600" />
+              <X className="h-5 w-5 text-gray-600" />
             )}
           </motion.button>
         </div>
