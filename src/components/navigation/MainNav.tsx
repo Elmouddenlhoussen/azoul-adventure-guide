@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Compass, Globe, Calendar, Newspaper, MessageCircle, MapPin } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { NavigationMenu, NavigationMenuList, NavigationMenuItem } from "@/components/ui/navigation-menu";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
 export const navLinks = [
   { 
@@ -53,32 +54,54 @@ export function MainNav() {
   };
 
   return (
-    <NavigationMenu>
-      <NavigationMenuList className="space-x-1">
+    <NavigationMenu className="mx-auto">
+      <NavigationMenuList className="space-x-1 md:space-x-2">
         {navLinks.map((link) => (
           <NavigationMenuItem key={link.name}>
-            <Link 
-              to={link.href}
-              className={cn(
-                "flex items-center text-sm font-medium px-3 py-2 rounded-lg transition-all relative group",
-                isActive(link.href)
-                  ? "text-morocco-clay" 
-                  : "text-gray-600 hover:text-morocco-clay"
-              )}
-            >
-              <span className="flex items-center">
-                <span className="mr-1.5">{link.icon}</span>
-                <span>{link.name}</span>
-              </span>
-              
-              {isActive(link.href) && (
-                <motion.span 
-                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-morocco-terracotta to-morocco-clay rounded-full"
-                  layoutId="navbar-indicator"
-                  transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
-                />
-              )}
-            </Link>
+            <HoverCard openDelay={300} closeDelay={100}>
+              <HoverCardTrigger asChild>
+                <Link 
+                  to={link.href}
+                  className={cn(
+                    "flex items-center text-sm font-medium px-3 py-2 rounded-full transition-all relative group",
+                    isActive(link.href)
+                      ? "bg-gradient-to-r from-morocco-clay to-morocco-terracotta text-white shadow-md" 
+                      : "text-gray-700 hover:bg-morocco-sand/30"
+                  )}
+                >
+                  <span className="flex items-center">
+                    <span className={cn(
+                      "mr-1.5",
+                      isActive(link.href) 
+                        ? "text-white" 
+                        : "text-morocco-terracotta"
+                    )}>
+                      {link.icon}
+                    </span>
+                    <span>{link.name}</span>
+                  </span>
+                  
+                  {isActive(link.href) && (
+                    <motion.span 
+                      className="absolute inset-0 rounded-full bg-gradient-to-r from-morocco-terracotta to-morocco-clay -z-10"
+                      layoutId="navbar-active"
+                      transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                    />
+                  )}
+                </Link>
+              </HoverCardTrigger>
+              <HoverCardContent className="w-64 p-3 shadow-lg backdrop-blur-sm bg-white/90 border border-morocco-sand/20">
+                <div className="flex">
+                  <div className="flex-shrink-0 mr-3 p-2 rounded-full bg-morocco-sand/20">
+                    {link.icon}
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-medium">{link.name}</h4>
+                    <p className="text-xs text-muted-foreground mt-1">{link.description}</p>
+                  </div>
+                </div>
+              </HoverCardContent>
+            </HoverCard>
           </NavigationMenuItem>
         ))}
       </NavigationMenuList>

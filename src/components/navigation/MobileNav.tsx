@@ -22,58 +22,66 @@ export function MobileNav({ isOpen }: MobileNavProps) {
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="md:hidden"
-          initial={{ opacity: 0, y: -10 }}
+          className="md:hidden fixed inset-x-0 top-[4.5rem] z-40"
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
+          exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.3 }}
         >
-          <div className="bg-white/95 backdrop-blur-lg shadow-lg rounded-2xl mx-4 mt-3 overflow-hidden border border-morocco-sand/10">
-            <div className="max-h-[70vh] overflow-y-auto p-4 space-y-2">
-              {navLinks.map((link, index) => (
-                <motion.div
-                  key={link.name}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  <Link
-                    to={link.href}
-                    className={cn(
-                      "flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all",
-                      isActive(link.href)
-                        ? "bg-gradient-to-r from-morocco-sand/30 to-morocco-sand/10 text-morocco-clay"
-                        : "text-gray-700 hover:bg-morocco-sand/10 hover:text-morocco-clay"
-                    )}
+          <div className="mx-4 glass-effect rounded-2xl overflow-hidden shadow-lg border border-white/20">
+            <div className="max-h-[70vh] overflow-y-auto backdrop-blur-xl bg-white/90">
+              <div className="p-4 space-y-2 divide-y divide-morocco-sand/10">
+                {navLinks.map((link, index) => (
+                  <motion.div
+                    key={link.name}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    className="py-2 first:pt-0 last:pb-0"
                   >
-                    <span className="flex items-center justify-center w-8 h-8 rounded-full bg-white/80 shadow-sm mr-3">
-                      {link.icon}
-                    </span>
-                    <div>
-                      <span>{link.name}</span>
-                      <p className="text-xs text-muted-foreground">{link.description}</p>
-                    </div>
-                  </Link>
-                </motion.div>
-              ))}
+                    <Link
+                      to={link.href}
+                      className={cn(
+                        "flex items-center p-4 rounded-xl transition-all",
+                        isActive(link.href)
+                          ? "bg-gradient-to-r from-morocco-sand/40 to-morocco-terracotta/20 text-morocco-clay shadow-sm"
+                          : "hover:bg-morocco-sand/20"
+                      )}
+                    >
+                      <span className={cn(
+                        "flex items-center justify-center w-10 h-10 rounded-full mr-4",
+                        isActive(link.href) 
+                          ? "bg-gradient-to-br from-morocco-clay to-morocco-terracotta text-white shadow-sm" 
+                          : "bg-morocco-sand/30 text-morocco-terracotta"
+                      )}>
+                        {link.icon}
+                      </span>
+                      <div>
+                        <span className="font-medium">{link.name}</span>
+                        <p className="text-xs text-muted-foreground mt-0.5">{link.description}</p>
+                      </div>
+                    </Link>
+                  </motion.div>
+                ))}
 
-              <motion.div
-                className="pt-4 mt-2 border-t border-morocco-sand/10"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-              >
-                <div className="space-y-3">
-                  <AuthButtons />
-                  <Link 
-                    to="/feature/chat"
-                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-morocco-clay to-morocco-terracotta text-white text-sm font-medium shadow-sm"
-                  >
-                    <MessageCircle className="h-4 w-4" />
-                    Chat with Azoul Assistant
-                  </Link>
-                </div>
-              </motion.div>
+                <motion.div
+                  className="pt-4 mt-2"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <div className="space-y-3 p-2">
+                    <AuthButtons />
+                    <Link 
+                      to="/feature/chat"
+                      className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-morocco-clay to-morocco-terracotta text-white text-sm font-medium shadow-md hover:shadow-lg transition-all"
+                    >
+                      <MessageCircle className="h-4 w-4" />
+                      Chat with Azoul Assistant
+                    </Link>
+                  </div>
+                </motion.div>
+              </div>
             </div>
           </div>
         </motion.div>

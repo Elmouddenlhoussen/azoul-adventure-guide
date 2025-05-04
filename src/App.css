@@ -28,13 +28,13 @@ body {
 /* Modern glassmorphism effects */
 .glass-effect {
   backdrop-filter: blur(16px);
-  background-color: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
 }
 
 .glass-card {
-  @apply backdrop-blur-lg bg-white/80 border border-white/20 shadow-sm rounded-2xl transition-all;
+  @apply backdrop-blur-lg bg-white/90 border border-white/30 shadow-sm rounded-2xl transition-all;
 }
 
 /* Animated card effects with modern hover */
@@ -222,6 +222,7 @@ body {
 /* Modern image hover effects */
 .img-hover-zoom {
   overflow: hidden;
+  border-radius: 12px;
 }
 
 .img-hover-zoom img {
@@ -236,4 +237,70 @@ body {
 .divider-gradient {
   height: 1px;
   background: linear-gradient(to right, transparent, rgba(193, 39, 45, 0.3), transparent);
+}
+
+/* Modern card designs */
+.modern-card {
+  background: linear-gradient(145deg, #ffffff, #f0f0f0);
+  border-radius: 16px;
+  box-shadow: 5px 5px 15px rgba(0,0,0,0.05),
+              -5px -5px 15px rgba(255,255,255,0.6);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.modern-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 8px 8px 20px rgba(0,0,0,0.1),
+              -8px -8px 20px rgba(255,255,255,0.8);
+}
+
+/* Glassmorphism utility classes */
+.glass-bg {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-dark {
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Modern typography utilities */
+.text-gradient-gold {
+  background: linear-gradient(to right, #f7971e, #ffd200);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-terracotta {
+  background: linear-gradient(to right, #e67e22, #d35400);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Animation utilities */
+.hover-float {
+  transition: transform 0.3s ease;
+}
+
+.hover-float:hover {
+  transform: translateY(-8px);
+}
+
+.pulse-slow {
+  animation: pulse 3s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
