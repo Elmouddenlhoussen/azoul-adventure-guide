@@ -14,7 +14,7 @@ body {
   transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Moroccan-inspired decorative elements */
+/* Modern decorative elements */
 .moroccan-pattern {
   background-color: #ffffff;
   background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c1272d' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
@@ -25,29 +25,37 @@ body {
   padding-top: 5rem;
 }
 
-/* Multi-tone image overlays */
-.image-overlay-gradient {
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
+/* Modern glassmorphism effects */
+.glass-effect {
+  backdrop-filter: blur(16px);
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
 }
 
-/* Animated card effects */
+.glass-card {
+  @apply backdrop-blur-lg bg-white/80 border border-white/20 shadow-sm rounded-2xl transition-all;
+}
+
+/* Animated card effects with modern hover */
 .card-hover {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), 
+              box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .card-hover:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 20px -10px rgba(193, 39, 45, 0.2);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
 }
 
-/* Moroccan geometric glowing button effect */
-.moroccan-glow {
+/* Modern button effects */
+.button-glow {
   position: relative;
   overflow: hidden;
   z-index: 1;
 }
 
-.moroccan-glow::after {
+.button-glow::after {
   content: '';
   position: absolute;
   top: -50%;
@@ -56,28 +64,29 @@ body {
   height: 200%;
   background: conic-gradient(
     transparent, 
-    rgba(193, 39, 45, 0.1), 
+    rgba(255, 255, 255, 0.2), 
     transparent 30%
   );
-  animation: moroccanGlow 4s linear infinite;
+  animation: buttonGlow 4s linear infinite;
   z-index: -1;
 }
 
-@keyframes moroccanGlow {
+@keyframes buttonGlow {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
-/* Enhanced scroll animations */
+/* Enhanced modern scroll animations */
 .smooth-scroll-enabled {
   scroll-behavior: smooth;
 }
 
-/* Staggered reveal animation for lists */
+/* Modern staggered reveal animation for lists */
 .stagger-item {
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), 
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .stagger-item.visible {
@@ -85,27 +94,27 @@ body {
   transform: translateY(0);
 }
 
-/* Custom scrollbar */
+/* Modern custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(193, 39, 45, 0.5);
-  border-radius: 4px;
+  background: rgba(193, 39, 45, 0.3);
+  border-radius: 8px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(193, 39, 45, 0.7);
+  background: rgba(193, 39, 45, 0.5);
 }
 
-/* Text appear animations */
+/* Modern text reveal animations */
 .text-reveal {
   display: inline-block;
   position: relative;
@@ -136,10 +145,10 @@ body {
   }
 }
 
-/* Scroll animations */
+/* Modern scroll animations */
 .scroll-animate {
-  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), 
-              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), 
+              transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .fade-in {
@@ -182,10 +191,49 @@ body {
 
 .scale-in {
   opacity: 0;
-  transform: scale(0.9);
+  transform: scale(0.95);
 }
 
 .scale-in.active {
   opacity: 1;
   transform: scale(1);
+}
+
+/* Modern button styles */
+.btn-modern {
+  @apply rounded-xl px-6 py-3 font-medium transition-all duration-300 relative overflow-hidden shadow-sm;
+}
+
+.btn-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.7s;
+}
+
+.btn-modern:hover::before {
+  left: 100%;
+}
+
+/* Modern image hover effects */
+.img-hover-zoom {
+  overflow: hidden;
+}
+
+.img-hover-zoom img {
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.img-hover-zoom:hover img {
+  transform: scale(1.05);
+}
+
+/* Modern section dividers */
+.divider-gradient {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(193, 39, 45, 0.3), transparent);
 }
