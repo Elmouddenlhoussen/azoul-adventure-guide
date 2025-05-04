@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { MessageCircle, X, Send, User, MessageSquare, Palmtree, Sparkles } from 'lucide-react';
@@ -21,19 +22,19 @@ type Message = {
 const initialMessagesMap: Record<string, Message> = {
   'en': {
     id: '1',
-    content: "Azul! I'm your Moroccan travel assistant. How can I help you explore the beauty and culture of Morocco today?",
+    content: "Marhaba! I'm your Moroccan travel assistant. How can I help you explore the beauty and culture of Morocco today?",
     sender: 'assistant',
     timestamp: new Date(),
   },
   'fr': {
     id: '1',
-    content: "Azul! Je suis votre assistant de voyage marocain. Comment puis-je vous aider à explorer la beauté et la culture du Maroc aujourd'hui?",
+    content: "Marhaba! Je suis votre assistant de voyage marocain. Comment puis-je vous aider à explorer la beauté et la culture du Maroc aujourd'hui?",
     sender: 'assistant',
     timestamp: new Date(),
   },
   'ar': {
     id: '1',
-    content: "أزول! أنا مساعد السفر المغربي. كيف يمكنني مساعدتك في استكشاف جمال وثقافة المغرب اليوم؟",
+    content: "مرحبا! أنا مساعد السفر المغربي. كيف يمكنني مساعدتك في استكشاف جمال وثقافة المغرب اليوم؟",
     sender: 'assistant',
     timestamp: new Date(),
   },
@@ -45,6 +46,15 @@ const initialMessagesMap: Record<string, Message> = {
   }
 };
 
+// Examples to show users what they can ask
+const suggestionExamples = [
+  "Tell me about Marrakech",
+  "What's the best time to visit Morocco?",
+  "What should I eat in Morocco?",
+  "How do I get around in Morocco?",
+  "Tell me about the Sahara desert"
+];
+
 const ChatAssistant = () => {
   const { language } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
@@ -53,6 +63,7 @@ const ChatAssistant = () => {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
+  const [suggestedQuestions, setSuggestedQuestions] = useState<string[]>(suggestionExamples);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
@@ -93,13 +104,19 @@ const ChatAssistant = () => {
     }
   };
 
-  const handleSend = async () => {
-    if (!input.trim()) return;
+  const handleSuggestionClick = (question: string) => {
+    setInput(question);
+    handleSend(question);
+  };
+
+  const handleSend = async (customMessage?: string) => {
+    const messageToSend = customMessage || input;
+    if (!messageToSend.trim()) return;
     
     // Add user message
     const userMessage: Message = {
       id: Date.now().toString(),
-      content: input,
+      content: messageToSend,
       sender: 'user',
       timestamp: new Date(),
     };
@@ -124,14 +141,23 @@ const ChatAssistant = () => {
       
       if (response.error) {
         console.error("Chat error:", response.error);
+        toast({
+          title: "Chat Issue",
+          description: "I had trouble understanding that. Let's try something else.",
+          variant: "destructive"
+        });
       }
+
+      // Update suggested questions dynamically based on current conversation
+      updateSuggestedQuestions(userMessage.content, response.response);
+      
     } catch (error) {
       console.error("Failed to get AI response:", error);
       
       // Add error message
       const errorMessage: Message = {
         id: Date.now().toString(),
-        content: "I'm sorry, I encountered a problem. Please try again later.",
+        content: "I'm having trouble understanding right now. Could you try asking your question differently?",
         sender: 'assistant',
         timestamp: new Date(),
         error: true
@@ -147,6 +173,62 @@ const ChatAssistant = () => {
     } finally {
       setIsTyping(false);
     }
+  };
+
+  const updateSuggestedQuestions = (userMessage: string, aiResponse: string) => {
+    // Create contextually relevant follow-up questions based on the conversation
+    const lowerUserMsg = userMessage.toLowerCase();
+    const lowerAiResp = aiResponse.toLowerCase();
+    
+    let newSuggestions: string[] = [];
+    
+    // If user asked about a destination
+    if (lowerUserMsg.includes("marrakech") || lowerAiResp.includes("marrakech")) {
+      newSuggestions.push("What are the best attractions in Marrakech?");
+      newSuggestions.push("How many days should I spend in Marrakech?");
+    } else if (lowerUserMsg.includes("fes") || lowerAiResp.includes("fes")) {
+      newSuggestions.push("Tell me about the tanneries in Fes");
+      newSuggestions.push("What's the history of Fes?");
+    } else if (lowerUserMsg.includes("desert") || lowerUserMsg.includes("sahara") || 
+              lowerAiResp.includes("desert") || lowerAiResp.includes("sahara")) {
+      newSuggestions.push("What should I pack for the desert?");
+      newSuggestions.push("How do I get to the Sahara from Marrakech?");
+    }
+    
+    // If user asked about food
+    else if (lowerUserMsg.includes("food") || lowerUserMsg.includes("eat") || lowerUserMsg.includes("dish") ||
+            lowerAiResp.includes("cuisine") || lowerAiResp.includes("tagine")) {
+      newSuggestions.push("What is tagine?");
+      newSuggestions.push("Where can I find the best street food?");
+      newSuggestions.push("Are there vegetarian options in Moroccan cuisine?");
+    }
+    
+    // If user asked about culture
+    else if (lowerUserMsg.includes("culture") || lowerUserMsg.includes("tradition") ||
+            lowerAiResp.includes("culture") || lowerAiResp.includes("tradition")) {
+      newSuggestions.push("Tell me about Moroccan music");
+      newSuggestions.push("What are important customs I should know?");
+    }
+    
+    // If user asked about transportation
+    else if (lowerUserMsg.includes("transport") || lowerUserMsg.includes("travel") || 
+            lowerAiResp.includes("transport") || lowerAiResp.includes("train")) {
+      newSuggestions.push("Is it easy to rent a car in Morocco?");
+      newSuggestions.push("How reliable are the trains?");
+    }
+    
+    // Default suggestions if nothing specific was detected
+    if (newSuggestions.length < 2) {
+      newSuggestions = newSuggestions.concat([
+        "What's the best time to visit Morocco?",
+        "What souvenirs should I buy?",
+        "Is Morocco safe for tourists?"
+      ]);
+    }
+    
+    // Limit to 3 suggestions and ensure they're different from each other
+    newSuggestions = Array.from(new Set(newSuggestions)).slice(0, 3);
+    setSuggestedQuestions(newSuggestions);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -184,10 +266,10 @@ const ChatAssistant = () => {
                         <Palmtree className="h-4 w-4 text-white" />
                       </div>
                       <div>
-                        <span className="font-semibold text-white">Azoul Assistant</span>
+                        <span className="font-semibold text-white">Morocco Travel Assistant</span>
                         <div className="flex items-center text-white/70 text-xs">
                           <span className="inline-block w-2 h-2 bg-green-400 rounded-full mr-1"></span>
-                          Online now
+                          Ready to help
                         </div>
                       </div>
                     </div>
@@ -228,6 +310,8 @@ const ChatAssistant = () => {
                           </div>
                         </div>
                       ))}
+                      
+                      {/* Typing indicator */}
                       {isTyping && (
                         <div className="flex justify-start">
                           <div className="flex flex-row gap-2 max-w-[80%]">
@@ -244,6 +328,22 @@ const ChatAssistant = () => {
                           </div>
                         </div>
                       )}
+                      
+                      {/* Suggested questions */}
+                      {!isTyping && messages.length > 0 && messages[messages.length - 1].sender === 'assistant' && (
+                        <div className="flex flex-wrap gap-2 mt-2 justify-center">
+                          {suggestedQuestions.map((question, index) => (
+                            <button 
+                              key={index}
+                              onClick={() => handleSuggestionClick(question)}
+                              className="text-xs bg-white border border-morocco-sand/30 hover:bg-morocco-sand/10 rounded-full px-3 py-1 transition-colors"
+                            >
+                              {question}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                      
                       <div ref={messagesEndRef} />
                     </div>
                   </ScrollArea>
@@ -255,12 +355,12 @@ const ChatAssistant = () => {
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
                       onKeyDown={handleKeyDown}
-                      placeholder="Type your message..."
+                      placeholder="Ask me about Morocco..."
                       className="resize-none min-h-[44px] max-h-[120px] border-morocco-sand/30 focus-visible:ring-morocco-terracotta"
                       rows={1}
                     />
                     <Button 
-                      onClick={handleSend} 
+                      onClick={() => handleSend()}
                       className={`h-9 w-9 p-0 ${primaryBg} hover:opacity-90 transition-opacity`}
                     >
                       <Send className="h-4 w-4 text-white" />
