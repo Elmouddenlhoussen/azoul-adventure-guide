@@ -76,65 +76,191 @@ const moroccoKnowledgeBase = {
     currency: "The Moroccan dirham (MAD) is the official currency. ATMs are widely available in cities. Credit cards are accepted in larger establishments but carry cash for souks and small shops.",
     safety: "Morocco is generally safe for tourists. Take normal precautions in crowded areas. Women travelers should dress modestly to avoid unwanted attention.",
     visas: "Many countries receive visa-free entry for up to 90 days. Check the latest requirements before traveling."
+  },
+  general: {
+    geography: "Morocco is located in North Africa, with coastlines on the Atlantic Ocean and Mediterranean Sea. The Atlas Mountains run through the center, and the Sahara Desert occupies the southeast.",
+    climate: "Morocco has diverse climates: Mediterranean along the coast, continental in the interior, and desert in the south. Temperatures vary dramatically between day and night in desert regions.",
+    history: "Morocco has a rich history influenced by Berber, Arab, European, and African cultures. It was colonized by France and Spain before gaining independence in 1956.",
+    economy: "Tourism, agriculture, and phosphate mining are key economic sectors. Morocco is also investing heavily in renewable energy, particularly solar power.",
+    politics: "Morocco is a constitutional monarchy with an elected parliament. King Mohammed VI has ruled since 1999.",
+    population: "Morocco has about 37 million people, with the majority being Arab-Berber. The population is relatively young, with a median age of around 30."
   }
 };
 
-// Improved function to generate a contextual response based on user input
-const generateResponse = (userInput: string): string => {
-  const input = userInput.toLowerCase().trim();
+// Improved text similarity function for better context understanding
+function stringSimilarity(s1, s2) {
+  s1 = s1.toLowerCase();
+  s2 = s2.toLowerCase();
   
-  // Check for greetings or introductions
-  if (input.match(/hello|hi|hey|greetings|azul|salam|bonjour/i)) {
+  const wordSet1 = new Set(s1.split(/\s+/).filter(word => word.length > 3));
+  const wordSet2 = new Set(s2.split(/\s+/).filter(word => word.length > 3));
+  
+  let intersection = 0;
+  for (const word of wordSet1) {
+    if (wordSet2.has(word)) {
+      intersection++;
+    }
+  }
+  
+  const union = wordSet1.size + wordSet2.size - intersection;
+  return union === 0 ? 0 : intersection / union;
+}
+
+// Advanced function to detect query intent and topic
+function detectQueryIntent(input) {
+  input = input.toLowerCase();
+  
+  // Define intent patterns
+  const intents = {
+    greeting: /hello|hi|hey|greetings|marhaba|salam|bonjour|^hi$|^hey$/i,
+    farewell: /goodbye|bye|see you|later|au revoir/i,
+    thanks: /thank|thanks|thank you|merci|شكرا/i,
+    destination: /marrakech|fes|casablanca|rabat|chefchaouen|essaouira|desert|sahara|tangier|agadir|ouarzazate|meknes/i,
+    food: /food|eat|dish|cuisine|restaurant|meal|tagine|couscous|pastilla|harira|tea|mint tea/i,
+    culture: /culture|custom|tradition|people|language|music|dance|religion|festival|holiday|art|craft/i,
+    practical: /money|currency|dirham|safety|travel|transport|bus|train|taxi|time to visit|best time|weather|season|visa|passport/i,
+    recommendation: /recommend|suggestion|best|top|must see|visit|advice|tips|should I|where to go/i,
+    price: /cost|price|budget|cheap|expensive|affordable/i,
+    accommodation: /hotel|riad|stay|accommodation|hostel|camping|sleep|lodge|where to stay/i,
+    nonMorocco: /spain|france|egypt|algeria|tunisia|europe|asia|america/i,
+    unrelated: /crypto|bitcoin|stock market|investment|programming|software|game|movie|politics|celebrity|sports/i
+  };
+  
+  // Check for intents
+  const matchedIntents = {};
+  for (const [intent, pattern] of Object.entries(intents)) {
+    matchedIntents[intent] = (input.match(pattern) || []).length;
+  }
+  
+  // Get primary intent
+  let primaryIntent = Object.entries(matchedIntents)
+    .filter(([key]) => key !== 'greeting' && key !== 'farewell' && key !== 'thanks')
+    .sort((a, b) => b[1] - a[1])[0];
+  
+  primaryIntent = primaryIntent ? primaryIntent[0] : 'unknown';
+  
+  // Handle completely unrelated queries
+  if (primaryIntent === 'unrelated' || primaryIntent === 'nonMorocco') {
+    return {
+      intent: 'unrelated',
+      topic: null,
+      confidence: matchedIntents.unrelated > 0 || matchedIntents.nonMorocco > 0 ? 0.9 : 0.5
+    };
+  }
+  
+  // Find the most likely topic
+  let maxScore = 0;
+  let bestTopic = null;
+  let bestCategory = null;
+  
+  // Check each category and topic
+  for (const [category, topics] of Object.entries(moroccoKnowledgeBase)) {
+    for (const [topic, content] of Object.entries(topics)) {
+      let topicText = '';
+      
+      if (typeof content === 'string') {
+        topicText = content;
+      } else if (typeof content === 'object') {
+        topicText = Object.values(content).join(' ');
+      }
+      
+      const similarity = stringSimilarity(input, topicText);
+      
+      if (similarity > maxScore) {
+        maxScore = similarity;
+        bestTopic = topic;
+        bestCategory = category;
+      }
+    }
+  }
+  
+  return {
+    intent: primaryIntent,
+    topic: bestTopic,
+    category: bestCategory,
+    confidence: maxScore
+  };
+}
+
+// Completely revised response generator with improved context handling
+function generateResponse(userInput, conversationHistory = []) {
+  const input = userInput.toLowerCase().trim();
+  console.log("Processing input:", input);
+  
+  // Detect input intent and topic
+  const queryAnalysis = detectQueryIntent(input);
+  console.log("Query analysis:", JSON.stringify(queryAnalysis));
+  
+  // Handle greetings first
+  if (input.match(/hello|hi|hey|greetings|marhaba|salam|bonjour|^hi$|^hey$/i)) {
     return "Marhaba! Hello! I'm your Moroccan travel assistant. I can help you discover destinations, learn about local cuisine, understand cultural practices, or get practical travel information. What would you like to know about Morocco?";
   }
   
-  // Check for thanks
-  if (input.match(/thank|thanks|thank you|appreciate|merci|شكرا/i)) {
+  // Handle thanks
+  if (input.match(/thank|thanks|thank you|merci|شكرا/i)) {
     return "You're very welcome! It's my pleasure to help with your Morocco travel plans. Is there anything else you'd like to know?";
   }
   
-  // Check for destination inquiries by city name
+  // Handle completely unrelated queries
+  if (queryAnalysis.intent === 'unrelated') {
+    return "I specialize in information about Morocco travel. I can tell you about Moroccan destinations, culture, food, or practical travel information. How can I help you plan your Moroccan adventure?";
+  }
+  
+  // Check if the input is a question about the chatbot itself
+  if (input.match(/who are you|what are you|your name|about you|made you|created you|developer/i)) {
+    return "I'm Azoul, your AI Moroccan travel assistant! I'm here to help you discover Morocco's beautiful destinations, rich culture, delicious cuisine, and practical travel information. I'm designed to make your Moroccan travel experience smoother and more enjoyable. How can I help you plan your Moroccan adventure today?";
+  }
+  
+  // Destination-specific responses
   for (const [destination, info] of Object.entries(moroccoKnowledgeBase.destinations)) {
     if (input.includes(destination)) {
       if (input.match(/best time|when to visit|season|weather|climat/i)) {
         return `The best time to visit ${destination.charAt(0).toUpperCase() + destination.slice(1)} is ${info.bestTimeToVisit}.`;
       }
+      
       if (input.match(/do|see|attraction|visit|activit|sight|tour/i)) {
         return `In ${destination.charAt(0).toUpperCase() + destination.slice(1)}, you should visit: ${info.attractions.join(", ")}. ${info.tips}`;
       }
+      
       if (input.match(/tip|advice|recommend|suggest/i)) {
         return `Tip for visiting ${destination.charAt(0).toUpperCase() + destination.slice(1)}: ${info.tips}`;
       }
+      
       return info.description;
     }
   }
   
-  // More general destination queries
+  // If we have a confident topic match, use it
+  if (queryAnalysis.confidence > 0.2 && queryAnalysis.topic && queryAnalysis.category) {
+    const category = moroccoKnowledgeBase[queryAnalysis.category];
+    
+    if (category) {
+      const content = category[queryAnalysis.topic];
+      
+      if (typeof content === 'string') {
+        return content;
+      } else if (typeof content === 'object' && content.description) {
+        return content.description;
+      }
+    }
+  }
+  
+  // Handle specific query patterns that might not be captured otherwise
   if (input.match(/where to go|best places|top destinations|must see|recommend destination|place to visit/i)) {
     return "Morocco offers diverse destinations! For cultural experiences, visit the imperial cities of Marrakech and Fes. For coastal relaxation, try Essaouira or Agadir. For unique landscapes, explore Chefchaouen (the Blue City) or the Sahara Desert. Would you like specific information about any of these places?";
   }
   
-  // Check for food inquiries
+  // Food related queries
   if (input.match(/food|eat|cuisine|dish|meal|gastronomy|restaurant|breakfast|lunch|dinner/i)) {
     for (const [dish, description] of Object.entries(moroccoKnowledgeBase.food)) {
       if (input.includes(dish.toLowerCase())) {
         return description;
       }
     }
-    return `Moroccan cuisine is diverse and flavorful! Famous dishes include tagine (slow-cooked stew), couscous (traditionally served on Fridays), pastilla (savory-sweet pastry), and mint tea. Street food is excellent - try msemen (square pancakes), harira (soup), and sfenj (doughnuts). Would you like to know more about specific Moroccan dishes?`;
+    return "Moroccan cuisine is diverse and flavorful! Famous dishes include tagine (slow-cooked stew), couscous (traditionally served on Fridays), pastilla (savory-sweet pastry), and mint tea. Street food is excellent - try msemen (square pancakes), harira (soup), and sfenj (doughnuts). Would you like to know more about specific Moroccan dishes?";
   }
   
-  // Check for culture inquiries
-  if (input.match(/culture|tradition|custom|etiquette|art|music|dance|festival|celebrat|holiday/i)) {
-    for (const [aspect, description] of Object.entries(moroccoKnowledgeBase.culture)) {
-      if (input.includes(aspect.toLowerCase())) {
-        return description;
-      }
-    }
-    return moroccoKnowledgeBase.culture.customs;
-  }
-  
-  // Check for practical information inquiries
+  // Practical information queries by category
   if (input.match(/when|best time|visit|season|weather|climat|temperature/i)) {
     return moroccoKnowledgeBase.practicalInfo.bestTimeToVisit;
   }
@@ -159,7 +285,20 @@ const generateResponse = (userInput: string): string => {
     return moroccoKnowledgeBase.practicalInfo.visas;
   }
   
-  // More complex response using rule-based NLP
+  // Special topic handlers
+  if (input.match(/hammam|spa|bath/i)) {
+    return "The hammam is a traditional Moroccan bathhouse and an important cultural experience. Public hammams are separated by gender and involve steam rooms of various temperatures, scrubbing with black soap, and exfoliation with a special glove called a 'kessa.' Many riads and hotels offer private hammam experiences. It's a wonderful way to relax and experience an authentic part of Moroccan culture.";
+  }
+  
+  if (input.match(/tipping|tip/i) && !input.match(/advice|suggest/i)) {
+    return "Tipping in Morocco is customary but not obligatory. In restaurants, rounding up the bill or leaving 10% is appreciated for good service. For taxis, rounding up to the nearest 5 dirhams is common. Hotel porters expect about 10-20 dirhams per bag. For guides, 100-150 dirhams per day is standard. Tip in local currency (dirhams) rather than foreign currency when possible.";
+  }
+  
+  if (input.match(/dress|wear|clothing|modest/i)) {
+    return "Morocco is a Muslim country with varying levels of conservatism. In general, both men and women should dress modestly, especially in more traditional areas. For women, covering shoulders, chest, and knees is respectful (long skirts/pants and tops that aren't revealing). Men should avoid very short shorts in non-beach areas. In major tourist areas and upscale parts of cities, dress codes are more relaxed, but modest dress is still appreciated when visiting religious sites.";
+  }
+  
+  // Topic-based responses for keywords
   const keywords = {
     "desert": ["desert", "sahara", "merzouga", "zagora", "camel", "dune", "sand", "camp", "erg", "berber", "nomad"],
     "medina": ["medina", "souk", "market", "old city", "walled", "maze", "bazaar", "shop", "artisan", "craft"],
@@ -192,51 +331,31 @@ const generateResponse = (userInput: string): string => {
   if (highestScore > 0) {
     switch(bestTopic) {
       case "desert":
-        return "The Moroccan Sahara offers unforgettable experiences including camel treks, overnight stays in desert camps, and breathtaking stargazing. Merzouga (near Erg Chebbi dunes) and Zagora (gateway to Erg Chigaga) are popular starting points. The best time to visit is between October and April when temperatures are more moderate. For the most authentic experience, stay overnight in a traditional camp to witness both sunset and sunrise over the dunes. Most tours include camel rides, traditional Berber music, and meals.";
+        return "The Moroccan Sahara offers unforgettable experiences including camel treks, overnight stays in desert camps, and breathtaking stargazing. Merzouga (near Erg Chebbi dunes) and Zagora (gateway to Erg Chigaga) are popular starting points. The best time to visit is between October and April when temperatures are more moderate. For the most authentic experience, stay overnight in a traditional camp to witness both sunset and sunrise over the dunes.";
         
       case "medina":
-        return "Moroccan medinas are historic walled city centers filled with narrow, maze-like streets. Each city's medina has its own character - Fes has the largest car-free urban area in the world, Marrakech has lively souks and squares, and Essaouira has a more relaxed coastal medina. They're excellent for shopping, photography, and experiencing authentic culture. When navigating medinas, consider hiring a local guide initially to get oriented, be prepared to haggle when shopping, and remember that getting a bit lost is part of the experience!";
+        return "Moroccan medinas are historic walled city centers filled with narrow, maze-like streets. Each city's medina has its own character - Fes has the largest car-free urban area in the world, Marrakech has lively souks and squares, and Essaouira has a more relaxed coastal medina. They're excellent for shopping, photography, and experiencing authentic culture. When navigating medinas, consider hiring a local guide initially to get oriented.";
         
       case "accommodation":
-        return "Morocco offers diverse accommodation options. Riads (traditional houses with inner courtyards) provide an authentic experience in medinas - they range from budget to luxury. Desert camps let you sleep under the stars in the Sahara. Modern hotels are available in major cities, while kasbahs (fortified buildings) offer atmospheric stays in southern regions. For budget travelers, hostels are increasingly common in tourist areas. Booking in advance is recommended during high season (spring and fall).";
+        return "Morocco offers diverse accommodation options. Riads (traditional houses with inner courtyards) provide an authentic experience in medinas - they range from budget to luxury. Desert camps let you sleep under the stars in the Sahara. Modern hotels are available in major cities, while kasbahs (fortified buildings) offer atmospheric stays in southern regions. For budget travelers, hostels are increasingly common in tourist areas.";
         
       case "hiking":
-        return "Morocco offers excellent hiking, particularly in the Atlas Mountains. The High Atlas near Marrakech includes Toubkal, North Africa's highest peak (4,167m). The Middle Atlas has cedar forests and lakes, while the Rif Mountains offer scenic trails near Chefchaouen. Spring (April-May) and fall (September-October) are the best seasons with moderate temperatures and beautiful landscapes. Multi-day treks typically require a guide, which can be arranged in nearby towns or through tour agencies.";
+        return "Morocco offers excellent hiking, particularly in the Atlas Mountains. The High Atlas near Marrakech includes Toubkal, North Africa's highest peak (4,167m). The Middle Atlas has cedar forests and lakes, while the Rif Mountains offer scenic trails near Chefchaouen. Spring (April-May) and fall (September-October) are the best seasons with moderate temperatures and beautiful landscapes.";
         
       case "photography":
-        return "Morocco is a photographer's paradise with diverse scenery and rich colors. For architecture and culture, focus on the blue streets of Chefchaouen, the vibrant markets of Marrakech, and the ancient medina of Fes. For landscapes, the Sahara Desert offers stunning dunes, especially at sunrise and sunset. The coastal ramparts of Essaouira and the High Atlas Mountains also provide spectacular photo opportunities. Early morning offers the best light and fewer crowds in popular locations.";
+        return "Morocco is a photographer's paradise with diverse scenery and rich colors. For architecture and culture, focus on the blue streets of Chefchaouen, the vibrant markets of Marrakech, and the ancient medina of Fes. For landscapes, the Sahara Desert offers stunning dunes, especially at sunrise and sunset. The coastal ramparts of Essaouira and the High Atlas Mountains also provide spectacular photo opportunities.";
         
       case "budget":
-        return "Morocco can be enjoyed on various budgets. For budget travelers, street food (5-20 MAD), public transportation (4-10 MAD for local buses), and hostels/budget riads (100-300 MAD/night) keep costs low. Mid-range travelers can enjoy comfortable riads (500-1000 MAD/night) and restaurant meals (70-150 MAD). Haggling is expected in souks - start around 40% of the asking price. Having small change is useful for markets, taxis, and tips. Credit cards are accepted in larger establishments but carry cash for smaller vendors.";
+        return "Morocco can be enjoyed on various budgets. For budget travelers, street food (5-20 MAD), public transportation (4-10 MAD for local buses), and hostels/budget riads (100-300 MAD/night) keep costs low. Mid-range travelers can enjoy comfortable riads (500-1000 MAD/night) and restaurant meals (70-150 MAD). Haggling is expected in souks - start around 40% of the asking price.";
         
       case "itinerary":
-        return "A classic first-time Morocco itinerary includes: 3 days in Marrakech exploring the medina and gardens, 2-3 days in Fes for its historic sites, 1-2 days in Chefchaouen to enjoy the blue city, and 2 days for a Sahara desert excursion. With more time, add coastal Essaouira (2 days) and the Atlas Mountains (2-3 days). For efficient travel between cities, use trains where available or book a private driver. Consider internal flights for longer distances. The minimum recommended time for a highlights tour is 10 days.";
+        return "A classic first-time Morocco itinerary includes: 3 days in Marrakech exploring the medina and gardens, 2-3 days in Fes for its historic sites, 1-2 days in Chefchaouen to enjoy the blue city, and 2 days for a Sahara desert excursion. With more time, add coastal Essaouira (2 days) and the Atlas Mountains (2-3 days). For efficient travel between cities, use trains where available or book a private driver.";
     }
   }
   
-  // Handle questions about personal topics
-  if (input.match(/who are you|what are you|your name|about you|made you|created you|developer/i)) {
-    return "I'm Azoul, your AI Moroccan travel assistant! I'm here to help you discover Morocco's beautiful destinations, rich culture, delicious cuisine, and practical travel information. I'm designed to make your Moroccan travel experience smoother and more enjoyable. How can I help you plan your Moroccan adventure today?";
-  }
-  
-  // Try to extract meaning from questions that don't match previous patterns
-  if (input.includes("?") || input.match(/^(what|when|where|how|why|can|could|would|should|is|are|do|does|did)/i)) {
-    if (input.match(/hammam|spa|bath/i)) {
-      return "The hammam is a traditional Moroccan bathhouse and an important cultural experience. Public hammams are separated by gender and involve steam rooms of various temperatures, scrubbing with black soap, and exfoliation with a special glove called a 'kessa.' Many riads and hotels offer private hammam experiences. It's a wonderful way to relax and experience an authentic part of Moroccan culture.";
-    }
-    
-    if (input.match(/tipping|tip/i) && !input.match(/advice|suggest/i)) {
-      return "Tipping in Morocco is customary but not obligatory. In restaurants, rounding up the bill or leaving 10% is appreciated for good service. For taxis, rounding up to the nearest 5 dirhams is common. Hotel porters expect about 10-20 dirhams per bag. For guides, 100-150 dirhams per day is standard. Tip in local currency (dirhams) rather than foreign currency when possible.";
-    }
-    
-    if (input.match(/dress|wear|clothing|modest/i)) {
-      return "Morocco is a Muslim country with varying levels of conservatism. In general, both men and women should dress modestly, especially in more traditional areas. For women, covering shoulders, chest, and knees is respectful (long skirts/pants and tops that aren't revealing). Men should avoid very short shorts in non-beach areas. In major tourist areas and upscale parts of cities, dress codes are more relaxed, but modest dress is still appreciated when visiting religious sites.";
-    }
-  }
-  
-  // Default response for unmatched queries
-  return `I'd be happy to help you with information about Morocco! You can ask me about specific destinations like Marrakech, Fes, or Chefchaouen; local cuisine like tagine or mint tea; cultural customs; or practical travel information like transportation or weather. What specifically would you like to know about Morocco?`;
-};
+  // Default response when we can't match the user's query
+  return "I'd be happy to help you with information about Morocco! You can ask me about specific destinations like Marrakech, Fes, or Chefchaouen; local cuisine like tagine or mint tea; cultural customs; or practical travel information like transportation or weather. What specifically would you like to know about Morocco?";
+}
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -245,14 +364,19 @@ serve(async (req) => {
   }
 
   try {
-    const { message } = await req.json();
+    const { message, conversationHistory } = await req.json();
     
     if (!message) {
       throw new Error('No message provided');
     }
 
-    // Generate contextual response based on user query
-    const response = generateResponse(message);
+    console.log("Received message:", message);
+    console.log("Conversation history:", conversationHistory || "No history provided");
+    
+    // Generate contextual response based on user query and conversation history
+    const response = generateResponse(message, conversationHistory || []);
+    
+    console.log("Generated response:", response);
     
     // Return the response with proper headers
     return new Response(
@@ -269,7 +393,8 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ 
         error: error.message || 'An error occurred while processing your message',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        response: "I'm sorry, I encountered a problem understanding your question. Could you please rephrase it or ask something else about Morocco?"
       }),
       { 
         status: 400, 

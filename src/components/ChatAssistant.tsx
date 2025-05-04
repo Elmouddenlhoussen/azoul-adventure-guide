@@ -9,7 +9,7 @@ import { ScrollArea } from './ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/hooks/use-language';
 import AnimatedTransition from './AnimatedTransition';
-import { sendChatMessage } from '@/services/chatService';
+import { sendChatMessage, ChatMessage } from '@/services/chatService';
 
 type Message = {
   id: string;
@@ -47,7 +47,7 @@ const initialMessagesMap: Record<string, Message> = {
 };
 
 // Examples to show users what they can ask
-const suggestionExamples = [
+const initialSuggestionExamples = [
   "Tell me about Marrakech",
   "What's the best time to visit Morocco?",
   "What should I eat in Morocco?",
@@ -63,7 +63,7 @@ const ChatAssistant = () => {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
-  const [suggestedQuestions, setSuggestedQuestions] = useState<string[]>(suggestionExamples);
+  const [suggestedQuestions, setSuggestedQuestions] = useState<string[]>(initialSuggestionExamples);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
@@ -99,7 +99,6 @@ const ChatAssistant = () => {
     setIsMinimized(!isMinimized);
     if (isMinimized) {
       setIsFirstLoad(false);
-      // If opening, log this in analytics (placeholder)
       console.log('Chat opened');
     }
   };
@@ -107,6 +106,16 @@ const ChatAssistant = () => {
   const handleSuggestionClick = (question: string) => {
     setInput(question);
     handleSend(question);
+  };
+
+  // Prepare messages for context
+  const prepareConversationHistory = (): ChatMessage[] => {
+    // Skip the initial greeting message
+    return messages.slice(1).map(msg => ({
+      content: msg.content,
+      sender: msg.sender,
+      timestamp: msg.timestamp
+    }));
   };
 
   const handleSend = async (customMessage?: string) => {
@@ -126,9 +135,13 @@ const ChatAssistant = () => {
     setIsTyping(true);
     
     try {
-      // Call the Supabase Edge Function for AI response
-      const response = await sendChatMessage(userMessage.content);
+      // Get conversation history to provide context
+      const conversationHistory = prepareConversationHistory();
       
+      // Send both the message and conversation history
+      const response = await sendChatMessage(userMessage.content, conversationHistory);
+      
+      // Generate a new AI message
       const aiMessage: Message = {
         id: Date.now().toString(),
         content: response.response,
@@ -148,8 +161,8 @@ const ChatAssistant = () => {
         });
       }
 
-      // Update suggested questions dynamically based on current conversation
-      updateSuggestedQuestions(userMessage.content, response.response);
+      // Update suggested questions based on the query and response
+      updateSuggestedQuestions(userMessage.content, aiMessage.content);
       
     } catch (error) {
       console.error("Failed to get AI response:", error);
@@ -176,57 +189,69 @@ const ChatAssistant = () => {
   };
 
   const updateSuggestedQuestions = (userMessage: string, aiResponse: string) => {
-    // Create contextually relevant follow-up questions based on the conversation
-    const lowerUserMsg = userMessage.toLowerCase();
-    const lowerAiResp = aiResponse.toLowerCase();
+    // Extract context from the user message and AI response
+    const combinedText = `${userMessage.toLowerCase()} ${aiResponse.toLowerCase()}`;
     
+    // Create context-aware follow-up suggestions
     let newSuggestions: string[] = [];
     
-    // If user asked about a destination
-    if (lowerUserMsg.includes("marrakech") || lowerAiResp.includes("marrakech")) {
-      newSuggestions.push("What are the best attractions in Marrakech?");
-      newSuggestions.push("How many days should I spend in Marrakech?");
-    } else if (lowerUserMsg.includes("fes") || lowerAiResp.includes("fes")) {
-      newSuggestions.push("Tell me about the tanneries in Fes");
-      newSuggestions.push("What's the history of Fes?");
-    } else if (lowerUserMsg.includes("desert") || lowerUserMsg.includes("sahara") || 
-              lowerAiResp.includes("desert") || lowerAiResp.includes("sahara")) {
-      newSuggestions.push("What should I pack for the desert?");
-      newSuggestions.push("How do I get to the Sahara from Marrakech?");
+    // Check for destinations in the conversation
+    const destinations = ['marrakech', 'fes', 'casablanca', 'chefchaouen', 'essaouira', 'rabat', 'desert', 'sahara'];
+    let mentionedDestination = '';
+    
+    for (const destination of destinations) {
+      if (combinedText.includes(destination)) {
+        mentionedDestination = destination;
+        newSuggestions.push(`What are the best attractions in ${destination}?`);
+        newSuggestions.push(`How many days should I spend in ${destination}?`);
+        break;
+      }
     }
     
-    // If user asked about food
-    else if (lowerUserMsg.includes("food") || lowerUserMsg.includes("eat") || lowerUserMsg.includes("dish") ||
-            lowerAiResp.includes("cuisine") || lowerAiResp.includes("tagine")) {
-      newSuggestions.push("What is tagine?");
-      newSuggestions.push("Where can I find the best street food?");
-      newSuggestions.push("Are there vegetarian options in Moroccan cuisine?");
+    // If no destination found, check for other topics
+    if (!mentionedDestination) {
+      // Food related
+      if (combinedText.includes('food') || combinedText.includes('eat') || 
+          combinedText.includes('cuisine') || combinedText.includes('tagine')) {
+        newSuggestions.push("What is Moroccan street food like?");
+        newSuggestions.push("Are there vegetarian options in Moroccan cuisine?");
+      }
+      
+      // Culture related
+      else if (combinedText.includes('culture') || combinedText.includes('tradition') ||
+              combinedText.includes('custom')) {
+        newSuggestions.push("Tell me about Moroccan music");
+        newSuggestions.push("What are important customs I should know?");
+      }
+      
+      // Travel related
+      else if (combinedText.includes('travel') || combinedText.includes('visit') ||
+              combinedText.includes('transport')) {
+        newSuggestions.push("What's the best time to visit Morocco?");
+        newSuggestions.push("How do I get around between cities?");
+      }
     }
     
-    // If user asked about culture
-    else if (lowerUserMsg.includes("culture") || lowerUserMsg.includes("tradition") ||
-            lowerAiResp.includes("culture") || lowerAiResp.includes("tradition")) {
-      newSuggestions.push("Tell me about Moroccan music");
-      newSuggestions.push("What are important customs I should know?");
+    // Add some general follow-ups if we don't have enough suggestions
+    if (newSuggestions.length < 3) {
+      const generalSuggestions = [
+        "What souvenirs should I buy in Morocco?",
+        "Is Morocco safe for tourists?",
+        "Tell me about the Atlas Mountains",
+        "What's a typical day like in Morocco?",
+        "How much should I budget for a week in Morocco?"
+      ];
+      
+      // Add random general suggestions until we have 3 total
+      while (newSuggestions.length < 3) {
+        const randomSuggestion = generalSuggestions[Math.floor(Math.random() * generalSuggestions.length)];
+        if (!newSuggestions.includes(randomSuggestion)) {
+          newSuggestions.push(randomSuggestion);
+        }
+      }
     }
     
-    // If user asked about transportation
-    else if (lowerUserMsg.includes("transport") || lowerUserMsg.includes("travel") || 
-            lowerAiResp.includes("transport") || lowerAiResp.includes("train")) {
-      newSuggestions.push("Is it easy to rent a car in Morocco?");
-      newSuggestions.push("How reliable are the trains?");
-    }
-    
-    // Default suggestions if nothing specific was detected
-    if (newSuggestions.length < 2) {
-      newSuggestions = newSuggestions.concat([
-        "What's the best time to visit Morocco?",
-        "What souvenirs should I buy?",
-        "Is Morocco safe for tourists?"
-      ]);
-    }
-    
-    // Limit to 3 suggestions and ensure they're different from each other
+    // Ensure we only have 3 unique suggestions
     newSuggestions = Array.from(new Set(newSuggestions)).slice(0, 3);
     setSuggestedQuestions(newSuggestions);
   };
@@ -305,7 +330,7 @@ const ChatAssistant = () => {
                                   : `${chatBubbleAssistant} rounded-tl-none`
                               }`}
                             >
-                              <p className="text-sm">{message.content}</p>
+                              <p className="text-sm whitespace-pre-wrap">{message.content}</p>
                             </div>
                           </div>
                         </div>
@@ -362,6 +387,7 @@ const ChatAssistant = () => {
                     <Button 
                       onClick={() => handleSend()}
                       className={`h-9 w-9 p-0 ${primaryBg} hover:opacity-90 transition-opacity`}
+                      disabled={isTyping || !input.trim()}
                     >
                       <Send className="h-4 w-4 text-white" />
                     </Button>

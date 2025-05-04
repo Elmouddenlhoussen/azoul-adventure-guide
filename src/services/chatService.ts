@@ -7,13 +7,31 @@ export interface ChatResponse {
   error?: string;
 }
 
-export const sendChatMessage = async (message: string): Promise<ChatResponse> => {
+export interface ChatMessage {
+  content: string;
+  sender: 'user' | 'assistant';
+  timestamp: Date;
+}
+
+export const sendChatMessage = async (message: string, conversationHistory?: ChatMessage[]): Promise<ChatResponse> => {
   try {
     console.log('Sending chat message:', message);
     
-    // Call the improved Morocco Chat edge function
+    // Format conversation history for the edge function
+    const formattedHistory = conversationHistory ? 
+      conversationHistory.map(msg => ({
+        role: msg.sender,
+        content: msg.content,
+        timestamp: msg.timestamp.toISOString()
+      })) : 
+      undefined;
+    
+    // Call the Morocco Chat edge function with conversation history
     const { data, error } = await supabase.functions.invoke('morocco-chat', {
-      body: { message }
+      body: { 
+        message,
+        conversationHistory: formattedHistory
+      }
     });
     
     if (error) {
