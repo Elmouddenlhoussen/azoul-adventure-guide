@@ -1,7 +1,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { GlobeAlt, X, Send, User, Brain, Sparkles } from 'lucide-react';
+import { Globe, X, Send, User, Brain, Sparkles } from 'lucide-react';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { Avatar } from './ui/avatar';
