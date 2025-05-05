@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
 import { MainNav } from './navigation/MainNav';
@@ -10,6 +10,12 @@ import LanguageSwitcher from './LanguageSwitcher';
 import ThemeToggle from './ThemeToggle';
 
 const Header = () => {
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+
+  const toggleMobileNav = () => {
+    setIsMobileNavOpen(!isMobileNavOpen);
+  };
+
   return (
     <header className="fixed top-0 left-0 right-0 h-20 border-b border-border/40 bg-white/80 backdrop-blur-md z-50 dark:bg-gray-900/80 dark:border-gray-800/40">
       <div className="container flex h-full items-center justify-between">
@@ -25,7 +31,16 @@ const Header = () => {
           <LanguageSwitcher />
           <ThemeToggle />
           <AuthButtons />
-          <MobileNav />
+          <button 
+            onClick={toggleMobileNav}
+            className="md:hidden p-2 rounded-full hover:bg-morocco-sand/20"
+            aria-label="Toggle mobile menu"
+          >
+            <span className={`block h-0.5 w-4 bg-current transition-all duration-300 ${isMobileNavOpen ? 'translate-y-1 rotate-45' : ''}`}></span>
+            <span className={`block h-0.5 w-4 bg-current my-0.5 transition-opacity duration-300 ${isMobileNavOpen ? 'opacity-0' : ''}`}></span>
+            <span className={`block h-0.5 w-4 bg-current transition-all duration-300 ${isMobileNavOpen ? '-translate-y-1 -rotate-45' : ''}`}></span>
+          </button>
+          <MobileNav isOpen={isMobileNavOpen} />
         </div>
       </div>
     </header>
