@@ -278,11 +278,15 @@ const ChatAssistant = () => {
                   exit={{ opacity: 0, y: 20, scale: 0.9 }}
                   transition={{ type: "spring", damping: 25, stiffness: 350 }}
                 >
-                  {/* Modern header with subtle gradient */}
-                  <div className="p-4 border-b border-gray-100 bg-gradient-to-r from-morocco-green/90 to-morocco-teal/90 flex justify-between items-center">
+                  {/* Modern header with color scheme matching the logo */}
+                  <div className="p-4 border-b border-gray-100 bg-gradient-to-r from-morocco-red to-morocco-green flex justify-between items-center">
                     <div className="flex items-center">
                       <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white/20 shadow-inner">
-                        <Brain className="h-5 w-5 text-white" />
+                        <div className="relative h-full w-full flex items-center justify-center">
+                          <Brain className="absolute h-5 w-5 text-white" />
+                          {/* Add Tifinagh letter overlay */}
+                          <span className="absolute text-white text-lg opacity-80">ⵣ</span>
+                        </div>
                       </div>
                       <div className="ml-3">
                         <span className="font-bold text-white">{t('morocco_guide')}</span>
@@ -302,8 +306,8 @@ const ChatAssistant = () => {
                     </Button>
                   </div>
                   
-                  {/* Elegant message container with improved styling */}
-                  <ScrollArea className="flex-1 p-4 bg-white/50 backdrop-blur-sm">
+                  {/* Improved ScrollArea with proper styling for visible scrollbar */}
+                  <ScrollArea className="h-[380px] px-4 py-3" type="always">
                     <div className="space-y-6">
                       {messages.map((message) => (
                         <div
@@ -313,13 +317,18 @@ const ChatAssistant = () => {
                           <div className={`flex ${message.sender === 'user' ? 'flex-row-reverse' : 'flex-row'} items-start gap-3 max-w-[80%] group`}>
                             <Avatar className={`h-9 w-9 shrink-0 ${
                               message.sender === 'assistant' 
-                                ? 'bg-gradient-to-br from-morocco-green to-morocco-teal' 
+                                ? 'bg-gradient-to-br from-morocco-red to-morocco-green' 
                                 : 'bg-gradient-to-br from-morocco-gold to-morocco-clay'
                             }`}>
-                              {message.sender === 'assistant' ? 
-                                <Brain className="h-4 w-4 text-white" /> : 
+                              {message.sender === 'assistant' ? (
+                                <div className="relative h-full w-full flex items-center justify-center">
+                                  <Brain className="absolute h-4 w-4 text-white" />
+                                  {/* Add small Tifinagh letter */}
+                                  <span className="absolute text-white text-[10px] opacity-80">ⵣ</span>
+                                </div>
+                              ) : (
                                 <User className="h-4 w-4 text-white" />
-                              }
+                              )}
                             </Avatar>
                             <div 
                               className={`p-3 rounded-2xl ${
@@ -343,14 +352,17 @@ const ChatAssistant = () => {
                       {isTyping && (
                         <div className="flex justify-start">
                           <div className="flex flex-row gap-3 max-w-[80%]">
-                            <Avatar className="h-9 w-9 bg-gradient-to-br from-morocco-green to-morocco-teal">
-                              <Brain className="h-4 w-4 text-white" />
+                            <Avatar className="h-9 w-9 bg-gradient-to-br from-morocco-red to-morocco-green">
+                              <div className="relative h-full w-full flex items-center justify-center">
+                                <Brain className="absolute h-4 w-4 text-white" />
+                                <span className="absolute text-white text-[10px] opacity-80">ⵣ</span>
+                              </div>
                             </Avatar>
                             <div className="p-4 rounded-2xl bg-white border border-gray-100 shadow-sm text-gray-800 rounded-tl-none">
                               <div className="flex space-x-2">
-                                <div className="h-2 w-2 bg-morocco-green rounded-full animate-bounce"></div>
-                                <div className="h-2 w-2 bg-morocco-teal rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                                <div className="h-2 w-2 bg-morocco-green rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                                <div className="h-2 w-2 bg-morocco-red rounded-full animate-bounce"></div>
+                                <div className="h-2 w-2 bg-morocco-green rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                                <div className="h-2 w-2 bg-morocco-clay rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
                               </div>
                             </div>
                           </div>
@@ -369,9 +381,9 @@ const ChatAssistant = () => {
                             <button 
                               key={index}
                               onClick={() => handleSuggestionClick(question)}
-                              className="text-xs bg-white border border-gray-200 hover:border-morocco-teal/50 hover:bg-morocco-sand/10 rounded-full px-3 py-1.5 transition-all duration-200 shadow-sm hover:shadow flex items-center"
+                              className="text-xs bg-white border border-gray-200 hover:border-morocco-red/50 hover:bg-morocco-sand/10 rounded-full px-3 py-1.5 transition-all duration-200 shadow-sm hover:shadow flex items-center"
                             >
-                              <Sparkles className="h-3 w-3 mr-1.5 text-morocco-teal" />
+                              <Sparkles className="h-3 w-3 mr-1.5 text-morocco-red" />
                               {question}
                             </button>
                           ))}
@@ -390,12 +402,12 @@ const ChatAssistant = () => {
                       onChange={(e) => setInput(e.target.value)}
                       onKeyDown={handleKeyDown}
                       placeholder={t('ask_about_morocco')}
-                      className="resize-none min-h-[44px] max-h-[120px] border-gray-200 rounded-xl focus-visible:ring-morocco-teal/50 focus-visible:border-morocco-teal/50 text-sm"
+                      className="resize-none min-h-[44px] max-h-[120px] border-gray-200 rounded-xl focus-visible:ring-morocco-red/50 focus-visible:border-morocco-red/50 text-sm"
                       rows={1}
                     />
                     <Button 
                       onClick={() => handleSend()}
-                      className={`h-10 w-10 rounded-xl p-0 bg-gradient-to-br from-morocco-green to-morocco-teal hover:opacity-90 transition-opacity shadow-md hover:shadow-lg`}
+                      className={`h-10 w-10 rounded-xl p-0 bg-gradient-to-br from-morocco-red to-morocco-green hover:opacity-90 transition-opacity shadow-md hover:shadow-lg`}
                       disabled={isTyping || !input.trim()}
                     >
                       <Send className="h-4 w-4 text-white" />
@@ -406,15 +418,15 @@ const ChatAssistant = () => {
             )}
           </AnimatePresence>
 
-          {/* Modern floating action button with updated icon */}
+          {/* Modern floating action button with updated icon and colors */}
           <motion.button
             onClick={toggleChat}
             className={`flex items-center justify-center rounded-full shadow-lg ${
               isMinimized 
-                ? 'bg-gradient-to-br from-morocco-green to-morocco-teal p-4'
+                ? 'bg-gradient-to-br from-morocco-red to-morocco-green p-4'
                 : 'bg-gray-100 hover:bg-gray-200 p-3'
             } text-white transition-all duration-300`}
-            whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(0, 98, 51, 0.4)" }}
+            whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(193, 39, 45, 0.4)" }}
             whileTap={{ scale: 0.95 }}
             initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -422,7 +434,11 @@ const ChatAssistant = () => {
           >
             {isMinimized ? (
               <>
-                <Brain className="h-6 w-6 text-white" />
+                <div className="relative h-6 w-6 flex items-center justify-center">
+                  <Brain className="absolute h-6 w-6 text-white" />
+                  {/* Add Tifinagh letter overlay */}
+                  <span className="absolute text-white text-base opacity-80">ⵣ</span>
+                </div>
                 {/* Notification badge */}
                 <span className="absolute -top-1 -right-1 h-5 w-5 bg-morocco-clay rounded-full flex items-center justify-center text-[10px] font-bold text-white shadow-sm">
                   1
