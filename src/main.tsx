@@ -1,23 +1,23 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter as Router } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 import App from './App'
-import { LanguageProvider } from './hooks/use-language'
-import { ThemeProvider } from './hooks/use-theme'
-import { AuthProvider } from './hooks/use-auth-context'
 import './index.css'
+import { AuthProvider } from '@/hooks/use-auth-context'
+import { LanguageProvider } from '@/hooks/use-language'
+import { Toaster } from '@/components/ui/toaster'
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+// Ensure the DOM is ready before mounting
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <ThemeProvider>
+    <BrowserRouter>
       <LanguageProvider>
         <AuthProvider>
-          <Router>
-            <App />
-          </Router>
+          <App />
+          <Toaster />
         </AuthProvider>
       </LanguageProvider>
-    </ThemeProvider>
-  </React.StrictMode>,
+    </BrowserRouter>
+  </React.StrictMode>
 )

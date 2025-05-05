@@ -1,6 +1,3 @@
-/* Use Google Fonts instead of local files */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -77,15 +74,15 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
 
-    /* Moroccan colors stay the same in dark mode but may need adjustment for visibility */
+    /* Moroccan colors stay the same in dark mode */
     --morocco-red: 357 81% 48%;
-    --morocco-green: 153 80% 29%;    /* Slightly brighter for dark mode */
-    --morocco-clay: 10 79% 58%;      /* Brighter in dark mode */
-    --morocco-terracotta: 15 85% 65%; /* Brighter in dark mode */
-    --morocco-gold: 42 100% 69%;     /* Brighter in dark mode */
+    --morocco-green: 153 100% 19%;
+    --morocco-clay: 10 79% 48%;
+    --morocco-terracotta: 15 85% 55%;
+    --morocco-gold: 42 100% 59%;
     --morocco-sand: 35 33% 90%;
-    --morocco-navy: 213 55% 58%;     /* Brighter in dark mode */
-    --morocco-teal: 182 66% 43%;     /* Brighter in dark mode */
+    --morocco-navy: 213 55% 28%;
+    --morocco-teal: 182 66% 33%;
   }
 }
 
@@ -111,7 +108,7 @@
 
 @layer components {
   .glass-card {
-    @apply bg-white bg-opacity-70 backdrop-blur-lg border border-white border-opacity-20 shadow-sm dark:bg-gray-900/70 dark:border-gray-800/30;
+    @apply bg-white bg-opacity-70 backdrop-blur-lg border border-white border-opacity-20 shadow-sm;
   }
   
   .section-container {
@@ -140,360 +137,54 @@
   
   /* Moroccan-specific utility classes */
   .bg-morocco-red {
-    @apply bg-[#c1272d] dark:bg-[#e84a50];
+    @apply bg-[#c1272d];
   }
   
   .bg-morocco-green {
-    @apply bg-[#006233] dark:bg-[#00834a];
+    @apply bg-[#006233];
   }
   
   .bg-morocco-clay {
-    @apply bg-[#d35a43] dark:bg-[#e67b64];
+    @apply bg-[#d35a43];
   }
   
   .bg-morocco-terracotta {
-    @apply bg-[#e86a40] dark:bg-[#ff8b61];
+    @apply bg-[#e86a40];
   }
   
   .bg-morocco-gold {
-    @apply bg-[#ffca28] dark:bg-[#ffda58];
+    @apply bg-[#ffca28];
   }
   
   .bg-morocco-sand {
-    @apply bg-[#f0e6d9] dark:bg-[#d4c9b6];
+    @apply bg-[#f0e6d9];
   }
   
   .text-morocco-red {
-    @apply text-[#c1272d] dark:text-[#e84a50];
+    @apply text-[#c1272d];
   }
   
   .text-morocco-green {
-    @apply text-[#006233] dark:text-[#00834a];
+    @apply text-[#006233];
   }
   
   .text-morocco-clay {
-    @apply text-[#d35a43] dark:text-[#e67b64];
+    @apply text-[#d35a43];
   }
   
   .text-morocco-terracotta {
-    @apply text-[#e86a40] dark:text-[#ff8b61];
+    @apply text-[#e86a40];
   }
   
   .text-morocco-gold {
-    @apply text-[#ffca28] dark:text-[#ffda58];
+    @apply text-[#ffca28];
   }
   
   .morocco-card {
-    @apply bg-white rounded-lg border border-morocco-sand/20 shadow-sm hover:shadow-md transition-shadow dark:bg-gray-800 dark:border-gray-700/30;
+    @apply bg-white rounded-lg border border-morocco-sand/20 shadow-sm hover:shadow-md transition-shadow;
   }
   
   .moroccan-button {
     @apply bg-gradient-to-r from-morocco-terracotta to-morocco-clay text-white font-medium rounded-full px-4 py-2 hover:opacity-90 transition-opacity;
-  }
-}
-
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0;
-  text-align: center;
-}
-
-body {
-  overflow-x: hidden;
-}
-
-.ease-custom-bezier {
-  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* Modern decorative elements */
-.moroccan-pattern {
-  background-color: #ffffff;
-  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c1272d' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-}
-
-/* Ensure proper content padding with fixed header */
-.page-content {
-  padding-top: 5rem;
-}
-
-/* Modern glassmorphism effects */
-.glass-effect {
-  backdrop-filter: blur(16px);
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-}
-
-.glass-card {
-  @apply backdrop-blur-lg bg-white/90 border border-white/30 shadow-sm rounded-2xl transition-all;
-}
-
-/* Animated card effects with modern hover */
-.card-hover {
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), 
-              box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.card-hover:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
-}
-
-/* Modern button effects */
-.button-glow {
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-}
-
-.button-glow::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: conic-gradient(
-    transparent, 
-    rgba(255, 255, 255, 0.2), 
-    transparent 30%
-  );
-  animation: buttonGlow 4s linear infinite;
-  z-index: -1;
-}
-
-@keyframes buttonGlow {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Enhanced modern scroll animations */
-.smooth-scroll-enabled {
-  scroll-behavior: smooth;
-}
-
-/* Modern staggered reveal animation for lists */
-.stagger-item {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), 
-              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.stagger-item.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Modern custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.02);
-  border-radius: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(193, 39, 45, 0.3);
-  border-radius: 8px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(193, 39, 45, 0.5);
-}
-
-/* Modern text reveal animations */
-.text-reveal {
-  display: inline-block;
-  position: relative;
-  overflow: hidden;
-}
-
-.text-reveal::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: -5%;
-  width: 110%;
-  height: 100%;
-  background: #e67e22;
-  z-index: 1;
-  animation: textReveal 1.2s cubic-bezier(0.77, 0, 0.18, 1) forwards;
-}
-
-@keyframes textReveal {
-  0% {
-    transform: translateX(-100%);
-  }
-  40%, 60% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-/* Modern scroll animations */
-.scroll-animate {
-  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), 
-              transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.fade-in {
-  opacity: 0;
-}
-
-.fade-in.active {
-  opacity: 1;
-}
-
-.slide-up {
-  opacity: 0;
-  transform: translateY(30px);
-}
-
-.slide-up.active {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.slide-left {
-  opacity: 0;
-  transform: translateX(30px);
-}
-
-.slide-left.active {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.slide-right {
-  opacity: 0;
-  transform: translateX(-30px);
-}
-
-.slide-right.active {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.scale-in {
-  opacity: 0;
-  transform: scale(0.95);
-}
-
-.scale-in.active {
-  opacity: 1;
-  transform: scale(1);
-}
-
-/* Modern button styles */
-.btn-modern {
-  @apply rounded-xl px-6 py-3 font-medium transition-all duration-300 relative overflow-hidden shadow-sm;
-}
-
-.btn-modern::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-  transition: left 0.7s;
-}
-
-.btn-modern:hover::before {
-  left: 100%;
-}
-
-/* Modern image hover effects */
-.img-hover-zoom {
-  overflow: hidden;
-  border-radius: 12px;
-}
-
-.img-hover-zoom img {
-  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.img-hover-zoom:hover img {
-  transform: scale(1.05);
-}
-
-/* Modern section dividers */
-.divider-gradient {
-  height: 1px;
-  background: linear-gradient(to right, transparent, rgba(193, 39, 45, 0.3), transparent);
-}
-
-/* Modern card designs */
-.modern-card {
-  background: linear-gradient(145deg, #ffffff, #f0f0f0);
-  border-radius: 16px;
-  box-shadow: 5px 5px 15px rgba(0,0,0,0.05),
-              -5px -5px 15px rgba(255,255,255,0.6);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.modern-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 8px 8px 20px rgba(0,0,0,0.1),
-              -8px -8px 20px rgba(255,255,255,0.8);
-}
-
-/* Glassmorphism utility classes */
-.glass-bg {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.glass-dark {
-  background: rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Modern typography utilities */
-.text-gradient-gold {
-  background: linear-gradient(to right, #f7971e, #ffd200);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.text-gradient-terracotta {
-  background: linear-gradient(to right, #e67e22, #d35400);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* Animation utilities */
-.hover-float {
-  transition: transform 0.3s ease;
-}
-
-.hover-float:hover {
-  transform: translateY(-8px);
-}
-
-.pulse-slow {
-  animation: pulse 3s infinite;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-  100% {
-    transform: scale(1);
   }
 }

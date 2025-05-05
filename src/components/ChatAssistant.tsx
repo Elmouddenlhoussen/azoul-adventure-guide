@@ -272,14 +272,14 @@ const ChatAssistant = () => {
             {!isMinimized && (
               <AnimatedTransition variant="scale">
                 <motion.div 
-                  className="mb-4 w-[380px] h-[520px] bg-white/95 backdrop-blur-lg rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:bg-gray-900/95 dark:border-gray-800"
+                  className="mb-4 w-[380px] h-[520px] bg-white/95 backdrop-blur-lg rounded-2xl shadow-xl overflow-hidden border border-gray-100"
                   initial={{ opacity: 0, y: 20, scale: 0.9 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 20, scale: 0.9 }}
                   transition={{ type: "spring", damping: 25, stiffness: 350 }}
                 >
                   {/* Modern header with color scheme matching the logo */}
-                  <div className="p-4 border-b border-gray-100 bg-gradient-to-r from-morocco-red to-morocco-green flex justify-between items-center dark:border-gray-800">
+                  <div className="p-4 border-b border-gray-100 bg-gradient-to-r from-morocco-red to-morocco-green flex justify-between items-center">
                     <div className="flex items-center">
                       <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white/20 shadow-inner">
                         <div className="relative h-full w-full flex items-center justify-center">
@@ -307,7 +307,7 @@ const ChatAssistant = () => {
                   </div>
                   
                   {/* Improved ScrollArea with proper styling for visible scrollbar */}
-                  <ScrollArea className="h-[380px] px-4 py-3 overflow-y-auto" type="always">
+                  <ScrollArea className="h-[380px] px-4 py-3" type="always">
                     <div className="space-y-6">
                       {messages.map((message) => (
                         <div
@@ -334,12 +334,12 @@ const ChatAssistant = () => {
                               className={`p-3 rounded-2xl ${
                                 message.sender === 'user' 
                                   ? 'bg-gradient-to-br from-morocco-clay to-morocco-terracotta text-white rounded-tr-none' 
-                                  : 'bg-white border border-gray-100 shadow-sm text-gray-800 rounded-tl-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200'
+                                  : 'bg-white border border-gray-100 shadow-sm text-gray-800 rounded-tl-none'
                               }`}
                             >
                               <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
                               <div className={`text-[10px] mt-1 opacity-0 group-hover:opacity-70 transition-opacity ${
-                                message.sender === 'user' ? 'text-white/70' : 'text-gray-400 dark:text-gray-500'
+                                message.sender === 'user' ? 'text-white/70' : 'text-gray-400'
                               }`}>
                                 {message.timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                               </div>
@@ -358,7 +358,7 @@ const ChatAssistant = () => {
                                 <span className="absolute text-white text-[10px] opacity-80">ⵣ</span>
                               </div>
                             </Avatar>
-                            <div className="p-4 rounded-2xl bg-white border border-gray-100 shadow-sm text-gray-800 rounded-tl-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200">
+                            <div className="p-4 rounded-2xl bg-white border border-gray-100 shadow-sm text-gray-800 rounded-tl-none">
                               <div className="flex space-x-2">
                                 <div className="h-2 w-2 bg-morocco-red rounded-full animate-bounce"></div>
                                 <div className="h-2 w-2 bg-morocco-green rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
@@ -381,9 +381,9 @@ const ChatAssistant = () => {
                             <button 
                               key={index}
                               onClick={() => handleSuggestionClick(question)}
-                              className="text-xs bg-white border border-gray-200 hover:border-morocco-red/50 hover:bg-morocco-sand/10 rounded-full px-3 py-1.5 transition-all duration-200 shadow-sm hover:shadow flex items-center dark:bg-gray-800 dark:border-gray-700 dark:hover:border-morocco-red/30 dark:hover:bg-gray-700/50"
+                              className="text-xs bg-white border border-gray-200 hover:border-morocco-red/50 hover:bg-morocco-sand/10 rounded-full px-3 py-1.5 transition-all duration-200 shadow-sm hover:shadow flex items-center"
                             >
-                              <Sparkles className="h-3 w-3 mr-1.5 text-morocco-red dark:text-morocco-clay" />
+                              <Sparkles className="h-3 w-3 mr-1.5 text-morocco-red" />
                               {question}
                             </button>
                           ))}
@@ -395,14 +395,14 @@ const ChatAssistant = () => {
                   </ScrollArea>
                   
                   {/* Modern input area with subtle shadow */}
-                  <div className="p-4 border-t border-gray-100 bg-white flex gap-2 items-end dark:bg-gray-900 dark:border-gray-800">
+                  <div className="p-4 border-t border-gray-100 bg-white flex gap-2 items-end">
                     <Textarea
                       ref={inputRef}
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
                       onKeyDown={handleKeyDown}
                       placeholder={t('ask_about_morocco')}
-                      className="resize-none min-h-[44px] max-h-[120px] border-gray-200 rounded-xl focus-visible:ring-morocco-red/50 focus-visible:border-morocco-red/50 text-sm dark:border-gray-700 dark:bg-gray-800"
+                      className="resize-none min-h-[44px] max-h-[120px] border-gray-200 rounded-xl focus-visible:ring-morocco-red/50 focus-visible:border-morocco-red/50 text-sm"
                       rows={1}
                     />
                     <Button 
@@ -424,7 +424,7 @@ const ChatAssistant = () => {
             className={`flex items-center justify-center rounded-full shadow-lg ${
               isMinimized 
                 ? 'bg-gradient-to-br from-morocco-red to-morocco-green p-4'
-                : 'bg-gray-100 hover:bg-gray-200 p-3 dark:bg-gray-800 dark:hover:bg-gray-700'
+                : 'bg-gray-100 hover:bg-gray-200 p-3'
             } text-white transition-all duration-300`}
             whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(193, 39, 45, 0.4)" }}
             whileTap={{ scale: 0.95 }}
@@ -448,7 +448,7 @@ const ChatAssistant = () => {
                 <span className="absolute inset-0 rounded-full bg-white opacity-30 animate-ping"></span>
               </>
             ) : (
-              <X className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+              <X className="h-5 w-5 text-gray-600" />
             )}
           </motion.button>
         </div>
