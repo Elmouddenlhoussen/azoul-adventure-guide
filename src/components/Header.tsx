@@ -2,8 +2,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
-import MainNav from './navigation/MainNav';
-import MobileNav from './navigation/MobileNav';
+import { MainNav } from './navigation/MainNav';
+import { MobileNav } from './navigation/MobileNav';
 import AuthButtons from './AuthButtons';
 import SearchBar from './SearchBar';
 import LanguageSwitcher from './LanguageSwitcher';
