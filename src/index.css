@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -74,15 +75,15 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
 
-    /* Moroccan colors stay the same in dark mode */
+    /* Moroccan colors stay the same in dark mode but may need adjustment for visibility */
     --morocco-red: 357 81% 48%;
-    --morocco-green: 153 100% 19%;
-    --morocco-clay: 10 79% 48%;
-    --morocco-terracotta: 15 85% 55%;
-    --morocco-gold: 42 100% 59%;
+    --morocco-green: 153 80% 29%;    /* Slightly brighter for dark mode */
+    --morocco-clay: 10 79% 58%;      /* Brighter in dark mode */
+    --morocco-terracotta: 15 85% 65%; /* Brighter in dark mode */
+    --morocco-gold: 42 100% 69%;     /* Brighter in dark mode */
     --morocco-sand: 35 33% 90%;
-    --morocco-navy: 213 55% 28%;
-    --morocco-teal: 182 66% 33%;
+    --morocco-navy: 213 55% 58%;     /* Brighter in dark mode */
+    --morocco-teal: 182 66% 43%;     /* Brighter in dark mode */
   }
 }
 
@@ -108,7 +109,7 @@
 
 @layer components {
   .glass-card {
-    @apply bg-white bg-opacity-70 backdrop-blur-lg border border-white border-opacity-20 shadow-sm;
+    @apply bg-white bg-opacity-70 backdrop-blur-lg border border-white border-opacity-20 shadow-sm dark:bg-gray-900/70 dark:border-gray-800/30;
   }
   
   .section-container {
@@ -137,51 +138,51 @@
   
   /* Moroccan-specific utility classes */
   .bg-morocco-red {
-    @apply bg-[#c1272d];
+    @apply bg-[#c1272d] dark:bg-[#e84a50];
   }
   
   .bg-morocco-green {
-    @apply bg-[#006233];
+    @apply bg-[#006233] dark:bg-[#00834a];
   }
   
   .bg-morocco-clay {
-    @apply bg-[#d35a43];
+    @apply bg-[#d35a43] dark:bg-[#e67b64];
   }
   
   .bg-morocco-terracotta {
-    @apply bg-[#e86a40];
+    @apply bg-[#e86a40] dark:bg-[#ff8b61];
   }
   
   .bg-morocco-gold {
-    @apply bg-[#ffca28];
+    @apply bg-[#ffca28] dark:bg-[#ffda58];
   }
   
   .bg-morocco-sand {
-    @apply bg-[#f0e6d9];
+    @apply bg-[#f0e6d9] dark:bg-[#d4c9b6];
   }
   
   .text-morocco-red {
-    @apply text-[#c1272d];
+    @apply text-[#c1272d] dark:text-[#e84a50];
   }
   
   .text-morocco-green {
-    @apply text-[#006233];
+    @apply text-[#006233] dark:text-[#00834a];
   }
   
   .text-morocco-clay {
-    @apply text-[#d35a43];
+    @apply text-[#d35a43] dark:text-[#e67b64];
   }
   
   .text-morocco-terracotta {
-    @apply text-[#e86a40];
+    @apply text-[#e86a40] dark:text-[#ff8b61];
   }
   
   .text-morocco-gold {
-    @apply text-[#ffca28];
+    @apply text-[#ffca28] dark:text-[#ffda58];
   }
   
   .morocco-card {
-    @apply bg-white rounded-lg border border-morocco-sand/20 shadow-sm hover:shadow-md transition-shadow;
+    @apply bg-white rounded-lg border border-morocco-sand/20 shadow-sm hover:shadow-md transition-shadow dark:bg-gray-800 dark:border-gray-700/30;
   }
   
   .moroccan-button {
