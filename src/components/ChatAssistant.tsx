@@ -1,7 +1,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { MessageCircle, X, Send, User, MessageSquare, Sparkles } from 'lucide-react';
+import { GlobeAlt, X, Send, User, Brain, Sparkles } from 'lucide-react';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { Avatar } from './ui/avatar';
@@ -56,7 +56,7 @@ const initialSuggestionExamples = [
 ];
 
 const ChatAssistant = () => {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(true);
   const [messages, setMessages] = useState<Message[]>([initialMessagesMap[language] || initialMessagesMap['en']]);
@@ -155,8 +155,8 @@ const ChatAssistant = () => {
       if (response.error) {
         console.error("Chat error:", response.error);
         toast({
-          title: "Chat Issue",
-          description: "I had trouble understanding that. Let's try something else.",
+          title: t('chat_error'),
+          description: t('chat_error_description'),
           variant: "destructive"
         });
       }
@@ -170,7 +170,7 @@ const ChatAssistant = () => {
       // Add error message
       const errorMessage: Message = {
         id: Date.now().toString(),
-        content: "I'm having trouble understanding right now. Could you try asking your question differently?",
+        content: t('chat_connection_error_message'),
         sender: 'assistant',
         timestamp: new Date(),
         error: true
@@ -179,8 +179,8 @@ const ChatAssistant = () => {
       setMessages(prev => [...prev, errorMessage]);
       
       toast({
-        title: "Connection Error",
-        description: "Couldn't reach the assistant. Please check your connection.",
+        title: t('chat_connection_error'),
+        description: t('chat_connection_error_description'),
         variant: "destructive"
       });
     } finally {
@@ -282,13 +282,13 @@ const ChatAssistant = () => {
                   <div className="p-4 border-b border-gray-100 bg-gradient-to-r from-morocco-green/90 to-morocco-teal/90 flex justify-between items-center">
                     <div className="flex items-center">
                       <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white/20 shadow-inner">
-                        <MessageCircle className="h-5 w-5 text-white" />
+                        <Brain className="h-5 w-5 text-white" />
                       </div>
                       <div className="ml-3">
-                        <span className="font-bold text-white">Morocco Guide</span>
+                        <span className="font-bold text-white">{t('morocco_guide')}</span>
                         <div className="flex items-center text-white/80 text-xs">
                           <span className="inline-block w-2 h-2 bg-green-300 rounded-full mr-1"></span>
-                          Ready to assist you
+                          {t('ready_to_assist')}
                         </div>
                       </div>
                     </div>
@@ -317,7 +317,7 @@ const ChatAssistant = () => {
                                 : 'bg-gradient-to-br from-morocco-gold to-morocco-clay'
                             }`}>
                               {message.sender === 'assistant' ? 
-                                <MessageSquare className="h-4 w-4 text-white" /> : 
+                                <Brain className="h-4 w-4 text-white" /> : 
                                 <User className="h-4 w-4 text-white" />
                               }
                             </Avatar>
@@ -344,7 +344,7 @@ const ChatAssistant = () => {
                         <div className="flex justify-start">
                           <div className="flex flex-row gap-3 max-w-[80%]">
                             <Avatar className="h-9 w-9 bg-gradient-to-br from-morocco-green to-morocco-teal">
-                              <MessageSquare className="h-4 w-4 text-white" />
+                              <Brain className="h-4 w-4 text-white" />
                             </Avatar>
                             <div className="p-4 rounded-2xl bg-white border border-gray-100 shadow-sm text-gray-800 rounded-tl-none">
                               <div className="flex space-x-2">
@@ -389,7 +389,7 @@ const ChatAssistant = () => {
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
                       onKeyDown={handleKeyDown}
-                      placeholder="Ask me about Morocco..."
+                      placeholder={t('ask_about_morocco')}
                       className="resize-none min-h-[44px] max-h-[120px] border-gray-200 rounded-xl focus-visible:ring-morocco-teal/50 focus-visible:border-morocco-teal/50 text-sm"
                       rows={1}
                     />
@@ -406,7 +406,7 @@ const ChatAssistant = () => {
             )}
           </AnimatePresence>
 
-          {/* Modern floating action button */}
+          {/* Modern floating action button with updated icon */}
           <motion.button
             onClick={toggleChat}
             className={`flex items-center justify-center rounded-full shadow-lg ${
@@ -422,7 +422,7 @@ const ChatAssistant = () => {
           >
             {isMinimized ? (
               <>
-                <MessageCircle className="h-6 w-6 text-white" />
+                <Brain className="h-6 w-6 text-white" />
                 {/* Notification badge */}
                 <span className="absolute -top-1 -right-1 h-5 w-5 bg-morocco-clay rounded-full flex items-center justify-center text-[10px] font-bold text-white shadow-sm">
                   1
