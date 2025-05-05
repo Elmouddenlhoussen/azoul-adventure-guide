@@ -1,7 +1,7 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { Globe, ChevronDown } from 'lucide-react';
+import { Languages, ChevronDown } from 'lucide-react';
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -22,6 +22,16 @@ const LanguageSwitcher = () => {
   
   const currentLanguage = languages.find(lang => lang.code === language) || languages[0];
 
+  const handleLanguageChange = (languageCode: string) => {
+    setLanguage(languageCode);
+    
+    // Set RTL direction for Arabic
+    document.documentElement.dir = languageCode === 'ar' ? 'rtl' : 'ltr';
+    
+    // Optional: Reload the page to apply translations everywhere
+    // window.location.reload();
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -30,7 +40,7 @@ const LanguageSwitcher = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          <Globe className="h-4 w-4 text-morocco-green" />
+          <Languages className="h-4 w-4 text-morocco-green" />
           <span className="mr-1">{currentLanguage.flag}</span>
           <span className="hidden sm:inline-block">{currentLanguage.name}</span>
           <ChevronDown className="h-3 w-3 opacity-50" />
@@ -43,7 +53,7 @@ const LanguageSwitcher = () => {
             className={`flex items-center gap-2 cursor-pointer ${
               lang.code === language ? 'bg-morocco-green/10 text-morocco-green font-medium' : ''
             }`}
-            onClick={() => setLanguage(lang.code)}
+            onClick={() => handleLanguageChange(lang.code)}
           >
             <span className="text-base">{lang.flag}</span>
             <span>{lang.name}</span>
