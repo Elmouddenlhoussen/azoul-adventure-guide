@@ -14,7 +14,7 @@ import { useAuth } from '@/hooks/use-auth-context';
 import { useLanguage } from '@/hooks/use-language';
 
 export default function AuthButtons() {
-  const { user, logout } = useAuth(); // Changed from signOut to logout to match the context
+  const { user, logout } = useAuth();
   const { t } = useLanguage();
   
   if (!user) {
@@ -61,7 +61,7 @@ export default function AuthButtons() {
         <DropdownMenuSeparator />
         <DropdownMenuItem 
           className="cursor-pointer text-morocco-red hover:text-morocco-red"
-          onClick={() => logout()}  // Changed from signOut to logout to match the context
+          onClick={() => logout()}
         >
           {t('logout')}
         </DropdownMenuItem>

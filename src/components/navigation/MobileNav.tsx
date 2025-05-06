@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence, Variants } from 'framer-motion'; // Added Variants import
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { useLanguage } from '@/hooks/use-language';
 
 const mobileNavItems = [
