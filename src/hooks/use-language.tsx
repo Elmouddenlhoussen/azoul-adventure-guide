@@ -28,41 +28,6 @@ const translations: Record<string, Record<string, string>> = {
     'chat_connection_error': 'Connection Error',
     'chat_connection_error_description': 'Couldn\'t reach the assistant. Please check your connection.',
     'chat_connection_error_message': 'I\'m having trouble understanding right now. Could you try asking your question differently?',
-    
-    // Navigation
-    'home': 'Home',
-    'destinations': 'Destinations',
-    'tours': 'Tours',
-    'guides': 'Guides',
-    'accommodations': 'Accommodations',
-    'about': 'About Us',
-    'news': 'News',
-    'contact': 'Contact',
-    'sign_in': 'Sign In',
-    'sign_up': 'Sign Up',
-    'profile': 'Profile',
-    'admin': 'Admin',
-    'logout': 'Logout',
-    
-    // Destination pages
-    'location': 'Location',
-    'duration': 'Recommended Duration',
-    'best_time': 'Best Time to Visit',
-    'group_size': 'Group Size',
-    'activities': 'Activities',
-    'highlights': 'Highlights',
-    'similar_destinations': 'Similar Destinations',
-    'plan_visit': 'Plan Your Visit',
-    
-    // Common UI elements
-    'search': 'Search',
-    'view_details': 'View Details',
-    'book_now': 'Book Now',
-    'learn_more': 'Learn More',
-    'read_more': 'Read More',
-    'coming_soon': 'Coming soon...',
-    'back': 'Back',
-    
     // Add more translations as needed
   },
   fr: {
@@ -85,41 +50,6 @@ const translations: Record<string, Record<string, string>> = {
     'chat_connection_error': 'Erreur de Connexion',
     'chat_connection_error_description': 'Impossible de joindre l\'assistant. Veuillez vérifier votre connexion.',
     'chat_connection_error_message': 'J\'ai du mal à comprendre en ce moment. Pourriez-vous reformuler votre question?',
-    
-    // Navigation
-    'home': 'Accueil',
-    'destinations': 'Destinations',
-    'tours': 'Circuits',
-    'guides': 'Guides',
-    'accommodations': 'Hébergements',
-    'about': 'À Propos',
-    'news': 'Actualités',
-    'contact': 'Contact',
-    'sign_in': 'Se Connecter',
-    'sign_up': 'S\'inscrire',
-    'profile': 'Profil',
-    'admin': 'Admin',
-    'logout': 'Déconnexion',
-    
-    // Destination pages
-    'location': 'Emplacement',
-    'duration': 'Durée Recommandée',
-    'best_time': 'Meilleure Période',
-    'group_size': 'Taille du Groupe',
-    'activities': 'Activités',
-    'highlights': 'Points Forts',
-    'similar_destinations': 'Destinations Similaires',
-    'plan_visit': 'Planifier Votre Visite',
-    
-    // Common UI elements
-    'search': 'Rechercher',
-    'view_details': 'Voir les Détails',
-    'book_now': 'Réserver',
-    'learn_more': 'En Savoir Plus',
-    'read_more': 'Lire Plus',
-    'coming_soon': 'Bientôt disponible...',
-    'back': 'Retour',
-    
     // Add more translations as needed
   },
   ar: {
@@ -142,41 +72,6 @@ const translations: Record<string, Record<string, string>> = {
     'chat_connection_error': 'خطأ في الاتصال',
     'chat_connection_error_description': 'تعذر الوصول إلى المساعد. يرجى التحقق من اتصالك.',
     'chat_connection_error_message': 'أواجه صعوبة في الفهم الآن. هل يمكنك إعادة صياغة سؤالك؟',
-    
-    // Navigation
-    'home': 'الرئيسية',
-    'destinations': 'الوجهات',
-    'tours': 'الجولات',
-    'guides': 'المرشدون',
-    'accommodations': 'أماكن الإقامة',
-    'about': 'من نحن',
-    'news': 'الأخبار',
-    'contact': 'اتصل بنا',
-    'sign_in': 'تسجيل الدخول',
-    'sign_up': 'التسجيل',
-    'profile': 'الملف الشخصي',
-    'admin': 'المسؤول',
-    'logout': 'تسجيل الخروج',
-    
-    // Destination pages
-    'location': 'الموقع',
-    'duration': 'المدة الموصى بها',
-    'best_time': 'أفضل وقت للزيارة',
-    'group_size': 'حجم المجموعة',
-    'activities': 'الأنشطة',
-    'highlights': 'أبرز المعالم',
-    'similar_destinations': 'وجهات مشابهة',
-    'plan_visit': 'خطط لزيارتك',
-    
-    // Common UI elements
-    'search': 'بحث',
-    'view_details': 'عرض التفاصيل',
-    'book_now': 'احجز الآن',
-    'learn_more': 'اعرف المزيد',
-    'read_more': 'اقرأ المزيد',
-    'coming_soon': 'قريبًا...',
-    'back': 'رجوع',
-    
     // Add more translations as needed
   },
   ber: {
@@ -199,41 +94,6 @@ const translations: Record<string, Record<string, string>> = {
     'chat_connection_error': 'ⵜⴰⵎⵓⴽⵔⵉⵙⵜ ⵏ ⵓⵣⴷⴰⵢ',
     'chat_connection_error_description': 'ⵓⵔ ⵣⵎⵉⵔⵖ ⴰⴷ ⵍⴽⵎⵖ ⴰⵎⴰⵡⴰⵙ. ⵜⵜⵅⵇⵇⴰ ⴰⵣⴷⴰⵢ ⵏⵏⴽ.',
     'chat_connection_error_message': 'ⴳⴰⵏⵖ ⵜⵉⵣⵉ ⴷⴰ ⵓⴼⵉⵖ ⵜⴰⵎⴰⵔⴰ ⴰⴷ ⵙⵙⵏⵖ. ⵉⵙ ⵜⵣⵎⵔⴷ ⴰⴷ ⵜⴱⴷⴷⵍⴷ ⴰⵙⵇⵙⵉ ⵏⵏⴽ?',
-    
-    // Navigation
-    'home': 'ⵜⴰⵏⵣⵡⴰⵔⵜ',
-    'destinations': 'ⵉⵙⴰⴼⴰⵔⵏ',
-    'tours': 'ⵜⵉⴽⴽⵉⵡⵉⵏ',
-    'guides': 'ⵉⵎⴷⵍⵉⵍⵏ',
-    'accommodations': 'ⵉⵙⴰⴷⴰⴼⵏ',
-    'about': 'ⵅⴼⵏⵖ',
-    'news': 'ⵉⵏⵖⵎⵉⵙⵏ',
-    'contact': 'ⵏⵔⵎⵙ ⴰⵖ',
-    'sign_in': 'ⴰⴽⵛⵎ',
-    'sign_up': 'ⵣⵎⵎⵎ',
-    'profile': 'ⴰⵎⵍⵓⵙ',
-    'admin': 'ⴰⵏⵎⵀⴰⵍ',
-    'logout': 'ⴼⴼⵖ',
-    
-    // Destination pages
-    'location': 'ⴰⴷⵖⴰⵔ',
-    'duration': 'ⵜⴰⵣⵣⵔⵓⵔⵜ',
-    'best_time': 'ⴰⴽⵓⴷ ⵉⵎⵥⵢⴰⵏⵏ',
-    'group_size': 'ⵜⵉⴷⴷⵉ ⵏ ⵓⴳⵔⵓⴱ',
-    'activities': 'ⵜⵉⵎⵙⴽⴰⵔⵉⵏ',
-    'highlights': 'ⵉⵙⵓⵍⴰⵏ',
-    'similar_destinations': 'ⵉⵙⴰⴼⴰⵔⵏ ⵉⵎⵔⵡⴰⵙⵏ',
-    'plan_visit': 'ⵙⵓⵊⴷ ⵜⵉⵔⵣⵉ ⵏⵏⴽ',
-    
-    // Common UI elements
-    'search': 'ⵔⵣⵓ',
-    'view_details': 'ⵥⵕ ⵜⵉⴼⵔⴰⵙ',
-    'book_now': 'ⴰⵔⴰⵖ ⵖⵉⵍⴰⴷ',
-    'learn_more': 'ⵙⵙⵏ ⵓⴳⴳⴰⵔ',
-    'read_more': 'ⵖⵔ ⵓⴳⴳⴰⵔ',
-    'coming_soon': 'ⴰⵔⴷ ⵢⵉⵍⵉ ⴰⵣⴽⴽⴰ...',
-    'back': 'ⴰⵖⵓⵍ',
-    
     // Add more translations as needed
   }
 };
@@ -251,7 +111,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     // Optionally set document language for accessibility
     document.documentElement.lang = language;
     // For RTL languages like Arabic
-    document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+    document.dir = language === 'ar' ? 'rtl' : 'ltr';
   }, [language]);
 
   const setLanguage = (newLanguage: string) => {
