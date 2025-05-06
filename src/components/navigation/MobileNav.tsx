@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Variants } from 'framer-motion'; // Added Variants import
 import { useLanguage } from '@/hooks/use-language';
 
 const mobileNavItems = [
@@ -35,7 +35,7 @@ export function MobileNav({ isOpen }: { isOpen: boolean }) {
   const location = useLocation();
   const { t } = useLanguage();
   
-  const container = {
+  const container: Variants = {
     hidden: { opacity: 0, y: -10 },
     show: {
       opacity: 1,
@@ -55,7 +55,7 @@ export function MobileNav({ isOpen }: { isOpen: boolean }) {
     }
   };
 
-  const item = {
+  const item: Variants = {
     hidden: { opacity: 0, y: -10 },
     show: { opacity: 1, y: 0 },
     exit: { opacity: 0, y: -10 }
@@ -73,17 +73,17 @@ export function MobileNav({ isOpen }: { isOpen: boolean }) {
         >
           <motion.div className="container max-w-7xl mx-auto px-4 py-6 flex flex-col">
             <div className="grid grid-cols-1 gap-y-4">
-              {mobileNavItems.map((item, index) => (
+              {mobileNavItems.map((navItem, index) => (
                 <motion.div key={index} variants={item}>
                   <Link 
-                    to={item.href}
+                    to={navItem.href}
                     className={`block px-4 py-2 text-base ${
-                      location.pathname === item.href
+                      location.pathname === navItem.href
                         ? "text-morocco-green font-medium bg-morocco-green/10 rounded-md"
                         : "text-gray-700 hover:text-morocco-green"
                     }`}
                   >
-                    {t(item.title)}
+                    {t(navItem.title)}
                   </Link>
                 </motion.div>
               ))}

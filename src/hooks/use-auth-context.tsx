@@ -16,7 +16,7 @@ interface AuthContextType {
   isLoggedIn: boolean;
   isAdmin: boolean;
   login: (email: string, password: string) => Promise<boolean>;
-  logout: () => Promise<void>;
+  logout: () => Promise<void>; // Make sure to export as logout, not signOut
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -124,7 +124,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         isLoggedIn: !!user,
         isAdmin: user?.role === 'admin',
         login,
-        logout,
+        logout, // Ensure we export as logout, not signOut
       }}
     >
       {children}
