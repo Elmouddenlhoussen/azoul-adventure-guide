@@ -67,7 +67,7 @@ const Index = () => {
 
           <div className="text-center mt-12">
             <Button asChild size="lg" className="bg-morocco-clay hover:bg-morocco-clay/90">
-              <Link to="/discover">
+              <Link to="/feature/cultural-tours">
                 Explore All Experiences
               </Link>
             </Button>
@@ -114,7 +114,7 @@ const Index = () => {
 
           <div className="text-center mt-12">
             <Button asChild variant="outline" size="lg">
-              <Link to="/discover">
+              <Link to="/destination/marrakech">
                 View All Destinations
               </Link>
             </Button>
