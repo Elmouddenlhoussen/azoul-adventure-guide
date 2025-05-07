@@ -1,7 +1,9 @@
 
+import { createElement } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { LucideIcon } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Card } from '@/components/ui/card';
 
 interface FeatureCardProps {
   title: string;
@@ -14,50 +16,43 @@ interface FeatureCardProps {
 const FeatureCard = ({
   title,
   description,
-  icon: Icon,
+  icon,
   index,
-  href,
+  href
 }: FeatureCardProps) => {
+  // Animation variants
+  const cardVariants = {
+    hidden: { y: 50, opacity: 0 },
+    visible: (i: number) => ({
+      y: 0,
+      opacity: 1,
+      transition: {
+        delay: i * 0.1,
+        duration: 0.5,
+        ease: "easeOut"
+      }
+    })
+  };
+
   return (
-    <Link to={href}>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: index * 0.1 }}
-        viewport={{ once: true, margin: "-50px" }}
-        whileHover={{ 
-          scale: 1.03, 
-          boxShadow: "0 10px 30px -15px rgba(0,0,0,0.15)", 
-          y: -5 
-        }}
-        className="glass-card p-6 rounded-2xl cursor-pointer group transition-all duration-300"
-      >
-        <motion.div 
-          className="relative z-10 mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-morocco-sand group-hover:bg-morocco-terracotta transition-colors duration-300"
-          whileHover={{ scale: 1.1, rotate: 5 }}
-          transition={{ type: "spring", stiffness: 400, damping: 10 }}
-        >
-          <Icon className="h-6 w-6 text-morocco-clay group-hover:text-white transition-colors duration-300" />
-        </motion.div>
-        
-        <motion.h3 
-          className="mb-2 text-xl font-semibold group-hover:text-morocco-terracotta transition-colors duration-300"
-          whileHover={{ x: 3 }}
-          transition={{ duration: 0.2 }}
-        >
-          {title}
-        </motion.h3>
-        
-        <p className="text-muted-foreground group-hover:text-gray-700 transition-colors duration-300">{description}</p>
-        
-        <motion.div
-          initial={{ width: 0 }}
-          whileHover={{ width: "100%" }}
-          transition={{ duration: 0.3 }}
-          className="h-0.5 bg-morocco-terracotta mt-4 rounded-full origin-left"
-        />
-      </motion.div>
-    </Link>
+    <motion.div
+      custom={index}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-50px" }}
+      variants={cardVariants}
+    >
+      <Link to={href} className="block h-full">
+        <Card className="p-6 h-full border border-border hover:border-morocco-clay/30 transition-colors hover:shadow-md">
+          <div className="mb-4 inline-flex p-3 rounded-full bg-morocco-sand/20">
+            {createElement(icon, { className: "h-6 w-6 text-morocco-clay" })}
+          </div>
+          
+          <h3 className="text-xl font-semibold mb-2">{title}</h3>
+          <p className="text-muted-foreground">{description}</p>
+        </Card>
+      </Link>
+    </motion.div>
   );
 };
 

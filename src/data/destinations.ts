@@ -2,7 +2,17 @@
 import { supabase } from "@/integrations/supabase/client";
 import { Tables } from "@/integrations/supabase/types";
 
-export type Destination = Tables<"destinations">;
+export type Destination = {
+  id: string;
+  title: string;
+  description: string;
+  location: string;
+  image: string;
+  rating: number;
+  featured: boolean;
+  created_at: string;
+  updated_at: string;
+};
 
 // Function to fetch all destinations
 export const getDestinations = async (): Promise<Destination[]> => {
@@ -30,10 +40,85 @@ export const getFeaturedDestinations = async (): Promise<Destination[]> => {
       .order("rating", { ascending: false });
     
     if (error) throw error;
-    return data || [];
+    
+    // If no data returned from database, use our fallback featured destinations
+    if (!data || data.length === 0) {
+      return [
+        {
+          id: "marrakech",
+          title: "Marrakech",
+          description: "Known as the Red City, Marrakech is a major economic center and home to mosques, palaces and gardens.",
+          location: "Central Morocco",
+          image: "/images/destinations/marrakech.jpg",
+          rating: 4.8,
+          featured: true,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        },
+        {
+          id: "fes",
+          title: "Fes",
+          description: "Fes is a northeastern Moroccan city often referred to as the country's cultural capital.",
+          location: "Northern Morocco",
+          image: "/images/destinations/fes.jpg",
+          rating: 4.7,
+          featured: true,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        },
+        {
+          id: "chefchaouen",
+          title: "Chefchaouen",
+          description: "Chefchaouen, the blue pearl of Morocco, is known for its striking blue-washed buildings.",
+          location: "Northwest Morocco",
+          image: "/images/destinations/chefchaouen.jpg",
+          rating: 4.6,
+          featured: true,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }
+      ];
+    }
+    
+    return data;
   } catch (error) {
     console.error("Error fetching featured destinations:", error);
-    return [];
+    // Return fallback destinations on error
+    return [
+      {
+        id: "marrakech",
+        title: "Marrakech",
+        description: "Known as the Red City, Marrakech is a major economic center and home to mosques, palaces and gardens.",
+        location: "Central Morocco",
+        image: "/images/destinations/marrakech.jpg",
+        rating: 4.8,
+        featured: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      {
+        id: "fes",
+        title: "Fes",
+        description: "Fes is a northeastern Moroccan city often referred to as the country's cultural capital.",
+        location: "Northern Morocco",
+        image: "/images/destinations/fes.jpg",
+        rating: 4.7,
+        featured: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      {
+        id: "chefchaouen",
+        title: "Chefchaouen",
+        description: "Chefchaouen, the blue pearl of Morocco, is known for its striking blue-washed buildings.",
+        location: "Northwest Morocco",
+        image: "/images/destinations/chefchaouen.jpg",
+        rating: 4.6,
+        featured: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+    ];
   }
 };
 
