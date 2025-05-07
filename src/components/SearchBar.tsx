@@ -1,11 +1,10 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, X, MapPin, Calendar, Compass } from 'lucide-react';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { useNavigate } from 'react-router-dom';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from './ui/command';
 
 // Mock suggestions data - in a real app, this would come from an API
 const searchSuggestions = {
@@ -33,6 +32,21 @@ const SearchBar = () => {
   const [filteredSuggestions, setFilteredSuggestions] = useState<SearchSuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const navigate = useNavigate();
+  const searchRef = useRef<HTMLDivElement>(null);
+
+  // Handle clicks outside of search component
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,7 +100,7 @@ const SearchBar = () => {
   }, [searchQuery]);
 
   return (
-    <div className="relative flex items-center">
+    <div className="relative flex items-center z-20" ref={searchRef}>
       <AnimatePresence>
         {isExpanded && (
           <motion.div
@@ -128,7 +142,7 @@ const SearchBar = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute z-10 mt-1 w-full rounded-md bg-white shadow-lg border border-morocco-sand/20"
+                    className="absolute z-50 mt-1 w-full rounded-md bg-white shadow-lg border border-morocco-sand/20"
                   >
                     <div className="py-1 max-h-64 overflow-auto">
                       {filteredSuggestions.map((suggestion) => {

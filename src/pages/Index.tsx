@@ -8,6 +8,8 @@ import ScrollReveal from '@/components/ScrollReveal';
 import { features } from '@/data/features';
 import { getFeaturedDestinations, Destination } from '@/data/destinations';
 import { Users, Compass, Home } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 const iconMap = {
   Users,
@@ -62,6 +64,14 @@ const Index = () => {
               />
             ))}
           </div>
+
+          <div className="text-center mt-12">
+            <Button asChild size="lg" className="bg-morocco-clay hover:bg-morocco-clay/90">
+              <Link to="/discover">
+                Explore All Experiences
+              </Link>
+            </Button>
+          </div>
         </div>
       </section>
 
@@ -101,6 +111,14 @@ const Index = () => {
               )}
             </div>
           )}
+
+          <div className="text-center mt-12">
+            <Button asChild variant="outline" size="lg">
+              <Link to="/discover">
+                View All Destinations
+              </Link>
+            </Button>
+          </div>
         </div>
       </section>
 

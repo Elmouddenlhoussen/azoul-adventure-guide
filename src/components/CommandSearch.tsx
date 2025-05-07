@@ -7,18 +7,18 @@ import { Search, MapPin, Calendar, Compass, Utensils, Camera } from 'lucide-reac
 // Mock search data - in a real app, this would come from an API or database
 const searchData = {
   destinations: [
-    { id: 'marrakech', title: 'Marrakech', description: 'The Red City with vibrant souks', icon: MapPin },
-    { id: 'fes', title: 'Fes', description: 'Ancient medina and tanneries', icon: MapPin },
-    { id: 'chefchaouen', title: 'Chefchaouen', description: 'The Blue Pearl of Morocco', icon: MapPin },
+    { id: 'marrakech', title: 'Marrakech', description: 'The Red City with vibrant souks', icon: MapPin, path: '/destination/marrakech' },
+    { id: 'fes', title: 'Fes', description: 'Ancient medina and tanneries', icon: MapPin, path: '/destination/fes' },
+    { id: 'chefchaouen', title: 'Chefchaouen', description: 'The Blue Pearl of Morocco', icon: MapPin, path: '/destination/chefchaouen' },
   ],
   experiences: [
-    { id: 'desert-tour', title: 'Sahara Desert Tour', description: 'Camel trekking and stargazing', icon: Compass },
-    { id: 'cooking-class', title: 'Moroccan Cooking Class', description: 'Learn to prepare tagine and couscous', icon: Utensils },
-    { id: 'photography-tour', title: 'Photography Tour', description: 'Capture Morocco\'s most scenic spots', icon: Camera },
+    { id: 'desert-tour', title: 'Sahara Desert Tour', description: 'Camel trekking and stargazing', icon: Compass, path: '/feature/desert-tour' },
+    { id: 'cooking-class', title: 'Moroccan Cooking Class', description: 'Learn to prepare tagine and couscous', icon: Utensils, path: '/feature/cooking-class' },
+    { id: 'photography-tour', title: 'Photography Tour', description: 'Capture Morocco\'s most scenic spots', icon: Camera, path: '/feature/photography-tour' },
   ],
   events: [
-    { id: 'rose-festival', title: 'Festival of Roses', description: 'Annual celebration in Kalaat M\'Gouna', icon: Calendar },
-    { id: 'music-festival', title: 'Gnaoua World Music Festival', description: 'Traditional and fusion music in Essaouira', icon: Calendar },
+    { id: 'rose-festival', title: 'Festival of Roses', description: 'Annual celebration in Kalaat M\'Gouna', icon: Calendar, path: '/event/rose-festival' },
+    { id: 'music-festival', title: 'Gnaoua World Music Festival', description: 'Traditional and fusion music in Essaouira', icon: Calendar, path: '/event/music-festival' },
   ]
 };
 
@@ -59,7 +59,7 @@ const CommandSearch = ({ open, onOpenChange }: CommandSearchProps) => {
               <CommandItem 
                 key={item.id}
                 value={item.title}
-                onSelect={() => handleSelect(`/destination/${item.id}`)}
+                onSelect={() => handleSelect(item.path)}
               >
                 <div className="flex items-center gap-2">
                   <div className="p-1 rounded-full bg-morocco-sand/20">
@@ -79,7 +79,7 @@ const CommandSearch = ({ open, onOpenChange }: CommandSearchProps) => {
               <CommandItem 
                 key={item.id}
                 value={item.title}
-                onSelect={() => handleSelect(`/feature/${item.id}`)}
+                onSelect={() => handleSelect(item.path)}
               >
                 <div className="flex items-center gap-2">
                   <div className="p-1 rounded-full bg-morocco-terracotta/10">
@@ -99,7 +99,7 @@ const CommandSearch = ({ open, onOpenChange }: CommandSearchProps) => {
               <CommandItem 
                 key={item.id}
                 value={item.title}
-                onSelect={() => handleSelect(`/event/${item.id}`)}
+                onSelect={() => handleSelect(item.path)}
               >
                 <div className="flex items-center gap-2">
                   <div className="p-1 rounded-full bg-blue-500/10">
