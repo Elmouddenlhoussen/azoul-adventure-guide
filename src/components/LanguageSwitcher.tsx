@@ -25,11 +25,8 @@ const LanguageSwitcher = () => {
   const handleLanguageChange = (languageCode: string) => {
     setLanguage(languageCode);
     
-    // Set RTL direction for Arabic
-    document.documentElement.dir = languageCode === 'ar' ? 'rtl' : 'ltr';
-    
-    // Optional: Reload the page to apply translations everywhere
-    // window.location.reload();
+    // We're no longer modifying the document.dir here to preserve layout
+    // Only text directionality will be handled through CSS in the language provider
   };
 
   return (

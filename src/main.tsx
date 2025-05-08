@@ -8,10 +8,27 @@ import { AuthProvider } from '@/hooks/use-auth-context'
 import { LanguageProvider } from '@/hooks/use-language'
 import { Toaster } from '@/components/ui/toaster'
 
-// Set initial direction based on saved language
+// Set initial language based on saved preference
 const savedLanguage = localStorage.getItem('language') || 'en';
-document.documentElement.dir = savedLanguage === 'ar' ? 'rtl' : 'ltr';
 document.documentElement.lang = savedLanguage;
+
+// We're intentionally not setting document.dir to preserve layout
+// Instead we'll use CSS for text directional changes
+
+// Add style for Arabic text without changing the entire layout
+const style = document.createElement('style');
+style.textContent = `
+  .arabic-text * {
+    text-align: right;
+  }
+  
+  /* Keep specific elements like headers, buttons, etc. with their original layout */
+  .preserve-layout-rtl {
+    direction: ltr !important;
+    text-align: left !important;
+  }
+`;
+document.head.appendChild(style);
 
 // Ensure the DOM is ready before mounting
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

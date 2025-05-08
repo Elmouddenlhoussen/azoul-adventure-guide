@@ -10,6 +10,7 @@ import { getFeaturedDestinations, Destination } from '@/data/destinations';
 import { Users, Compass, Home } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/hooks/use-language';
 
 const iconMap = {
   Users,
@@ -20,6 +21,7 @@ const iconMap = {
 const Index = () => {
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useLanguage();
 
   useEffect(() => {
     document.title = 'Azoul - Experience Morocco';
@@ -45,9 +47,9 @@ const Index = () => {
         <div className="container px-4 mx-auto">
           <ScrollReveal>
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Discover Our Services</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('discover_services')}</h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Experience the best of Morocco with our curated services and expert guidance
+                {t('experience_best')}
               </p>
             </div>
           </ScrollReveal>
@@ -68,7 +70,7 @@ const Index = () => {
           <div className="text-center mt-12">
             <Button asChild size="lg" className="bg-morocco-clay hover:bg-morocco-clay/90">
               <Link to="/feature/cultural-tours">
-                Explore All Experiences
+                {t('explore_all')}
               </Link>
             </Button>
           </div>
@@ -80,9 +82,9 @@ const Index = () => {
         <div className="container px-4 mx-auto">
           <ScrollReveal>
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Popular Destinations</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('popular_destinations')}</h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Explore the most enchanting places Morocco has to offer
+                {t('enchanting_places')}
               </p>
             </div>
           </ScrollReveal>
@@ -115,7 +117,7 @@ const Index = () => {
           <div className="text-center mt-12">
             <Button asChild variant="outline" size="lg">
               <Link to="/destination/marrakech">
-                View All Destinations
+                {t('view_all')}
               </Link>
             </Button>
           </div>
@@ -127,9 +129,9 @@ const Index = () => {
         <div className="container px-4 mx-auto">
           <ScrollReveal>
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Explore Morocco</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('explore')}</h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Plan your journey with our interactive map
+                {t('interactive_map')}
               </p>
             </div>
           </ScrollReveal>

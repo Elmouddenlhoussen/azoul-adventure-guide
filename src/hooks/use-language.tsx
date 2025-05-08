@@ -18,6 +18,12 @@ const translations: Record<string, Record<string, string>> = {
     'ready': 'Ready to Experience the Magic of Morocco?',
     'start_exploring': 'Start Exploring',
     'chat_with': 'Chat with Azoul',
+    'discover_services': 'Discover Our Services',
+    'experience_best': 'Experience the best of Morocco with our curated services and expert guidance',
+    'explore_all': 'Explore All Experiences',
+    'enchanting_places': 'Explore the most enchanting places Morocco has to offer',
+    'view_all': 'View All Destinations',
+    'interactive_map': 'Plan your journey with our interactive map',
     
     // Chat translations
     'morocco_guide': 'Morocco Guide',
@@ -40,6 +46,12 @@ const translations: Record<string, Record<string, string>> = {
     'ready': 'Prêt à Vivre la Magie du Maroc?',
     'start_exploring': 'Commencer à Explorer',
     'chat_with': 'Discuter avec Azoul',
+    'discover_services': 'Découvrez Nos Services',
+    'experience_best': 'Découvrez le meilleur du Maroc avec nos services et conseils d\'experts',
+    'explore_all': 'Explorer Toutes les Expériences',
+    'enchanting_places': 'Découvrez les lieux les plus enchanteurs que le Maroc a à offrir',
+    'view_all': 'Voir Toutes les Destinations',
+    'interactive_map': 'Planifiez votre voyage avec notre carte interactive',
     
     // Chat translations
     'morocco_guide': 'Guide du Maroc',
@@ -62,6 +74,12 @@ const translations: Record<string, Record<string, string>> = {
     'ready': 'هل أنت مستعد لتجربة سحر المغرب؟',
     'start_exploring': 'ابدأ الاستكشاف',
     'chat_with': 'الدردشة مع أزول',
+    'discover_services': 'اكتشف خدماتنا',
+    'experience_best': 'استمتع بأفضل ما في المغرب مع خدماتنا المنسقة وإرشادات الخبراء',
+    'explore_all': 'استكشف جميع التجارب',
+    'enchanting_places': 'استكشف أكثر الأماكن سحرًا في المغرب',
+    'view_all': 'عرض جميع الوجهات',
+    'interactive_map': 'خطط لرحلتك مع خريطتنا التفاعلية',
     
     // Chat translations
     'morocco_guide': 'دليل المغرب',
@@ -84,6 +102,12 @@ const translations: Record<string, Record<string, string>> = {
     'ready': 'ⵉⵙ ⵜⵙⵓⵊⴷⴷ ⵉ ⵜⴰⵔⵎⵉⵜ ⵏ ⵍⵎⵖⵔⵉⴱ?',
     'start_exploring': 'ⴱⴷⵓ ⴰⵙⵙⵓⵊⵊⴷ',
     'chat_with': 'ⵙⵉⵡⵍ ⴷ ⴰⵣⵓⵍ',
+    'discover_services': 'ⴰⴼ ⵜⵉⵡⵓⵔⵉⵡⵉⵏ ⵏⵏⵖ',
+    'experience_best': 'ⵜⴰⵔⵎⵉⵜ ⵏ ⵓⵎⵓⴽⵔⵉⵙ ⵏ ⵍⵎⵖⵔⵉⴱ ⴰⴽⴷ ⵜⵉⵡⵓⵔⵉⵡⵉⵏ ⵏⵏⵖ ⵜⵉⵎⵙⴷⴰⵡⵉⵏ',
+    'explore_all': 'ⵙⵙⵓⵊⵊⴷ ⵎⴰⵕⵕⴰ ⵜⵉⵔⵎⵉⵜⵉⵏ',
+    'enchanting_places': 'ⵙⵙⵓⵊⵊⴷ ⵉⵎⵓⴽⴰⵏ ⵉⵎⵣⵡⴰⵔⵏ ⴰⴷ ⵉⵎⵍⴰ ⵍⵎⵖⵔⵉⴱ',
+    'view_all': 'ⵥⵕ ⵎⴰⵕⵕⴰ ⵜⵉⵎⵏⴰⴷⵉⵏ',
+    'interactive_map': 'ⵙⵓⵊⴷ ⵓⵔⴳⴰⵣ ⵏⵏⴽ ⵙ ⵜⴽⴰⵔⴹⴰ ⵏⵏⵖ ⵜⴰⵎⵙⴰⵡⴰⵙⵜ',
     
     // Chat translations
     'morocco_guide': 'ⴰⵎⴷⴰⵡ ⵏ ⵍⵎⵖⵔⵉⴱ',
@@ -110,8 +134,16 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('language', language);
     // Optionally set document language for accessibility
     document.documentElement.lang = language;
-    // For RTL languages like Arabic
-    document.dir = language === 'ar' ? 'rtl' : 'ltr';
+    
+    // Only adjust text direction for Arabic, without changing entire layout
+    if (language === 'ar') {
+      // Apply RTL for text content without changing layout
+      document.documentElement.classList.add('arabic-text');
+    } else {
+      document.documentElement.classList.remove('arabic-text');
+    }
+    
+    // We're not changing the document.dir to preserve the layout
   }, [language]);
 
   const setLanguage = (newLanguage: string) => {
