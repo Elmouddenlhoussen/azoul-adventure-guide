@@ -25,7 +25,7 @@ const sampleExperiences: UserExperience[] = [
   {
     id: '2',
     title: 'Getting Lost in Fes Medina',
-    content: "The ancient Fes Medina is like stepping back in time. The narrow alleys, artisan workshops, and hidden gems around every corner made for an adventure I'll never forget.",
+    content: "The ancient Fes Medina is like stepping back in time. The narrow alleys, artisan workshops, and hidden gems around every corner made for an adventure I will never forget.",
     location: 'Fes, Morocco',
     imageUrl: 'https://images.unsplash.com/photo-1548112129-b5cf67e9507a?q=80&w=800&h=500&auto=format&fit=crop',
     author: {

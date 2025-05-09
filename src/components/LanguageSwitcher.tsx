@@ -10,7 +10,16 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useLanguage } from '@/hooks/use-language';
 
-const languages = [
+// Define language type to match the type expected by useLanguage
+type Language = 'en' | 'fr' | 'ar' | 'ber';
+
+interface LanguageOption {
+  code: Language;
+  name: string;
+  flag: string;
+}
+
+const languages: LanguageOption[] = [
   { code: 'en', name: 'English', flag: '🇬🇧' },
   { code: 'fr', name: 'Français', flag: '🇫🇷' },
   { code: 'ar', name: 'العربية', flag: '🇲🇦' },
@@ -22,7 +31,7 @@ const LanguageSwitcher = () => {
   
   const currentLanguage = languages.find(lang => lang.code === language) || languages[0];
 
-  const handleLanguageChange = (languageCode: string) => {
+  const handleLanguageChange = (languageCode: Language) => {
     setLanguage(languageCode);
     
     // We're no longer modifying the document.dir here to preserve layout
