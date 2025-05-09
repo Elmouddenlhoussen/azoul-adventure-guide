@@ -12,7 +12,7 @@ import ExperienceDetailPage from '@/pages/ExperienceDetailPage';
 
 function App() {
   const location = useLocation()
-  const { auth } = useAuth();
+  const { isLoggedIn } = useAuth();
   const [isMaintenance, setIsMaintenance] = useState(false);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ function App() {
               <li><a href="/" className="hover:text-gray-500">Home</a></li>
               <li><a href="/discover" className="hover:text-gray-500">Discover</a></li>
               <li><a href="/community/experiences" className="hover:text-gray-500">Community</a></li>
-              {auth?.isLoggedIn ? (
+              {isLoggedIn ? (
                 <>
                   <li><a href="/profile" className="hover:text-gray-500">Profile</a></li>
                 </>
