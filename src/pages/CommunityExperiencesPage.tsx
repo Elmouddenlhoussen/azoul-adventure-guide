@@ -27,7 +27,7 @@ const sampleExperiences: UserExperience[] = [
   {
     id: '2',
     title: 'Getting Lost in Fes Medina',
-    content: 'The ancient Fes Medina is like stepping back in time. The narrow alleys, artisan workshops, and hidden gems around every corner made for an adventure I'll never forget.',
+    content: "The ancient Fes Medina is like stepping back in time. The narrow alleys, artisan workshops, and hidden gems around every corner made for an adventure I'll never forget.",
     location: 'Fes, Morocco',
     imageUrl: 'https://images.unsplash.com/photo-1548112129-b5cf67e9507a?q=80&w=800&h=500&auto=format&fit=crop',
     author: {
@@ -41,7 +41,7 @@ const sampleExperiences: UserExperience[] = [
   {
     id: '3',
     title: 'Cooking Class in Marrakech',
-    content: 'Learning to make authentic Moroccan tagine from a local chef was the highlight of my trip. The spices, techniques, and stories shared made the food taste even better!',
+    content: "Learning to make authentic Moroccan tagine from a local chef was the highlight of my trip. The spices, techniques, and stories shared made the food taste even better!",
     location: 'Marrakech, Morocco',
     imageUrl: 'https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38?q=80&w=800&h=500&auto=format&fit=crop',
     author: {
@@ -55,7 +55,7 @@ const sampleExperiences: UserExperience[] = [
   {
     id: '4',
     title: 'Hiking in the Atlas Mountains',
-    content: 'The trek through Toubkal National Park was challenging but absolutely worth it. The views from the summit were breathtaking, and the Berber villages along the way gave us a glimpse into traditional mountain life.',
+    content: "The trek through Toubkal National Park was challenging but absolutely worth it. The views from the summit were breathtaking, and the Berber villages along the way gave us a glimpse into traditional mountain life.",
     location: 'Atlas Mountains, Morocco',
     imageUrl: 'https://images.unsplash.com/photo-1489493585363-d69421e0edd3?q=80&w=800&h=500&auto=format&fit=crop',
     author: {
@@ -69,7 +69,7 @@ const sampleExperiences: UserExperience[] = [
   {
     id: '5',
     title: 'Blue Magic of Chefchaouen',
-    content: 'Walking through the blue streets of Chefchaouen felt like being in a dream. Every corner was a perfect photo opportunity, and the locals were so friendly and welcoming.',
+    content: "Walking through the blue streets of Chefchaouen felt like being in a dream. Every corner was a perfect photo opportunity, and the locals were so friendly and welcoming.",
     location: 'Chefchaouen, Morocco',
     imageUrl: 'https://images.unsplash.com/photo-1548013146-72479768bada?q=80&w=800&h=500&auto=format&fit=crop',
     author: {
@@ -83,7 +83,7 @@ const sampleExperiences: UserExperience[] = [
   {
     id: '6',
     title: 'Surfing in Taghazout',
-    content: 'Catching waves in Taghazout was an incredible experience. The surf culture there is so laid-back, and the sunset sessions on the beach were pure magic.',
+    content: "Catching waves in Taghazout was an incredible experience. The surf culture there is so laid-back, and the sunset sessions on the beach were pure magic.",
     location: 'Taghazout, Morocco',
     imageUrl: 'https://images.unsplash.com/photo-1621068893813-f330b9155fa7?q=80&w=800&h=500&auto=format&fit=crop',
     author: {

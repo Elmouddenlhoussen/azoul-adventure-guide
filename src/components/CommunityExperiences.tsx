@@ -25,7 +25,7 @@ const sampleExperiences: UserExperience[] = [
   {
     id: '2',
     title: 'Getting Lost in Fes Medina',
-    content: 'The ancient Fes Medina is like stepping back in time. The narrow alleys, artisan workshops, and hidden gems around every corner made for an adventure I'll never forget.',
+    content: "The ancient Fes Medina is like stepping back in time. The narrow alleys, artisan workshops, and hidden gems around every corner made for an adventure I'll never forget.",
     location: 'Fes, Morocco',
     imageUrl: 'https://images.unsplash.com/photo-1548112129-b5cf67e9507a?q=80&w=800&h=500&auto=format&fit=crop',
     author: {
@@ -39,7 +39,7 @@ const sampleExperiences: UserExperience[] = [
   {
     id: '3',
     title: 'Cooking Class in Marrakech',
-    content: 'Learning to make authentic Moroccan tagine from a local chef was the highlight of my trip. The spices, techniques, and stories shared made the food taste even better!',
+    content: "Learning to make authentic Moroccan tagine from a local chef was the highlight of my trip. The spices, techniques, and stories shared made the food taste even better!",
     location: 'Marrakech, Morocco',
     imageUrl: 'https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38?q=80&w=800&h=500&auto=format&fit=crop',
     author: {
