@@ -5,7 +5,6 @@ import FeatureCard from '@/components/FeatureCard';
 import DestinationCard from '@/components/DestinationCard';
 import MapPreview from '@/components/MapPreview';
 import ScrollReveal from '@/components/ScrollReveal';
-import CommunityExperiences from '@/components/CommunityExperiences';
 import { features } from '@/data/features';
 import { getFeaturedDestinations, Destination } from '@/data/destinations';
 import { Users, Compass, Home } from 'lucide-react';
@@ -124,9 +123,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-
-      {/* Community Experiences Section */}
-      <CommunityExperiences />
 
       {/* Map Section */}
       <section className="py-20 bg-white">

@@ -1,84 +1,92 @@
 
-import { useState, useEffect } from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
-import { AnimatePresence } from 'framer-motion'
+import { useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom'
 import Index from '@/pages/Index'
 import NotFound from '@/pages/NotFound'
-import { useAuth } from '@/hooks/use-auth-context'
-import LanguageSwitcher from '@/components/LanguageSwitcher'
-import CommunityExperiencesPage from '@/pages/CommunityExperiencesPage';
-import ShareExperiencePage from '@/pages/ShareExperiencePage';
-import ExperienceDetailPage from '@/pages/ExperienceDetailPage';
+import { Toaster } from '@/components/ui/toaster'
+import ScrollToTop from '@/components/ScrollToTop'
+import ChatAssistant from '@/components/ChatAssistant'
+import FeatureDetail from '@/pages/FeatureDetail'
+import SearchResults from '@/pages/SearchResults'
+import SignIn from '@/pages/SignIn'
+import SignUp from '@/pages/SignUp'
+import ForgotPassword from '@/pages/ForgotPassword'
+import Terms from '@/pages/Terms'
+import Privacy from '@/pages/Privacy'
+import DestinationDetail from '@/pages/DestinationDetail'
+import UserProfile from '@/pages/UserProfile'
+import ProtectedRoute from '@/components/ProtectedRoute'
+import AdminDashboard from '@/pages/AdminDashboard'
+import GuidesPage from '@/pages/GuidesPage'
+import CulturalToursPage from '@/pages/CulturalToursPage'
+import AccommodationsPage from '@/pages/AccommodationsPage'
+import GuideDetailPage from '@/pages/GuideDetailPage'
+import TourDetailPage from '@/pages/TourDetailPage'
+import AccommodationDetailPage from '@/pages/AccommodationDetailPage'
+import AdminRoutes from '@/components/admin/AdminRoutes'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
+import DiscoverPage from '@/pages/DiscoverPage'
+import NewsPage from '@/pages/NewsPage'
+import BookingPage from '@/pages/BookingPage'
+import { initializeApp } from '@/services/initApp'
 
 function App() {
-  const location = useLocation()
-  const { isLoggedIn } = useAuth();
-  const [isMaintenance, setIsMaintenance] = useState(false);
-
   useEffect(() => {
-    // Simulate checking maintenance status from an API
-    const checkMaintenance = async () => {
-      // Replace with actual API call
-      const isUnderMaintenance = false;
-      setIsMaintenance(isUnderMaintenance);
-    };
-
-    checkMaintenance();
+    // Initialize app services
+    initializeApp().catch(console.error);
   }, []);
 
-  if (isMaintenance) {
-    return <div>Site is under maintenance</div>;
-  }
-
   return (
-    <div className="bg-white text-black min-h-screen flex flex-col">
-      <header className="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200">
-        <div className="container max-w-screen-xl mx-auto flex justify-between items-center p-4">
-          <a href="/" className="font-bold text-xl">Azoul</a>
-          <nav>
-            <ul className="flex space-x-4">
-              <li><a href="/" className="hover:text-gray-500">Home</a></li>
-              <li><a href="/discover" className="hover:text-gray-500">Discover</a></li>
-              <li><a href="/community/experiences" className="hover:text-gray-500">Community</a></li>
-              {isLoggedIn ? (
-                <>
-                  <li><a href="/profile" className="hover:text-gray-500">Profile</a></li>
-                </>
-              ) : (
-                <>
-                  <li><a href="/login" className="hover:text-gray-500">Login</a></li>
-                  <li><a href="/register" className="hover:text-gray-500">Register</a></li>
-                </>
-              )}
-              <li>
-                <LanguageSwitcher />
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </header>
-
-      <main className="flex-grow">
-        <AnimatePresence mode="wait" initial={false}>
-          <Routes key={location.pathname} location={location}>
-            <Route path="/" element={<Index />} />
-            {/* Community routes */}
-            <Route path="/community/experiences" element={<CommunityExperiencesPage />} />
-            <Route path="/community/share" element={<ShareExperiencePage />} />
-            <Route path="/experiences/:id" element={<ExperienceDetailPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </AnimatePresence>
-      </main>
-
-      <footer className="bg-gray-100 border-t border-gray-200 py-6">
-        <div className="container max-w-screen-xl mx-auto text-center">
-          <p className="text-sm text-gray-500">
-            &copy; {new Date().getFullYear()} Azoul. All rights reserved.
-          </p>
-        </div>
-      </footer>
-    </div>
+    <>
+      <ScrollToTop />
+      <Routes>
+        {/* Admin routes - no header/footer */}
+        <Route path="/admin/*" element={
+          <ProtectedRoute requireAdmin={true}>
+            <AdminRoutes />
+          </ProtectedRoute>
+        } />
+        
+        {/* All other routes with header and footer */}
+        <Route path="*" element={
+          <>
+            <Header />
+            <div className="min-h-screen pt-20">
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/feature/:featureId" element={<FeatureDetail />} />
+                <Route path="/feature/guides" element={<GuidesPage />} />
+                <Route path="/feature/cultural-tours" element={<CulturalToursPage />} />
+                <Route path="/feature/accommodations" element={<AccommodationsPage />} />
+                <Route path="/destination/:destinationId" element={<DestinationDetail />} />
+                <Route path="/guide/:guideId" element={<GuideDetailPage />} />
+                <Route path="/tour/:tourId" element={<TourDetailPage />} />
+                <Route path="/accommodation/:accommodationId" element={<AccommodationDetailPage />} />
+                <Route path="/search" element={<SearchResults />} />
+                <Route path="/signin" element={<SignIn />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="/discover" element={<DiscoverPage />} />
+                <Route path="/news" element={<NewsPage />} />
+                <Route path="/booking" element={<BookingPage />} />
+                <Route path="/profile" element={
+                  <ProtectedRoute>
+                    <UserProfile />
+                  </ProtectedRoute>
+                } />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </div>
+            <Footer />
+          </>
+        } />
+      </Routes>
+      <ChatAssistant />
+      <Toaster />
+    </>
   )
 }
 
