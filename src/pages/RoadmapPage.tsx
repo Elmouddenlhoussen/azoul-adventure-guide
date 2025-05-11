@@ -60,7 +60,7 @@ const featuresData: Feature[] = [
   {
     id: 'feature-3',
     title: 'Virtual Reality Tours',
-    description: 'Explore Morocco's most beautiful locations in immersive 360° virtual reality.',
+    description: "Explore Morocco's most beautiful locations in immersive 360° virtual reality.",
     status: 'planned',
     category: 'immersive',
     votes: 189,
