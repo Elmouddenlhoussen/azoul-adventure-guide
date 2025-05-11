@@ -29,6 +29,7 @@ import Footer from '@/components/Footer'
 import DiscoverPage from '@/pages/DiscoverPage'
 import NewsPage from '@/pages/NewsPage'
 import BookingPage from '@/pages/BookingPage'
+import RoadmapPage from '@/pages/RoadmapPage'
 import { initializeApp } from '@/services/initApp'
 
 function App() {
@@ -72,6 +73,7 @@ function App() {
                 <Route path="/discover" element={<DiscoverPage />} />
                 <Route path="/news" element={<NewsPage />} />
                 <Route path="/booking" element={<BookingPage />} />
+                <Route path="/roadmap" element={<RoadmapPage />} />
                 <Route path="/profile" element={
                   <ProtectedRoute>
                     <UserProfile />
