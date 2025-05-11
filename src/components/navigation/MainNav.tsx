@@ -9,31 +9,37 @@ export const links = [
     title: "Home",
     href: "/",
     icon: Home,
+    description: "Return to the homepage"
   },
   {
     title: "Discover",
     href: "/discover",
     icon: Compass,
+    description: "Explore Morocco's hidden gems"
   },
   {
     title: "Tours",
     href: "/feature/cultural-tours",
     icon: Map,
+    description: "Browse our cultural tour offerings"
   },
   {
     title: "Guides",
     href: "/feature/guides",
     icon: Users,
+    description: "Meet our professional local guides"
   },
   {
     title: "Booking",
     href: "/booking",
     icon: CalendarDays,
+    description: "Reserve your Morocco experience"
   },
   {
     title: "Roadmap",
     href: "/roadmap",
     icon: MessageSquare,
+    description: "See our upcoming features"
   },
 ];
 

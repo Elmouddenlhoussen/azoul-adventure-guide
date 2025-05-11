@@ -59,7 +59,7 @@ const featuresData: Feature[] = [
   },
   {
     id: 'feature-3',
-    title: 'Virtual Reality Tours',
+    title: "Virtual Reality Tours",
     description: "Explore Morocco's most beautiful locations in immersive 360° virtual reality.",
     status: 'planned',
     category: 'immersive',
@@ -244,7 +244,7 @@ const RoadmapPage = () => {
             </TabsList>
           </div>
           
-          <TabsContent value={activeTab} className="space-y-0">
+          <TabsContent value={activeTab}>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredFeatures.map((feature) => {
                 const StatusIcon = statusIcons[feature.status];

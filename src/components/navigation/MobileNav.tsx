@@ -59,7 +59,7 @@ export function MobileNav({ isOpen }: MobileNavProps) {
                       <div>
                         <span className="font-medium">{link.title}</span>
                         <p className="text-xs text-muted-foreground mt-0.5">
-                          {link.description || "Explore " + link.title}
+                          {link.description}
                         </p>
                       </div>
                     </Link>
