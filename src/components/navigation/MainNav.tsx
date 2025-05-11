@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { CalendarDays, Compass, Home, Map, MessageSquare, Users } from "lucide-react";
 
-const links = [
+export const links = [
   {
     title: "Home",
     href: "/",

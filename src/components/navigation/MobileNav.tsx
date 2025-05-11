@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import AuthButtons from '@/components/AuthButtons';
-import { navLinks } from './MainNav';
+import { links } from './MainNav';
 
 interface MobileNavProps {
   isOpen: boolean;
@@ -31,9 +31,9 @@ export function MobileNav({ isOpen }: MobileNavProps) {
           <div className="mx-4 glass-effect rounded-2xl overflow-hidden shadow-lg border border-white/20">
             <div className="max-h-[70vh] overflow-y-auto backdrop-blur-xl bg-white/90">
               <div className="p-4 space-y-2 divide-y divide-morocco-sand/10">
-                {navLinks.map((link, index) => (
+                {links.map((link, index) => (
                   <motion.div
-                    key={link.name}
+                    key={link.href}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.05 }}
@@ -54,11 +54,13 @@ export function MobileNav({ isOpen }: MobileNavProps) {
                           ? "bg-gradient-to-br from-morocco-clay to-morocco-terracotta text-white shadow-sm" 
                           : "bg-morocco-sand/30 text-morocco-terracotta"
                       )}>
-                        {link.icon}
+                        <link.icon className="h-5 w-5" />
                       </span>
                       <div>
-                        <span className="font-medium">{link.name}</span>
-                        <p className="text-xs text-muted-foreground mt-0.5">{link.description}</p>
+                        <span className="font-medium">{link.title}</span>
+                        <p className="text-xs text-muted-foreground mt-0.5">
+                          {link.description || "Explore " + link.title}
+                        </p>
                       </div>
                     </Link>
                   </motion.div>
