@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { MessageSquare, ThumbsUp, Clock, Check, CalendarDays, Users, Star } from 'lucide-react';
@@ -243,7 +244,7 @@ const RoadmapPage = () => {
             </TabsList>
           </div>
           
-          <TabsContent value={activeTab}>
+          <TabsContent value={activeTab} className="w-full">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredFeatures.map((feature) => {
                 const StatusIcon = statusIcons[feature.status];
