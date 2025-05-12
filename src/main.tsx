@@ -6,7 +6,6 @@ import App from './App'
 import './index.css'
 import { AuthProvider } from '@/hooks/use-auth-context'
 import { LanguageProvider } from '@/hooks/use-language'
-import { Toaster } from '@/components/ui/toaster'
 
 // Set initial language based on saved preference
 const savedLanguage = localStorage.getItem('language') || 'en';
@@ -37,7 +36,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       <LanguageProvider>
         <AuthProvider>
           <App />
-          <Toaster />
         </AuthProvider>
       </LanguageProvider>
     </BrowserRouter>
