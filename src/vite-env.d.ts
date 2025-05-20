@@ -1,6 +1,23 @@
 
 /// <reference types="vite/client" />
 
-// No need to redeclare these modules as we've installed the proper @types packages
-// TypeScript will automatically find the type definitions from the @types packages
+// Explicitly declare module types for leaflet and react-leaflet
+declare module 'leaflet' {
+  export * from 'leaflet';
+}
 
+declare module 'react-leaflet' {
+  import * as L from 'leaflet';
+  
+  export interface MapContainerProps extends React.HTMLAttributes<HTMLElement> {
+    center: L.LatLngExpression;
+    zoom: number;
+    style?: React.CSSProperties;
+    [key: string]: any;
+  }
+  
+  export const MapContainer: React.FC<MapContainerProps>;
+  export const TileLayer: React.FC<any>;
+  export const Marker: React.FC<any>;
+  export const Popup: React.FC<any>;
+}
