@@ -129,7 +129,7 @@ const featuresData: Feature[] = [
 ];
 
 // Category labels and icons
-const categoryLabels: Record<FeatureCategory, { label: string; icon: React.ComponentType }> = {
+const categoryLabels: Record<FeatureCategory, { label: string; icon: React.ComponentType<any> }> = {
   personalization: { label: 'Personalization', icon: Star },
   community: { label: 'Community', icon: Users },
   immersive: { label: 'Immersive Content', icon: Star },
@@ -140,7 +140,7 @@ const categoryLabels: Record<FeatureCategory, { label: string; icon: React.Compo
 };
 
 // Status icons
-const statusIcons: Record<FeatureStatus, React.ComponentType> = {
+const statusIcons: Record<FeatureStatus, React.ComponentType<any>> = {
   'planned': Clock,
   'in-progress': CalendarDays,
   'completed': Check
