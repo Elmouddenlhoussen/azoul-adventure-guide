@@ -1,14 +1,20 @@
-
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { MessageSquare, ThumbsUp, Clock, Check, CalendarDays, Users, Star } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { MessageSquare, ThumbsUp, Clock, Check, CalendarDays, Users, Star, Filter } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
 import AnimatedTransition from '@/components/AnimatedTransition';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/hooks/use-language';
+
+// Import new components
+import FeatureDetailModal from '@/components/roadmap/FeatureDetailModal';
+import RoadmapStats from '@/components/roadmap/RoadmapStats';
+import CategoryTags from '@/components/roadmap/CategoryTags';
+import FeatureCard from '@/components/roadmap/FeatureCard';
 
 // Feature status types
 type FeatureStatus = 'planned' | 'in-progress' | 'completed';
@@ -151,7 +157,10 @@ const RoadmapPage = () => {
   const { t } = useLanguage();
   const [features, setFeatures] = useState<Feature[]>(featuresData);
   const [activeTab, setActiveTab] = useState<string>('all');
+  const [activeCategory, setActiveCategory] = useState<string>('all');
   const [votedFeatures, setVotedFeatures] = useState<string[]>([]);
+  const [selectedFeature, setSelectedFeature] = useState<Feature | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     document.title = 'Feature Roadmap | Azoul';
@@ -164,7 +173,10 @@ const RoadmapPage = () => {
   }, []);
 
   // Handle voting for a feature
-  const handleVote = (featureId: string) => {
+  const handleVote = (featureId: string, e?: React.MouseEvent) => {
+    // Stop propagation if called from button click inside card
+    if (e) e.stopPropagation();
+    
     // Check if already voted
     if (votedFeatures.includes(featureId)) {
       toast({
@@ -198,15 +210,31 @@ const RoadmapPage = () => {
     });
   };
 
-  // Filter features based on active tab
-  const filteredFeatures = activeTab === 'all' 
-    ? features 
-    : features.filter(feature => {
-        if (activeTab === 'planned') return feature.status === 'planned';
-        if (activeTab === 'in-progress') return feature.status === 'in-progress';
-        if (activeTab === 'completed') return feature.status === 'completed';
-        return feature.category === activeTab;
-      });
+  // Open feature detail modal
+  const openFeatureDetail = (feature: Feature) => {
+    setSelectedFeature(feature);
+    setIsModalOpen(true);
+  };
+
+  // Filter features based on active tab and category
+  const filteredFeatures = features.filter(feature => {
+    // Filter by tab (status)
+    if (activeTab !== 'all' && feature.status !== activeTab) return false;
+    
+    // Filter by category
+    if (activeCategory !== 'all' && feature.category !== activeCategory) return false;
+    
+    return true;
+  });
+
+  // Compute stats for RoadmapStats component
+  const totalFeatures = features.length;
+  const completedFeatures = features.filter(f => f.status === 'completed').length;
+  const inProgressFeatures = features.filter(f => f.status === 'in-progress').length;
+  const plannedFeatures = features.filter(f => f.status === 'planned').length;
+  
+  // Get most voted feature
+  const mostVotedFeature = [...features].sort((a, b) => b.votes - a.votes)[0]?.title || '';
 
   return (
     <AnimatedTransition>
@@ -231,120 +259,94 @@ const RoadmapPage = () => {
           </motion.p>
         </div>
 
-        <Tabs defaultValue="all" className="mb-12" onValueChange={setActiveTab}>
-          <div className="overflow-x-auto pb-2">
-            <TabsList className="mb-8">
-              <TabsTrigger value="all">All Features</TabsTrigger>
-              <TabsTrigger value="planned">Planned</TabsTrigger>
-              <TabsTrigger value="in-progress">In Progress</TabsTrigger>
-              <TabsTrigger value="completed">Completed</TabsTrigger>
-              <TabsTrigger value="personalization">Personalization</TabsTrigger>
-              <TabsTrigger value="community">Community</TabsTrigger>
-              <TabsTrigger value="travel">Travel Tools</TabsTrigger>
-            </TabsList>
-          </div>
+        {/* Progress statistics */}
+        <RoadmapStats 
+          totalFeatures={totalFeatures}
+          completedFeatures={completedFeatures}
+          inProgressFeatures={inProgressFeatures}
+          plannedFeatures={plannedFeatures}
+          mostVotedFeature={mostVotedFeature}
+        />
+
+        {/* Feature filtering */}
+        <div className="mb-8">
+          <Tabs defaultValue="all" className="mb-6" onValueChange={setActiveTab}>
+            <div className="overflow-x-auto pb-2">
+              <TabsList>
+                <TabsTrigger value="all">All</TabsTrigger>
+                <TabsTrigger value="planned">Planned</TabsTrigger>
+                <TabsTrigger value="in-progress">In Progress</TabsTrigger>
+                <TabsTrigger value="completed">Completed</TabsTrigger>
+              </TabsList>
+            </div>
+          </Tabs>
           
-          <TabsContent value={activeTab} className="w-full">
+          {/* Category filtering */}
+          <CategoryTags 
+            activeCategory={activeCategory}
+            setActiveCategory={setActiveCategory}
+          />
+        </div>
+        
+        <TabsContent value={activeTab} className="w-full mt-0">
+          {filteredFeatures.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredFeatures.map((feature) => {
-                const StatusIcon = statusIcons[feature.status];
+              {filteredFeatures.map((feature, index) => {
                 const CategoryInfo = categoryLabels[feature.category];
-                const CategoryIcon = CategoryInfo.icon;
+                const StatusIcon = statusIcons[feature.status];
                 
                 return (
-                  <motion.div
+                  <FeatureCard 
                     key={feature.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4 }}
-                    className="h-full"
-                  >
-                    <Card className="h-full flex flex-col">
-                      <CardHeader>
-                        <div className="flex items-start justify-between">
-                          <div className="flex items-center space-x-2 mb-2">
-                            <div className={`p-1.5 rounded-full 
-                              ${feature.status === 'completed' ? 'bg-green-100' : 
-                                feature.status === 'in-progress' ? 'bg-blue-100' : 'bg-amber-100'}`}>
-                              <StatusIcon size={16} className={`
-                                ${feature.status === 'completed' ? 'text-green-600' : 
-                                  feature.status === 'in-progress' ? 'text-blue-600' : 'text-amber-600'}`} />
-                            </div>
-                            <span className="text-sm font-medium capitalize">
-                              {feature.status.replace('-', ' ')}
-                            </span>
-                          </div>
-                          <div className="flex items-center space-x-1 bg-muted/50 px-2 py-1 rounded text-sm">
-                            <CategoryIcon size={14} className="text-muted-foreground" />
-                            <span className="text-xs text-muted-foreground">{CategoryInfo.label}</span>
-                          </div>
-                        </div>
-                        <CardTitle>{feature.title}</CardTitle>
-                        <CardDescription>{feature.description}</CardDescription>
-                      </CardHeader>
-                      <CardContent className="flex-grow flex flex-col justify-between space-y-4">
-                        <div className="space-y-3">
-                          <div className="space-y-1.5">
-                            <div className="flex items-center justify-between text-sm">
-                              <span>Progress</span>
-                              <span className="font-medium">{feature.progress}%</span>
-                            </div>
-                            <Progress value={feature.progress} className="h-2" />
-                          </div>
-                          {feature.estimatedCompletion && (
-                            <div className="flex items-center text-sm text-muted-foreground">
-                              <CalendarDays className="h-3.5 w-3.5 mr-1.5" />
-                              <span>Estimated: {feature.estimatedCompletion}</span>
-                            </div>
-                          )}
-                        </div>
-                        <div className="flex items-center justify-between pt-3 mt-auto">
-                          <div className="flex items-center text-sm">
-                            <ThumbsUp className="h-4 w-4 mr-1.5 text-morocco-green" />
-                            <span>{feature.votes} votes</span>
-                          </div>
-                          <Button
-                            size="sm"
-                            variant={votedFeatures.includes(feature.id) ? "outline" : "default"}
-                            className={votedFeatures.includes(feature.id) ? "" : "bg-morocco-clay hover:bg-morocco-clay/90"}
-                            onClick={() => handleVote(feature.id)}
-                            disabled={votedFeatures.includes(feature.id)}
-                          >
-                            {votedFeatures.includes(feature.id) ? "Voted" : "Vote"}
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
+                    feature={feature}
+                    categoryLabel={CategoryInfo.label}
+                    categoryIcon={CategoryInfo.icon}
+                    statusIcon={StatusIcon}
+                    hasVoted={votedFeatures.includes(feature.id)}
+                    onClick={() => openFeatureDetail(feature)}
+                    onVote={(e) => handleVote(feature.id, e)}
+                    index={index}
+                  />
                 );
               })}
             </div>
-            
-            {filteredFeatures.length === 0 && (
-              <div className="text-center py-12">
-                <Clock size={64} className="mx-auto text-muted-foreground/30 mb-4" />
-                <h3 className="text-xl font-semibold mb-2">No features found</h3>
-                <p className="text-muted-foreground">No features match the current filter.</p>
-              </div>
-            )}
-          </TabsContent>
-        </Tabs>
+          ) : (
+            <div className="text-center py-12">
+              <Clock size={64} className="mx-auto text-muted-foreground/30 mb-4" />
+              <h3 className="text-xl font-semibold mb-2">No features found</h3>
+              <p className="text-muted-foreground">No features match the current filter.</p>
+            </div>
+          )}
+        </TabsContent>
 
         <div className="mt-16 bg-muted/30 rounded-lg p-6 border">
-          <h2 className="text-2xl font-bold mb-4">Suggest a Feature</h2>
-          <p className="mb-6">Have an idea that would make Azoul even better? We'd love to hear about it!</p>
-          <Button 
-            className="bg-morocco-green hover:bg-morocco-green/90"
-            onClick={() => {
-              toast({
-                title: "Feature suggestion",
-                description: "Feature suggestion form coming soon! Thank you for your interest.",
-              });
-            }}
-          >
-            Suggest a Feature
-          </Button>
+          <div className="md:flex items-center justify-between">
+            <div className="mb-6 md:mb-0 md:mr-6">
+              <h2 className="text-2xl font-bold mb-4">Suggest a Feature</h2>
+              <p className="mb-6 md:mb-0 max-w-xl">Have an idea that would make Azoul even better? We'd love to hear about it! Your suggestions help us prioritize the most valuable features.</p>
+            </div>
+            <Button 
+              className="bg-morocco-green hover:bg-morocco-green/90 min-w-[200px]"
+              onClick={() => {
+                toast({
+                  title: "Feature suggestion",
+                  description: "Feature suggestion form coming soon! Thank you for your interest.",
+                });
+              }}
+            >
+              Suggest a Feature
+            </Button>
+          </div>
         </div>
+
+        {/* Feature detail modal */}
+        <FeatureDetailModal
+          feature={selectedFeature}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onVote={handleVote}
+          hasVoted={selectedFeature ? votedFeatures.includes(selectedFeature.id) : false}
+        />
       </div>
     </AnimatedTransition>
   );
