@@ -1,10 +1,10 @@
 
 import React from 'react';
 import { ThumbsUp as ThumbsUpIcon } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, HTMLMotionProps } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
-interface ThumbsUpProps extends React.ComponentPropsWithoutRef<'button'> {
+interface ThumbsUpProps extends Omit<HTMLMotionProps<"button">, "size"> {
   hasVoted?: boolean;
   size?: 'sm' | 'md' | 'lg';
   showCount?: boolean;

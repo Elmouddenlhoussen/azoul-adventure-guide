@@ -2,6 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Check, Clock, CalendarDays } from 'lucide-react';
+import { ThumbsUp } from 'lucide-react'; // Import the ThumbsUp icon from lucide-react
 
 interface RoadmapStatsProps {
   totalFeatures: number;
