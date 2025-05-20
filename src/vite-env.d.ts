@@ -1,12 +1,6 @@
 
 /// <reference types="vite/client" />
 
-// Make TypeScript aware of Leaflet module
-declare module 'leaflet' {
-  export * from 'leaflet';
-}
+// No need to redeclare these modules as we've installed the proper @types packages
+// TypeScript will automatically find the type definitions from the @types packages
 
-// Make TypeScript aware of react-leaflet module
-declare module 'react-leaflet' {
-  export * from 'react-leaflet';
-}

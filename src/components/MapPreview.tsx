@@ -1,5 +1,5 @@
 
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
@@ -18,6 +18,7 @@ const DefaultIcon = L.icon({
   popupAnchor: [1, -34],
 });
 
+// Set default icon for all markers
 L.Marker.prototype.options.icon = DefaultIcon;
 
 // Define Moroccan destinations for the map
