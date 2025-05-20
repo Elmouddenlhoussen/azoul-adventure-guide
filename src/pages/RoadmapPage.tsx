@@ -266,7 +266,7 @@ const RoadmapPage = () => {
                             <div className={`p-1.5 rounded-full 
                               ${feature.status === 'completed' ? 'bg-green-100' : 
                                 feature.status === 'in-progress' ? 'bg-blue-100' : 'bg-amber-100'}`}>
-                              <StatusIcon className={`h-4 w-4 
+                              <StatusIcon size={16} className={`
                                 ${feature.status === 'completed' ? 'text-green-600' : 
                                   feature.status === 'in-progress' ? 'text-blue-600' : 'text-amber-600'}`} />
                             </div>
@@ -275,7 +275,7 @@ const RoadmapPage = () => {
                             </span>
                           </div>
                           <div className="flex items-center space-x-1 bg-muted/50 px-2 py-1 rounded text-sm">
-                            <CategoryIcon className="h-3.5 w-3.5 text-muted-foreground" />
+                            <CategoryIcon size={14} className="text-muted-foreground" />
                             <span className="text-xs text-muted-foreground">{CategoryInfo.label}</span>
                           </div>
                         </div>
@@ -322,7 +322,7 @@ const RoadmapPage = () => {
             
             {filteredFeatures.length === 0 && (
               <div className="text-center py-12">
-                <Clock className="h-16 w-16 mx-auto text-muted-foreground/30 mb-4" />
+                <Clock size={64} className="mx-auto text-muted-foreground/30 mb-4" />
                 <h3 className="text-xl font-semibold mb-2">No features found</h3>
                 <p className="text-muted-foreground">No features match the current filter.</p>
               </div>
