@@ -279,6 +279,131 @@ const RoadmapPage = () => {
                 <TabsTrigger value="completed">Completed</TabsTrigger>
               </TabsList>
             </div>
+          
+            {/* FIXED: Move TabsContent inside the Tabs component */}
+            <TabsContent value="all" className="w-full mt-0">
+              {filteredFeatures.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredFeatures.map((feature, index) => {
+                    const CategoryInfo = categoryLabels[feature.category];
+                    const StatusIcon = statusIcons[feature.status];
+                    
+                    return (
+                      <FeatureCard 
+                        key={feature.id}
+                        feature={feature}
+                        categoryLabel={CategoryInfo.label}
+                        categoryIcon={CategoryInfo.icon}
+                        statusIcon={StatusIcon}
+                        hasVoted={votedFeatures.includes(feature.id)}
+                        onClick={() => openFeatureDetail(feature)}
+                        onVote={(e) => handleVote(feature.id, e)}
+                        index={index}
+                      />
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <Clock size={64} className="mx-auto text-muted-foreground/30 mb-4" />
+                  <h3 className="text-xl font-semibold mb-2">No features found</h3>
+                  <p className="text-muted-foreground">No features match the current filter.</p>
+                </div>
+              )}
+            </TabsContent>
+            
+            <TabsContent value="planned" className="w-full mt-0">
+              {filteredFeatures.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredFeatures.map((feature, index) => {
+                    const CategoryInfo = categoryLabels[feature.category];
+                    const StatusIcon = statusIcons[feature.status];
+                    
+                    return (
+                      <FeatureCard 
+                        key={feature.id}
+                        feature={feature}
+                        categoryLabel={CategoryInfo.label}
+                        categoryIcon={CategoryInfo.icon}
+                        statusIcon={StatusIcon}
+                        hasVoted={votedFeatures.includes(feature.id)}
+                        onClick={() => openFeatureDetail(feature)}
+                        onVote={(e) => handleVote(feature.id, e)}
+                        index={index}
+                      />
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <Clock size={64} className="mx-auto text-muted-foreground/30 mb-4" />
+                  <h3 className="text-xl font-semibold mb-2">No features found</h3>
+                  <p className="text-muted-foreground">No features match the current filter.</p>
+                </div>
+              )}
+            </TabsContent>
+            
+            <TabsContent value="in-progress" className="w-full mt-0">
+              {filteredFeatures.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredFeatures.map((feature, index) => {
+                    const CategoryInfo = categoryLabels[feature.category];
+                    const StatusIcon = statusIcons[feature.status];
+                    
+                    return (
+                      <FeatureCard 
+                        key={feature.id}
+                        feature={feature}
+                        categoryLabel={CategoryInfo.label}
+                        categoryIcon={CategoryInfo.icon}
+                        statusIcon={StatusIcon}
+                        hasVoted={votedFeatures.includes(feature.id)}
+                        onClick={() => openFeatureDetail(feature)}
+                        onVote={(e) => handleVote(feature.id, e)}
+                        index={index}
+                      />
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <Clock size={64} className="mx-auto text-muted-foreground/30 mb-4" />
+                  <h3 className="text-xl font-semibold mb-2">No features found</h3>
+                  <p className="text-muted-foreground">No features match the current filter.</p>
+                </div>
+              )}
+            </TabsContent>
+            
+            <TabsContent value="completed" className="w-full mt-0">
+              {filteredFeatures.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredFeatures.map((feature, index) => {
+                    const CategoryInfo = categoryLabels[feature.category];
+                    const StatusIcon = statusIcons[feature.status];
+                    
+                    return (
+                      <FeatureCard 
+                        key={feature.id}
+                        feature={feature}
+                        categoryLabel={CategoryInfo.label}
+                        categoryIcon={CategoryInfo.icon}
+                        statusIcon={StatusIcon}
+                        hasVoted={votedFeatures.includes(feature.id)}
+                        onClick={() => openFeatureDetail(feature)}
+                        onVote={(e) => handleVote(feature.id, e)}
+                        index={index}
+                      />
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <Clock size={64} className="mx-auto text-muted-foreground/30 mb-4" />
+                  <h3 className="text-xl font-semibold mb-2">No features found</h3>
+                  <p className="text-muted-foreground">No features match the current filter.</p>
+                </div>
+              )}
+            </TabsContent>
           </Tabs>
           
           {/* Category filtering */}
@@ -288,37 +413,6 @@ const RoadmapPage = () => {
           />
         </div>
         
-        <TabsContent value={activeTab} className="w-full mt-0">
-          {filteredFeatures.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredFeatures.map((feature, index) => {
-                const CategoryInfo = categoryLabels[feature.category];
-                const StatusIcon = statusIcons[feature.status];
-                
-                return (
-                  <FeatureCard 
-                    key={feature.id}
-                    feature={feature}
-                    categoryLabel={CategoryInfo.label}
-                    categoryIcon={CategoryInfo.icon}
-                    statusIcon={StatusIcon}
-                    hasVoted={votedFeatures.includes(feature.id)}
-                    onClick={() => openFeatureDetail(feature)}
-                    onVote={(e) => handleVote(feature.id, e)}
-                    index={index}
-                  />
-                );
-              })}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <Clock size={64} className="mx-auto text-muted-foreground/30 mb-4" />
-              <h3 className="text-xl font-semibold mb-2">No features found</h3>
-              <p className="text-muted-foreground">No features match the current filter.</p>
-            </div>
-          )}
-        </TabsContent>
-
         <div className="mt-16 bg-muted/30 rounded-lg p-6 border">
           <div className="md:flex items-center justify-between">
             <div className="mb-6 md:mb-0 md:mr-6">
