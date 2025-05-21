@@ -16,28 +16,28 @@ const suggestions: Suggestion[] = [
     id: 1,
     title: 'Jemaa el-Fnaa',
     type: 'Attraction',
-    image: '/images/suggestion-1.jpg',
+    image: 'https://images.unsplash.com/photo-1539020140153-e69ed81792c6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
     href: '/destination/marrakech'
   },
   {
     id: 2,
     title: 'Chefchaouen',
     type: 'City',
-    image: '/images/suggestion-2.jpg',
+    image: 'https://images.unsplash.com/photo-1548922825-2a98f98ea191?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
     href: '/destination/chefchaouen'
   },
   {
     id: 3,
     title: 'Sahara Desert Tour',
     type: 'Experience',
-    image: '/images/suggestion-3.jpg',
+    image: 'https://images.unsplash.com/photo-1548759806-821cafe0fa7a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
     href: '/destination/sahara'
   },
   {
     id: 4,
     title: 'Moroccan Cuisine Workshop',
     type: 'Activity',
-    image: '/images/suggestion-4.jpg',
+    image: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
     href: '/feature/guides'
   }
 ];
@@ -46,7 +46,7 @@ const SmartSuggestions = () => {
   const [hoveredId, setHoveredId] = useState<number | null>(null);
 
   return (
-    <section className="section-container">
+    <div className="section-container">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -54,9 +54,9 @@ const SmartSuggestions = () => {
         viewport={{ once: true, margin: "-100px" }}
         className="text-center mb-12"
       >
-        <h2 className="section-title">Smart Suggestions</h2>
-        <p className="section-subtitle mx-auto">
-          Personalized recommendations based on your interests and browsing history
+        <h2 className="text-3xl md:text-4xl font-bold mb-4">Personalized For You</h2>
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          Discover experiences tailored to your preferences and interests
         </p>
       </motion.div>
 
@@ -68,7 +68,7 @@ const SmartSuggestions = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true, margin: "-100px" }}
-              className="relative overflow-hidden rounded-xl cursor-pointer"
+              className="relative overflow-hidden rounded-xl cursor-pointer h-full"
               whileHover={{ y: -5, boxShadow: "0 10px 30px -15px rgba(0,0,0,0.2)" }}
               onMouseEnter={() => setHoveredId(suggestion.id)}
               onMouseLeave={() => setHoveredId(null)}
@@ -144,7 +144,7 @@ const SmartSuggestions = () => {
           </motion.button>
         </Link>
       </motion.div>
-    </section>
+    </div>
   );
 };
 

@@ -5,6 +5,7 @@ import FeatureCard from '@/components/FeatureCard';
 import DestinationCard from '@/components/DestinationCard';
 import MapPreview from '@/components/MapPreview';
 import ScrollReveal from '@/components/ScrollReveal';
+import SmartSuggestions from '@/components/SmartSuggestions';
 import { features } from '@/data/features';
 import { getFeaturedDestinations, Destination } from '@/data/destinations';
 import { Users, Compass, Home } from 'lucide-react';
@@ -75,6 +76,11 @@ const Index = () => {
             </Button>
           </div>
         </div>
+      </section>
+
+      {/* Smart Suggestions Section */}
+      <section className="py-20 bg-morocco-sand/20">
+        <SmartSuggestions />
       </section>
 
       {/* Destinations Section */}
